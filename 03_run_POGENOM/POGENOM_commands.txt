@@ -1,0 +1,5 @@
+##### PRERUN #####
+perl pogenom.pl -vcf_file Fubi_cov30_bdth50_filtered.vcf --out Fubi_mc15_mf23_prerun --pi_only --fasta_file Fubi_LSUCC0530.fa --min_count 15 --min_found 23 --subsample 15 > Fubi_mc15_mf23_prerun.stdout 2> Fubi_mc15_mf23_prerun.stderr
+
+####### RUN #######
+perl pogenom.pl -vcf_file Fubi_cov30_bdth50_filtered_nomono.vcf --out Fubi_mc15_mf23_run --genome_size 384503 --min_count 15 --min_found 23 --subsample 15 > Fubi_mc15_mf23_run.stdout 2> Fubi_mc15_mf23_run.stderr

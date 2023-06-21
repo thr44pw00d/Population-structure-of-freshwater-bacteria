@@ -1,0 +1,47 @@
+library(dplyr)
+
+###>>>>>>> change species name
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/Pfin",
+                            recursive = TRUE,
+                            full.names = TRUE)
+
+filenames = paste(filelist, collapse = '')
+
+## dataframe for numbers of tri- and tetraallelic loci
+tt <- data.frame(matrix(ncol = 5, nrow = 0))
+x <- c("sample", "S", "#di", "#tri", "#tetra")
+colnames(tt) <- x
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],95,nchar(filelist[i]))
+    assign(sample, read.csv(filelist[i], header=T, check.names=T, sep="\t"))
+## tri- and tetraallelic loci
+tt[nrow(tt)+1, 1] <- sample
+tt[nrow(tt), 2] <- nrow(filter(get(sample), X.alleles!="1"))
+tt[nrow(tt), 3] <- nrow(filter(get(sample), X.alleles=="2"))
+tt[nrow(tt), 4] <- nrow(filter(get(sample), X.alleles=="3"))
+tt[nrow(tt), 5] <- nrow(filter(get(sample), X.alleles=="4"))
+## occurences of 1 - 14
+freqs <- table(unlist(get(sample)[3:6]))[2:15]
+freqs_tri <- table(unlist(filter(get(sample), X.alleles=="3")[3:6]))[2:15]
+freqs_tetra <- table(unlist(filter(get(sample), X.alleles=="4")[3:6]))[2:15]
+## open pdf to plot to
+###>>>>>>> change species name
+pdf(file=paste("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Pfin_plots/", sample, "_allelehist.pdf", sep=""), width=5, height=5)
+## set ylim according to max occurence
+###>>>>>>> change ymax
+ylim <- c(0,2500)
+## plot and store x-coordinates of bars in xx
+xx <- barplot(freqs, ylim=ylim, cex.axis=0.65, cex.names=0.65, cex.main=0.8, main=sample)
+## add text at top of bars
+text(x=xx, y=freqs, label=round(freqs,1), pos=3, cex=0.6, col="blue")
+## add tri and tetra... or rather don't (so low that hardly visible in plot anyway and doesn't fit if not all freqs from 1-14 present)
+## ...check numbers of tri- and tetraallelic loci in dataframe tt generated above instead
+#barplot(freqs_tri, cex.axis=0.65, cex.names=0.65, col="red", add=T)
+#barplot(freqs_tetra, cex.axis=0.65, cex.names=0.65, col="magenta", add=T)
+# close plot
+dev.off()
+}
+###>>>>>>> change species name
+write.table(tt, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Pfin_di_tri_tetra.tsv", sep="\t", row.names=FALSE)
+

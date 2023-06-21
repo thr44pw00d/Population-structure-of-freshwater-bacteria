@@ -1,0 +1,48 @@
+library(car)
+library(ggplot2)
+library(dplyr)
+
+### Read in table from tsv
+multiple <- read.csv("/media/matthias/meuk/ISME2022/ISME2022_poster/pogenom_cov30_mc15/000_merged/multiple_merged_onePpan_noFspIIIbA2.tsv", header=TRUE, sep="\t")
+
+## Split pops
+Fsp <- filter(multiple, species == "Fsp")
+#FspIIIbA2 <- filter(multiple, species == "FspIIIbA2")
+Fubi <- filter(multiple, species == "Fubi")
+Muni <- filter(multiple, species == "Muni")
+Pver <- filter(multiple, species == "Pver")
+Nabu <- filter(multiple, species == "Nabu")
+#PpanEnzM <- filter(multiple, species == "PpanEnzM")
+#PpanWOEnzM2020 <- filter(multiple, species == "PpanWOEnzM2020")
+Ppan <- filter(multiple, species == "Ppan")
+Pfin <- filter(multiple, species == "Pfin")
+
+## Plot Pi vs meddpth/Gbp
+p <- ggplot(multiple, aes(x=meddpth.Gbp, y=pi*100, fill=species)) +
+      theme_bw() +
+#Set axis labels and legend
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), 
+            legend.text=element_text(size=12), legend.title=element_text(size=14, face="plain")) +
+      labs(x = "Relative abundance (depth/Gbp)", y = "Pi (%)") +
+#Set line colors
+      scale_fill_manual(values = c("Fsp"="#56B4E9", "Fubi"="#0072B2", "Muni"="#F0E442", "Pver"="#009E73", "Nabu"="#383838", "Ppan"="#CC79A7", "Pfin"="#D55E00")) +
+      geom_point(alpha=0.8, shape=21, size=3, stroke=0.2, color="black")
+
+## Test correlation
+cor.test(x=Fsp$meddpth.Gbp, y=Fsp$pi, method = 'spearman')
+#cor.test(x=FspIIIbA2$meddpth.Gbp, y=FspIIIbA2$pi, method = 'spearman')
+cor.test(x=Fubi$meddpth.Gbp, y=Fubi$pi, method = 'spearman')
+cor.test(x=Muni$meddpth.Gbp, y=Muni$pi, method = 'spearman')
+cor.test(x=Nabu$meddpth.Gbp, y=Nabu$pi, method = 'spearman')
+#cor.test(x=PpanEnzM$meddpth.Gbp, y=PpanEnzM$pi, method = 'spearman')
+#cor.test(x=PpanWOEnzM2020$meddpth.Gbp, y=PpanWOEnzM2020$pi, method = 'spearman')
+cor.test(x=Ppan$meddpth.Gbp, y=Ppan$pi, method = 'spearman')
+cor.test(x=Pver$meddpth.Gbp, y=Pver$pi, method = 'spearman')
+cor.test(x=multiple$meddpth.Gbp, y=multiple$pi, method = 'spearman')
+# >>> no significant correlation for all species!
+
+### Print to pdf
+pdf("/media/matthias/meuk/ISME2022/ISME2022_poster/pogenom_cov30_mc15/aaa_plots/Pi_vs_depth_per_Gbp.pdf", width=7, height=7)
+print(p)
+dev.off()
+

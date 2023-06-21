@@ -1,0 +1,567 @@
+library(car)
+library(ggplot2)
+library(dplyr)
+library(ggbeeswarm)
+##library(FSA)
+##library(ggsignif)
+
+### Read in table from tsv
+multiple <- read.csv("/media/matthias/meuk/intercontinental/various.csv", header=TRUE, sep="\t")
+#multiple <- read.csv("/media/matthias/meuk/intercontinental/various_woHome.csv", header=TRUE, sep="\t")
+
+# Split pops
+Fsp <- filter(multiple, species == "Fsp")
+Fubi <- filter(multiple, species == "Fubi")
+Muni <- filter(multiple, species == "Muni")
+Nabu <- filter(multiple, species == "Nabu")
+Pver <- filter(multiple, species == "Pver")
+Ppan <- filter(multiple, species == "Ppan")
+Pfin <- filter(multiple, species == "Pfin")
+
+# Get med, min, max rel. abundance
+median(Ppan$X..mapped.bases.1)
+median(Pfin$X..mapped.bases.1)
+median(Muni$X..mapped.bases.1)
+median(Fubi$X..mapped.bases.1)
+median(Fsp$X..mapped.bases.1)
+median(Nabu$X..mapped.bases.1)
+median(Pver$X..mapped.bases.1)
+min(Ppan$X..mapped.bases.1)
+min(Pfin$X..mapped.bases.1)
+min(Muni$X..mapped.bases.1)
+min(Fubi$X..mapped.bases.1)
+min(Fsp$X..mapped.bases.1)
+min(Nabu$X..mapped.bases.1)
+min(Pver$X..mapped.bases.1)
+max(Ppan$X..mapped.bases.1)
+max(Pfin$X..mapped.bases.1)
+max(Muni$X..mapped.bases.1)
+max(Fubi$X..mapped.bases.1)
+max(Fsp$X..mapped.bases.1)
+max(Nabu$X..mapped.bases.1)
+max(Pver$X..mapped.bases.1)
+
+### Set order of factors
+multiple$species <- factor(multiple$species,levels = c("Ppan", "Pfin", "Muni", "Fubi", "Fsp", "Nabu", "Pver"))
+
+#### Plot Pi ####
+p <- ggplot(multiple, aes(x=species, y=Pi.1*100)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Pi (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/pi.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot Entnoncorr ####
+p <- ggplot(multiple, aes(x=species, y=Entrnoncorr.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = bquote(Entr[noncorr]))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/entrnoncorr.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot ANIr90 ####
+p <- ggplot(multiple, aes(x=species, y=ANIr90)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = bquote(ANIr[90]))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/ANIr90.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot ANIr95 ####
+p <- ggplot(multiple, aes(x=species, y=ANIr95)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = bquote(ANIr[95]))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/ANIr95.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot MNIr90 ####
+p <- ggplot(multiple, aes(x=species, y=med90)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = bquote(MNIr[90]))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/MNIr90.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot MNIr95 ####
+p <- ggplot(multiple, aes(x=species, y=med95)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = bquote(MNIr[95]))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/MNIr95.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot Tetra ####
+p <- ggplot(multiple, aes(x=species, y=X..tetra.allelic.loci.1.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Tetra-allelic loci (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/tetra.pdf", width=5, height=5)
+  p
+  dev.off()
+  
+#### Plot Tri ####
+p <- ggplot(multiple, aes(x=species, y=X..tri.allelic.loci.1.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Tri-allelic loci (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/tri.pdf", width=5, height=5)
+  p
+  dev.off()
+  
+#### Plot Di ####
+p <- ggplot(multiple, aes(x=species, y=X..di.allelic.loci.1.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Di-allelic loci (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/di.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot S ####
+p <- ggplot(multiple, aes(x=species, y=X..Polymorphic.loci.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Polymorphic loci (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/S.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot S ####
+p <- ggplot(multiple, aes(x=species, y=X..polymorphic.loci.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "# polymorphic loci")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/numS.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot S all metas ####
+p <- ggplot(multiple, aes(x=species, y=X..polymorphic.loci..in.all.metagenomes.of.species..1.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Polymorphic loci (%), all metagenomes")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/S_all_metas.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot num S all metas ####
+p <- ggplot(multiple, aes(x=species, y=X..polymorphic.loci..in.all.metagenomes.of.species..1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "# polymorphic loci, all metagenomes")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/numS_all_metas.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot num loci passing Pogenom thresholds ####
+p <- ggplot(multiple, aes(x=species, y=X..loci.passing.Pogenom.thresholds)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "# loci passing Pogenom thresholds")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/numloc.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot genome size ####
+p <- ggplot(multiple, aes(x=species, y=genome.size..bp./1000000)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Genome size (Mbp)")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/genome_size.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot metasize ####
+p <- ggplot(multiple, aes(x=species, y=metagenome.size..Gbp.)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Metagenome size (Gbp)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/metasize.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot mapped bases ####
+p <- ggplot(multiple, aes(x=species, y=X..mapped.bases)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "# mapped bases")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/mapped_bases.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot mapped bases % ####
+p <- ggplot(multiple, aes(x=species, y=X..mapped.bases.1)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Mapped bases (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/mapped_bases_perc.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot depth/Gbp ####
+p <- ggplot(multiple, aes(x=species, y=depth.Gbp)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Depth / Gbp")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/depth_Gbp.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot meddepth ####
+p <- ggplot(multiple, aes(x=species, y=median.coverage.depth)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Median coverage depth")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/meddepth.pdf", width=5, height=5)
+  p
+  dev.off()
+
+#### Plot cov breadth ####
+p <- ggplot(multiple, aes(x=species, y=coverage.breadth....)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=15), legend.position="none") +
+      labs(x = "Species", y = "Coverage breadth (%)")
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+pdf(file="/media/matthias/meuk/intercontinental/breadth.pdf", width=5, height=5)
+  p
+  dev.off()
+
+################ Statistics ##################
+library(DescTools)
+
+##### Pi ##### 
+
+# Test normality
+shapiro.test(Fsp$Pi.1)        # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Fubi$Pi.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Muni$Pi.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Nabu$Pi.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pver$Pi.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Ppan$Pi.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Pfin$Pi.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+# Test variances
+bartlett.test(Pi.1 ~ species, data = multiple)    # p<0.05 (not all groups have same variance)
+leveneTest(Pi.1 ~ species, data = multiple)       # p<0.05 (not all groups have same variance)
+# Welch's ANOVA (should be ok with unequal variances and non-normal distributons)
+welch <- oneway.test(Pi.1 ~ species, data = multiple)   # p<0.05 (some groups are different?)
+anova <- aov(Pi.1 ~ species, data = multiple)
+summary(anova)                                          # p<0.05 (some groups are different?)
+# Post-hoc test to see which species are different
+ScheffeTest(anova)
+# Wilcoxon-Mann-Whitney Rank Sum test for independent populations, non-parametric (unequal variances, non-normal distributions)
+wilcox.test(Fubi$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Muni$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Fsp$Pi.1, paired=FALSE)$p.val
+wilcox.test(Muni$Pi.1, Fubi$Pi.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Pi.1, Fubi$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Pi.1, Fubi$Pi.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Pi.1, Fubi$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Fubi$Pi.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Pi.1, Muni$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Pi.1, Muni$Pi.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Pi.1, Muni$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Muni$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Pi.1, Nabu$Pi.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Pi.1, Nabu$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Nabu$Pi.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Pi.1, Pfin$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Pfin$Pi.1, paired=FALSE)$p.val
+wilcox.test(Pver$Pi.1, Ppan$Pi.1, paired=FALSE)$p.val
+
+##### Entrnoncorr ##### 
+
+# Test normality
+shapiro.test(Fsp$Entrnoncorr.1)        # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Fubi$Entrnoncorr.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Muni$Entrnoncorr.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Nabu$Entrnoncorr.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pver$Entrnoncorr.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Ppan$Entrnoncorr.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Pfin$Entrnoncorr.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+# Test variances
+bartlett.test(Entrnoncorr.1 ~ species, data = multiple)    # p<0.05 (not all groups have same variance)
+leveneTest(Entrnoncorr.1 ~ species, data = multiple)       # p<0.05 (not all groups have same variance)
+# Welch's ANOVA (should be ok with unequal variances and non-normal distributons)
+welch <- oneway.test(Entrnoncorr.1 ~ species, data = multiple)   # p<0.05 (some groups are different?)
+anova <- aov(Entrnoncorr.1 ~ species, data = multiple)
+summary(anova)                                          # p<0.05 (some groups are different?)
+# Post-hoc test to see which species are different
+ScheffeTest(anova)
+# Wilcoxon-Mann-Whitney Rank Sum test for independent populations, non-parametric (unequal variances, non-normal distributions)
+wilcox.test(Fubi$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Muni$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Fsp$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Muni$Entrnoncorr.1, Fubi$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Entrnoncorr.1, Fubi$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Entrnoncorr.1, Fubi$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Entrnoncorr.1, Fubi$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Fubi$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Nabu$Entrnoncorr.1, Muni$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Entrnoncorr.1, Muni$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Entrnoncorr.1, Muni$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Muni$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pfin$Entrnoncorr.1, Nabu$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Entrnoncorr.1, Nabu$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Nabu$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Ppan$Entrnoncorr.1, Pfin$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Pfin$Entrnoncorr.1, paired=FALSE)$p.val
+wilcox.test(Pver$Entrnoncorr.1, Ppan$Entrnoncorr.1, paired=FALSE)$p.val
+
+##### ANIr90 ##### 
+
+# Test normality
+shapiro.test(Fsp$ANIr90)        # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Fubi$ANIr90)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Muni$ANIr90)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Nabu$ANIr90)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pver$ANIr90)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Ppan$ANIr90)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pfin$ANIr90)       # p<0.05 (sample doesn't come from a normally distributed population)
+# Test variances
+bartlett.test(ANIr90 ~ species, data = multiple)    # p<0.05 (not all groups have same variance)
+leveneTest(ANIr90 ~ species, data = multiple)       # p<0.05 (not all groups have same variance)
+# Welch's ANOVA (should be ok with unequal variances and non-normal distributons)
+welch <- oneway.test(ANIr90 ~ species, data = multiple)   # p<0.05 (some groups are different?)
+anova <- aov(ANIr90 ~ species, data = multiple)
+summary(anova)                                          # p<0.05 (some groups are different?)
+# Post-hoc test to see which species are different
+ScheffeTest(anova)
+# Wilcoxon-Mann-Whitney Rank Sum test for independent populations, non-parametric (unequal variances, non-normal distributions)
+wilcox.test(Fubi$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Muni$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Fsp$ANIr90, paired=FALSE)$p.val
+wilcox.test(Muni$ANIr90, Fubi$ANIr90, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr90, Fubi$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr90, Fubi$ANIr90, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr90, Fubi$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Fubi$ANIr90, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr90, Muni$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr90, Muni$ANIr90, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr90, Muni$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Muni$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr90, Nabu$ANIr90, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr90, Nabu$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Nabu$ANIr90, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr90, Pfin$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Pfin$ANIr90, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr90, Ppan$ANIr90, paired=FALSE)$p.val
+
+
+##### ANIr95 ##### 
+
+# Test normality
+shapiro.test(Fsp$ANIr95)        # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Fubi$ANIr95)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Muni$ANIr95)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Nabu$ANIr95)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Pver$ANIr95)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Ppan$ANIr95)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Pfin$ANIr95)       # p<0.05 (sample doesn't come from a normally distributed population)
+# Test variances
+bartlett.test(ANIr95 ~ species, data = multiple)    # p<0.05 (not all groups have same variance)
+leveneTest(ANIr95 ~ species, data = multiple)       # p<0.05 (not all groups have same variance)
+# Welch's ANOVA (should be ok with unequal variances and non-normal distributons)
+welch <- oneway.test(ANIr95 ~ species, data = multiple)   # p<0.05 (some groups are different?)
+anova <- aov(ANIr95 ~ species, data = multiple)
+summary(anova)                                          # p<0.05 (some groups are different?)
+# Post-hoc test to see which species are different
+ScheffeTest(anova)
+# Wilcoxon-Mann-Whitney Rank Sum test for independent populations, non-parametric (unequal variances, non-normal distributions)
+wilcox.test(Fubi$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Muni$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Fsp$ANIr95, paired=FALSE)$p.val
+wilcox.test(Muni$ANIr95, Fubi$ANIr95, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr95, Fubi$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr95, Fubi$ANIr95, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr95, Fubi$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Fubi$ANIr95, paired=FALSE)$p.val
+wilcox.test(Nabu$ANIr95, Muni$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr95, Muni$ANIr95, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr95, Muni$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Muni$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pfin$ANIr95, Nabu$ANIr95, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr95, Nabu$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Nabu$ANIr95, paired=FALSE)$p.val
+wilcox.test(Ppan$ANIr95, Pfin$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Pfin$ANIr95, paired=FALSE)$p.val
+wilcox.test(Pver$ANIr95, Ppan$ANIr95, paired=FALSE)$p.val
+
+##### S ##### 
+
+# Test normality
+shapiro.test(Fsp$X..Polymorphic.loci.1)        # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Fubi$X..Polymorphic.loci.1)       # p>0.05 (sample comes from a normally distributed population)
+shapiro.test(Muni$X..Polymorphic.loci.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Nabu$X..Polymorphic.loci.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pver$X..Polymorphic.loci.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Ppan$X..Polymorphic.loci.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+shapiro.test(Pfin$X..Polymorphic.loci.1)       # p<0.05 (sample doesn't come from a normally distributed population)
+# Test variances
+bartlett.test(X..Polymorphic.loci.1 ~ species, data = multiple)    # p<0.05 (not all groups have same variance)
+leveneTest(X..Polymorphic.loci.1 ~ species, data = multiple)       # p<0.05 (not all groups have same variance)
+# Welch's ANOVA (should be ok with unequal variances and non-normal distributons)
+welch <- oneway.test(X..Polymorphic.loci.1 ~ species, data = multiple)   # p<0.05 (some groups are different?)
+anova <- aov(X..Polymorphic.loci.1 ~ species, data = multiple)
+summary(anova)                                          # p<0.05 (some groups are different?)
+# Post-hoc test to see which species are different
+ScheffeTest(anova)
+# Wilcoxon-Mann-Whitney Rank Sum test for independent populations, non-parametric (unequal variances, non-normal distributions)
+wilcox.test(Fubi$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Muni$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Nabu$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pfin$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Ppan$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Fsp$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Muni$X..Polymorphic.loci.1, Fubi$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Nabu$X..Polymorphic.loci.1, Fubi$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pfin$X..Polymorphic.loci.1, Fubi$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Ppan$X..Polymorphic.loci.1, Fubi$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Fubi$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Nabu$X..Polymorphic.loci.1, Muni$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pfin$X..Polymorphic.loci.1, Muni$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Ppan$X..Polymorphic.loci.1, Muni$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Muni$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pfin$X..Polymorphic.loci.1, Nabu$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Ppan$X..Polymorphic.loci.1, Nabu$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Nabu$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Ppan$X..Polymorphic.loci.1, Pfin$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Pfin$X..Polymorphic.loci.1, paired=FALSE)$p.val
+wilcox.test(Pver$X..Polymorphic.loci.1, Ppan$X..Polymorphic.loci.1, paired=FALSE)$p.val
+

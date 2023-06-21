@@ -1,0 +1,538 @@
+##### get matrix with time differences #####
+#all
+time1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Fsp_Erken_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_Mekkojarvi_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+#specific depth
+time6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_hypo_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_epi_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_Mekk_2.5m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time9 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_0.5m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time10 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_30m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time11 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_0.2m_original_order_run1.csv", header=FALSE, sep="\t", check.names=FALSE)
+time12 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_1.2m_original_order_run1.csv", header=FALSE, sep="\t", check.names=FALSE)
+
+#Calculate time differences for all pairs and format matrix as dataframe
+#1
+tdiff1<-0
+temp<-c(0,0)
+for(i in 1:nrow(time1)) {
+  for(k in 1:nrow(time1)) {
+    temp[k]<-abs(difftime(time1[i,2], time1[k,2], tz="GMT", units="days"))
+  }
+  tdiff1<-rbind(tdiff1,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff1<-tdiff1[-1,] #Remove the first row
+row.names(tdiff1)<-time1[,1] #Add row names from original file
+colnames(tdiff1)<-time1[,1] #Add column names from original file
+tdiff1<-data.frame(tdiff1, check.names=FALSE)
+#2
+tdiff2<-0
+temp<-c(0,0)
+for(i in 1:nrow(time2)) {
+  for(k in 1:nrow(time2)) {
+    temp[k]<-abs(difftime(time2[i,2], time2[k,2], tz="GMT", units="days"))
+  }
+  tdiff2<-rbind(tdiff2,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff2<-tdiff2[-1,] #Remove the first row
+row.names(tdiff2)<-time2[,1] #Add row names from original file
+colnames(tdiff2)<-time2[,1] #Add column names from original file
+tdiff2<-data.frame(tdiff2, check.names=FALSE)
+#3
+tdiff3<-0
+temp<-c(0,0)
+for(i in 1:nrow(time3)) {
+  for(k in 1:nrow(time3)) {
+    temp[k]<-abs(difftime(time3[i,2], time3[k,2], tz="GMT", units="days"))
+  }
+  tdiff3<-rbind(tdiff3,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff3<-tdiff3[-1,] #Remove the first row
+row.names(tdiff3)<-time3[,1] #Add row names from original file
+colnames(tdiff3)<-time3[,1] #Add column names from original file
+tdiff3<-data.frame(tdiff3, check.names=FALSE)
+#4
+tdiff4<-0
+temp<-c(0,0)
+for(i in 1:nrow(time4)) {
+  for(k in 1:nrow(time4)) {
+    temp[k]<-abs(difftime(time4[i,2], time4[k,2], tz="GMT", units="days"))
+  }
+  tdiff4<-rbind(tdiff4,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff4<-tdiff4[-1,] #Remove the first row
+row.names(tdiff4)<-time4[,1] #Add row names from original file
+colnames(tdiff4)<-time4[,1] #Add column names from original file
+tdiff4<-data.frame(tdiff4, check.names=FALSE)
+#5
+tdiff5<-0
+temp<-c(0,0)
+for(i in 1:nrow(time5)) {
+  for(k in 1:nrow(time5)) {
+    temp[k]<-abs(difftime(time5[i,2], time5[k,2], tz="GMT", units="days"))
+  }
+  tdiff5<-rbind(tdiff5,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff5<-tdiff5[-1,] #Remove the first row
+row.names(tdiff5)<-time5[,1] #Add row names from original file
+colnames(tdiff5)<-time5[,1] #Add column names from original file
+tdiff5<-data.frame(tdiff5, check.names=FALSE)
+#6
+tdiff6<-0
+temp<-c(0,0)
+for(i in 1:nrow(time6)) {
+  for(k in 1:nrow(time6)) {
+    temp[k]<-abs(difftime(time6[i,2], time6[k,2], tz="GMT", units="days"))
+  }
+  tdiff6<-rbind(tdiff6,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff6<-tdiff6[-1,] #Remove the first row
+row.names(tdiff6)<-time6[,1] #Add row names from original file
+colnames(tdiff6)<-time6[,1] #Add column names from original file
+tdiff6<-data.frame(tdiff6, check.names=FALSE)
+#7
+tdiff7<-0
+temp<-c(0,0)
+for(i in 1:nrow(time7)) {
+  for(k in 1:nrow(time7)) {
+    temp[k]<-abs(difftime(time7[i,2], time7[k,2], tz="GMT", units="days"))
+  }
+  tdiff7<-rbind(tdiff7,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff7<-tdiff7[-1,] #Remove the first row
+row.names(tdiff7)<-time7[,1] #Add row names from original file
+colnames(tdiff7)<-time7[,1] #Add column names from original file
+tdiff7<-data.frame(tdiff7, check.names=FALSE)
+
+#8
+tdiff8<-0
+temp<-c(0,0)
+for(i in 1:nrow(time8)) {
+  for(k in 1:nrow(time8)) {
+    temp[k]<-abs(difftime(time8[i,2], time8[k,2], tz="GMT", units="days"))
+  }
+  tdiff8<-rbind(tdiff8,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff8<-tdiff8[-1,] #Remove the first row
+row.names(tdiff8)<-time8[,1] #Add row names from original file
+colnames(tdiff8)<-time8[,1] #Add column names from original file
+tdiff8<-data.frame(tdiff8, check.names=FALSE)
+#9
+tdiff9<-0
+temp<-c(0,0)
+for(i in 1:nrow(time9)) {
+  for(k in 1:nrow(time9)) {
+    temp[k]<-abs(difftime(time9[i,2], time9[k,2], tz="GMT", units="days"))
+  }
+  tdiff9<-rbind(tdiff9,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff9<-tdiff9[-1,] #Remove the first row
+row.names(tdiff9)<-time9[,1] #Add row names from original file
+colnames(tdiff9)<-time9[,1] #Add column names from original file
+tdiff9<-data.frame(tdiff9, check.names=FALSE)
+#10
+tdiff10<-0
+temp<-c(0,0)
+for(i in 1:nrow(time10)) {
+  for(k in 1:nrow(time10)) {
+    temp[k]<-abs(difftime(time10[i,2], time10[k,2], tz="GMT", units="days"))
+  }
+  tdiff10<-rbind(tdiff10,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff10<-tdiff10[-1,] #Remove the first row
+row.names(tdiff10)<-time10[,1] #Add row names from original file
+colnames(tdiff10)<-time10[,1] #Add column names from original file
+tdiff10<-data.frame(tdiff10, check.names=FALSE)
+#11
+tdiff11<-0
+temp<-c(0,0)
+for(i in 1:nrow(time11)) {
+  for(k in 1:nrow(time11)) {
+    temp[k]<-abs(difftime(time11[i,2], time11[k,2], tz="GMT", units="days"))
+  }
+  tdiff11<-rbind(tdiff11,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff11<-tdiff11[-1,] #Remove the first row
+row.names(tdiff11)<-time11[,1] #Add row names from original file
+colnames(tdiff11)<-time11[,1] #Add column names from original file
+tdiff11<-data.frame(tdiff11, check.names=FALSE)
+#12
+tdiff12<-0
+temp<-c(0,0)
+for(i in 1:nrow(time12)) {
+  for(k in 1:nrow(time12)) {
+    temp[k]<-abs(difftime(time12[i,2], time12[k,2], tz="GMT", units="days"))
+  }
+  tdiff12<-rbind(tdiff12,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff12<-tdiff12[-1,] #Remove the first row
+row.names(tdiff12)<-time12[,1] #Add row names from original file
+colnames(tdiff12)<-time12[,1] #Add column names from original file
+tdiff12<-data.frame(tdiff12, check.names=FALSE)
+
+##### get matrix with inter-Pi and Fst #####
+library(igraph)
+#Load file with Pi and Fst values (long format)
+#all
+pi_fst1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Fsp1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin2_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan1_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#specific depth
+pi_fst6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_hypo_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_epi_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin25_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst9 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni05_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst10 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni30_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst11 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan02_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst12 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan12_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+
+#Make undirected so that matrix will be symmetric
+undir1 <- graph.data.frame(pi_fst1, directed=FALSE)
+undir2 <- graph.data.frame(pi_fst2, directed=FALSE)
+undir3 <- graph.data.frame(pi_fst3, directed=FALSE)
+undir4 <- graph.data.frame(pi_fst4, directed=FALSE)
+undir5 <- graph.data.frame(pi_fst5, directed=FALSE)
+undir6 <- graph.data.frame(pi_fst6, directed=FALSE)
+undir7 <- graph.data.frame(pi_fst7, directed=FALSE)
+undir8 <- graph.data.frame(pi_fst8, directed=FALSE)
+undir9 <- graph.data.frame(pi_fst9, directed=FALSE)
+undir10 <- graph.data.frame(pi_fst10, directed=FALSE)
+undir11 <- graph.data.frame(pi_fst11, directed=FALSE)
+undir12 <- graph.data.frame(pi_fst12, directed=FALSE)
+
+#Turn into matrix and into dataframe finally
+#pi1
+pi1 <- get.adjacency(undir1, attr="pi_1-2", sparse=FALSE)
+pi1 <- as.data.frame(pi1)
+for(k in 1:nrow(pi1)){
+pi1[,k]<-as.numeric(pi1[,k])
+}
+pi1 <- pi1[,1:ncol(pi1)]*100
+diag(pi1) <- ""
+#fst1
+fst1 <- get.adjacency(undir1, attr="fst", sparse=FALSE)
+fst1 <- as.data.frame(fst1)
+for(k in 1:nrow(fst1)){
+fst1[,k]<-as.numeric(fst1[,k])
+}
+diag(fst1) <- ""
+#pi2
+pi2 <- get.adjacency(undir2, attr="pi_1-2", sparse=FALSE)
+pi2 <- as.data.frame(pi2)
+for(k in 1:nrow(pi2)){
+pi2[,k]<-as.numeric(pi2[,k])
+}
+pi2 <- pi2[,1:ncol(pi2)]*100
+diag(pi2) <- ""
+#fst2
+fst2 <- get.adjacency(undir2, attr="fst", sparse=FALSE)
+fst2 <- as.data.frame(fst2)
+for(k in 1:nrow(fst2)){
+fst2[,k]<-as.numeric(fst2[,k])
+}
+diag(fst2) <- ""
+#pi3
+pi3 <- get.adjacency(undir3, attr="pi_1-2", sparse=FALSE)
+pi3 <- as.data.frame(pi3)
+for(k in 1:nrow(pi3)){
+pi3[,k]<-as.numeric(pi3[,k])
+}
+pi3 <- pi3[,1:ncol(pi3)]*100
+diag(pi3) <- ""
+#fst3
+fst3 <- get.adjacency(undir3, attr="fst", sparse=FALSE)
+fst3 <- as.data.frame(fst3)
+for(k in 1:nrow(fst3)){
+fst3[,k]<-as.numeric(fst3[,k])
+}
+diag(fst3) <- ""
+#pi4
+pi4 <- get.adjacency(undir4, attr="pi_1-2", sparse=FALSE)
+pi4 <- as.data.frame(pi4)
+for(k in 1:nrow(pi4)){
+pi4[,k]<-as.numeric(pi4[,k])
+}
+pi4 <- pi4[,1:ncol(pi4)]*100
+diag(pi4) <- ""
+#fst4
+fst4 <- get.adjacency(undir4, attr="fst", sparse=FALSE)
+fst4 <- as.data.frame(fst4)
+for(k in 1:nrow(fst4)){
+fst4[,k]<-as.numeric(fst4[,k])
+}
+diag(fst4) <- ""
+#pi5
+pi5 <- get.adjacency(undir5, attr="pi_1-2", sparse=FALSE)
+pi5 <- as.data.frame(pi5)
+for(k in 1:nrow(pi5)){
+pi5[,k]<-as.numeric(pi5[,k])
+}
+pi5 <- pi5[,1:ncol(pi5)]*100
+diag(pi5) <- ""
+#fst5
+fst5 <- get.adjacency(undir5, attr="fst", sparse=FALSE)
+fst5 <- as.data.frame(fst5)
+for(k in 1:nrow(fst5)){
+fst5[,k]<-as.numeric(fst5[,k])
+}
+diag(fst5) <- ""
+#pi6
+pi6 <- get.adjacency(undir6, attr="pi_1-2", sparse=FALSE)
+pi6 <- as.data.frame(pi6)
+for(k in 1:nrow(pi6)){
+pi6[,k]<-as.numeric(pi6[,k])
+}
+pi6 <- pi6[,1:ncol(pi6)]*100
+diag(pi6) <- ""
+#fst6
+fst6 <- get.adjacency(undir6, attr="fst", sparse=FALSE)
+fst6 <- as.data.frame(fst6)
+for(k in 1:nrow(fst6)){
+fst6[,k]<-as.numeric(fst6[,k])
+}
+diag(fst6) <- ""
+#pi7
+pi7 <- get.adjacency(undir7, attr="pi_1-2", sparse=FALSE)
+pi7 <- as.data.frame(pi7)
+for(k in 1:nrow(pi7)){
+pi7[,k]<-as.numeric(pi7[,k])
+}
+pi7 <- pi7[,1:ncol(pi7)]*100
+diag(pi7) <- ""
+#fst7
+fst7 <- get.adjacency(undir7, attr="fst", sparse=FALSE)
+fst7 <- as.data.frame(fst7)
+for(k in 1:nrow(fst7)){
+fst7[,k]<-as.numeric(fst7[,k])
+}
+diag(fst7) <- ""
+
+#pi8
+pi8 <- get.adjacency(undir8, attr="pi_1-2", sparse=FALSE)
+pi8 <- as.data.frame(pi8)
+for(k in 1:nrow(pi8)){
+pi8[,k]<-as.numeric(pi8[,k])
+}
+pi8 <- pi8[,1:ncol(pi8)]*100
+diag(pi8) <- ""
+#fst8
+fst8 <- get.adjacency(undir8, attr="fst", sparse=FALSE)
+fst8 <- as.data.frame(fst8)
+for(k in 1:nrow(fst8)){
+fst8[,k]<-as.numeric(fst8[,k])
+}
+diag(fst8) <- ""
+#pi9
+pi9 <- get.adjacency(undir9, attr="pi_1-2", sparse=FALSE)
+pi9 <- as.data.frame(pi9)
+for(k in 1:nrow(pi9)){
+pi9[,k]<-as.numeric(pi9[,k])
+}
+pi9 <- pi9[,1:ncol(pi9)]*100
+diag(pi9) <- ""
+#fst9
+fst9 <- get.adjacency(undir9, attr="fst", sparse=FALSE)
+fst9 <- as.data.frame(fst9)
+for(k in 1:nrow(fst9)){
+fst9[,k]<-as.numeric(fst9[,k])
+}
+diag(fst9) <- ""
+#pi10
+pi10 <- get.adjacency(undir10, attr="pi_1-2", sparse=FALSE)
+pi10 <- as.data.frame(pi10)
+for(k in 1:nrow(pi10)){
+pi10[,k]<-as.numeric(pi10[,k])
+}
+pi10 <- pi10[,1:ncol(pi10)]*100
+diag(pi10) <- ""
+#fst10
+fst10 <- get.adjacency(undir10, attr="fst", sparse=FALSE)
+fst10 <- as.data.frame(fst10)
+for(k in 1:nrow(fst10)){
+fst10[,k]<-as.numeric(fst10[,k])
+}
+diag(fst10) <- ""
+#pi11
+pi11 <- get.adjacency(undir11, attr="pi_1-2", sparse=FALSE)
+pi11 <- as.data.frame(pi11)
+for(k in 1:nrow(pi11)){
+pi11[,k]<-as.numeric(pi11[,k])
+}
+pi11 <- pi11[,1:ncol(pi11)]*100
+diag(pi11) <- ""
+#fst11
+fst11 <- get.adjacency(undir11, attr="fst", sparse=FALSE)
+fst11 <- as.data.frame(fst11)
+for(k in 1:nrow(fst11)){
+fst11[,k]<-as.numeric(fst11[,k])
+}
+diag(fst11) <- ""
+#pi12
+pi12 <- get.adjacency(undir12, attr="pi_1-2", sparse=FALSE)
+pi12 <- as.data.frame(pi12)
+for(k in 1:nrow(pi12)){
+pi12[,k]<-as.numeric(pi12[,k])
+}
+pi12 <- pi12[,1:ncol(pi12)]*100
+diag(pi12) <- ""
+#fst12
+fst12 <- get.adjacency(undir12, attr="fst", sparse=FALSE)
+fst12 <- as.data.frame(fst12)
+for(k in 1:nrow(fst12)){
+fst12[,k]<-as.numeric(fst12[,k])
+}
+diag(fst12) <- ""
+
+##### Check if rows and columns of matrices match #####
+#1
+identical(colnames(tdiff1), rownames(tdiff1))
+identical(colnames(tdiff1), colnames(pi1))
+identical(colnames(tdiff1), rownames(pi1))
+identical(colnames(tdiff1), colnames(fst1))
+identical(colnames(tdiff1), rownames(fst1))
+#2
+identical(colnames(tdiff2), rownames(tdiff2))
+identical(colnames(tdiff2), colnames(pi2))
+identical(colnames(tdiff2), rownames(pi2))
+identical(colnames(tdiff2), colnames(fst2))
+identical(colnames(tdiff2), rownames(fst2))
+#3
+identical(colnames(tdiff3), rownames(tdiff3))
+identical(colnames(tdiff3), colnames(pi3))
+identical(colnames(tdiff3), rownames(pi3))
+identical(colnames(tdiff3), colnames(fst3))
+identical(colnames(tdiff3), rownames(fst3))
+#4
+identical(colnames(tdiff4), rownames(tdiff4))
+identical(colnames(tdiff4), colnames(pi4))
+identical(colnames(tdiff4), rownames(pi4))
+identical(colnames(tdiff4), colnames(fst4))
+identical(colnames(tdiff4), rownames(fst4))
+#5
+identical(colnames(tdiff5), rownames(tdiff5))
+identical(colnames(tdiff5), colnames(pi5))
+identical(colnames(tdiff5), rownames(pi5))
+identical(colnames(tdiff5), colnames(fst5))
+identical(colnames(tdiff5), rownames(fst5))
+#6
+identical(colnames(tdiff6), rownames(tdiff6))
+identical(colnames(tdiff6), colnames(pi6))
+identical(colnames(tdiff6), rownames(pi6))
+identical(colnames(tdiff6), colnames(fst6))
+identical(colnames(tdiff6), rownames(fst6))
+#7
+identical(colnames(tdiff7), rownames(tdiff7))
+identical(colnames(tdiff7), colnames(pi7))
+identical(colnames(tdiff7), rownames(pi7))
+identical(colnames(tdiff7), colnames(fst7))
+identical(colnames(tdiff7), rownames(fst7))
+#8
+identical(colnames(tdiff8), rownames(tdiff8))
+identical(colnames(tdiff8), colnames(pi8))
+identical(colnames(tdiff8), rownames(pi8))
+identical(colnames(tdiff8), colnames(fst8))
+identical(colnames(tdiff8), rownames(fst8))
+#9
+identical(colnames(tdiff9), rownames(tdiff9))
+identical(colnames(tdiff9), colnames(pi9))
+identical(colnames(tdiff9), rownames(pi9))
+identical(colnames(tdiff9), colnames(fst9))
+identical(colnames(tdiff9), rownames(fst9))
+#10
+identical(colnames(tdiff10), rownames(tdiff10))
+identical(colnames(tdiff10), colnames(pi10))
+identical(colnames(tdiff10), rownames(pi10))
+identical(colnames(tdiff10), colnames(fst10))
+identical(colnames(tdiff10), rownames(fst10))
+#11
+identical(colnames(tdiff11), rownames(tdiff11))
+identical(colnames(tdiff11), colnames(pi11))
+identical(colnames(tdiff11), rownames(pi11))
+identical(colnames(tdiff11), colnames(fst11))
+identical(colnames(tdiff11), rownames(fst11))
+#12
+identical(colnames(tdiff12), rownames(tdiff12))
+identical(colnames(tdiff12), colnames(pi12))
+identical(colnames(tdiff12), rownames(pi12))
+identical(colnames(tdiff12), colnames(fst12))
+identical(colnames(tdiff12), rownames(fst12))
+
+#### PCoA ####
+library(vegan)
+library(plotrix)
+library(viridis)
+library(colourvalues)
+
+### select species/lake
+#species = substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp.  -  Lake Erken")))
+#species = substitute(paste(bolditalic("Polynucleobacter finlandensis"), bold("  -  Lake Mekkojärvi")))
+#species = substitute(paste(bolditalic("Polynucleobacter finlandensis"), bold("  -  Trout Bog Lake")))
+#species = substitute(paste(bolditalic("Ca."), bold(" Methylopumilus universalis  -  Rimov reservoir")))
+species = substitute(paste(bolditalic("Polynucleobacter paneuropaeus"), bold("  -  Pond EnzMain")))
+
+################################################ change accordingly ################################################
+FST = fst5
+GEO = time5
+COORD = tdiff5
+lakes <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Ppan_EnzMain_dates_depths.csv", sep="\t", check.names=F)
+plotout = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Ppan_EnzMain_Fst_time_PCoA.pdf"
+legeout = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Ppan_EnzMain_Fst_time_PCoA_legend.tiff"
+legeticks = c(0,500,1000)     #max(dists2minlong$unlist.dists)
+####################################################################################################################
+
+### run things
+modFstCore = wcmdscale(as.dist(FST), k=2, eig = TRUE)
+mod = modFstCore; main=species; legpos = 'topright'
+idx <- match(min(GEO$V2), GEO$V2)
+min_long <- GEO$V1[idx]
+dists <- COORD[,min_long]
+acces <- rownames(COORD)
+dists2minlong = data.frame(unlist(acces),unlist(dists))
+dists2minlong$col <- colour_values(dists2minlong$unlist.dists, palette = "viridis")
+cols = dists2minlong[order(match(dists2minlong[,1],rownames(mod$points))),]
+lakes_ordered = lakes[order(match(lakes[,1],rownames(mod$points))),]
+#check if accessions match
+identical(rownames(mod$points), lakes_ordered$accession)
+identical(rownames(FST), lakes_ordered$accession)
+
+### Permanova???
+#adonis2(as.dist(FST)~continent, data=lakes_ordered, permutations=999, method="bray")
+#adonis2(as.dist(FST)~lake, data=lakes_ordered, permutations=999, method="bray")
+
+### plot
+pdf(file=plotout, width=5, height=4.5)
+par(mgp=c(1.4, 0.3, 0))
+plot(mod, type="n", bty="n", axes=F, cex.lab=0.8,
+         xlab=sprintf('PCoA1 (%s%%)', round(100*mod$eig[1]/sum(mod$eig))),
+         ylab=sprintf('PCoA2 (%s%%)', round(100*mod$eig[2]/sum(mod$eig))))
+box(lwd=0.5)
+title(main, line=1.4, cex.main=1.1)
+axis(1, cex.axis=0.7, lwd=0.5, tck=-0.02)
+axis(2, cex.axis=0.7, lwd=0.5, tck=-0.02)
+points(mod$points, bg=cols$col, pch=21, cex=1.7, lwd=0.7)
+#text(mod$points, labels=lakes_ordered$month, col="red", cex=0.6, pos=2)
+#text(mod$points, labels=lakes_ordered$depth, col="blue", cex=0.6, pos=1)
+ordiellipse(mod, lakes_ordered$year, scaling="symmetric", kind="ehull", lty=2, lwd=0.7, label=T, cex=0.95, pos=1)
+#ordiellipse(mod, lakes_ordered$depth, scaling="symmetric", kind="ehull", lty=3, lwd=0.7, col="blue", label=T, cex=0.8, pos=2)
+ordihull(mod, lakes_ordered$dat_dep, scaling="symmetric", lwd=0.5, col="red", label=T, cex=0.6, pos=2)
+dev.off()
+
+### legend
+bar_plot <- function(df) {
+  barplot( height = df[["a"]], col = df[["col"]], border = NA, space = 0, yaxt = 'n')
+}
+df <- data.frame(a = 1, x = min(dists2minlong$unlist.dists):max(dists2minlong$unlist.dists))
+df$col <- colour_values(df$x, palette = "viridis")
+
+tiff(file=legeout, width=3000, height=300)
+bar_plot(df)
+axis(side=1, at=legeticks, lwd=5, labels=F, tck=-0.4)
+dev.off()
+
+
+

@@ -1,0 +1,130 @@
+library(dplyr)
+library(zoo)
+library(tibble)
+
+#### doesn't work for genomes with multiple contigs!!! ################################################################################
+#### coverage ####
+###>>>>>>>> change species name
+ppan40_cov <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/Ppan_included_loci.txt", header=T, check.names=F, sep=" ")
+cov <- data.frame(pos=ppan40_cov$Position)
+cov[2] <- 0
+
+# Fsp1 genome size: 925141
+# Fubi genome size: 1160202
+# Nabu genome size: 1161863
+# Muni genome size: 1268083
+# Pver genome size: 1364004
+# Ppan genome size: 1830921
+# Pfin genome size: 2280072
+
+# -1 to 0
+###>>>>>>>> change number according to genome size (just leave ppan40 and other variable names for all species/samples)
+noncov <- data.frame(pos=setdiff(1:1830921, ppan40_cov$Position))
+noncov[2] <- -1
+covall <- rbind(cov,noncov)
+covall <- covall[order(covall$pos), ]
+w1000_b100 <- rollapply(covall, width=1000, by=100, FUN=mean, align="left")
+df_w1000_b100 <- as.data.frame(w1000_b100)
+
+# 0 to 1
+cov[2] <- 1
+noncov[2] <- 0
+covall <- rbind(cov,noncov)
+covall <- covall[order(covall$pos), ]
+cov_w1000_b100 <- rollapply(covall, width=1000, by=100, FUN=mean, align="left")
+df_cov_w1000_b100 <- as.data.frame(cov_w1000_b100)
+
+
+######################################## pi per locus ########################################
+###>>>>>>>> change file name
+ppan40_pipl <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/Ppan_mc15_mf40_run.intradiv-per-locus.txt", header=T, check.names=F, sep="\t")
+
+ppan40_pipl_ <- ppan40_pipl[ , c(TRUE,FALSE) ]
+ppan40_pipl_ <- add_column(ppan40_pipl_, pos=ppan40_pipl$Position, .after="Contig")
+
+nonpi <- data.frame(pos=setdiff(1:1830921, ppan40_pipl$Position))
+nonpi <- add_column(nonpi, Contig="UB-Kaiv-W7", .before="pos")
+nonpi[3:ncol(ppan40_pipl_)] <- 0
+colnames(nonpi) <- colnames(ppan40_pipl_)
+piall <- rbind(ppan40_pipl_,nonpi)
+piall <- piall[order(piall$pos), ]
+
+## polymorphic sites >>>>>>> skip if Pi should be plotted, run if S should be plotted!!!
+piall[, 3:ncol(piall)][piall[, 3:ncol(piall)] != 0] <- 1
+
+# sliding window
+piall$Contig <- NULL
+piall_w1000_b100 <- rollapply(piall, width=1000, by=100, FUN=mean, align="left")
+df_piall_w1000_b100 <- as.data.frame(piall_w1000_b100)
+
+piall_w_perl_perc <- df_piall_w1000_b100*100 / df_cov_w1000_b100$V2
+piall_w_perl_perc[1] <- df_piall_w1000_b100[1]
+
+## dataframe for S
+ps <- data.frame(matrix(ncol = 4, nrow = 0))
+x <- c("sample", "genome_len", "S", "S (%)")
+colnames(ps) <- x
+
+## plot in loop
+for(sample in colnames(piall_w_perl_perc)[2:length(colnames(piall_w_perl_perc))]) {
+## >>>>>>> change name accordingly (_Pi or _S)!!!
+  pdf(file=paste("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/", sample, "_S.pdf", sep=""),
+          width=17, height=3.5)
+# empty plot with x-axis length according to genome size
+  plot(c(0,1830921), c(-1,5), type= "n", xlab = "", ylab = "", xaxs="i", yaxs="i")
+# plot coverage at the bottom
+  segments(df_w1000_b100$pos, -1, df_w1000_b100$pos, df_w1000_b100$V2, lwd=0.1)
+  lines(w1000_b100, col="white", lwd=0.1)
+# plot sliding window allele freqs
+  #lines(piall_w_perl_perc$pos, piall_w_perl_perc[[sample]], lwd=0.1, col="black")
+  segments(piall_w_perl_perc$pos, 0, piall_w_perl_perc$pos, piall_w_perl_perc[[sample]], lwd=0.1, col="red")
+# close plot
+  dev.off()
+## get number of polymorphic sites >>>>>>> only for S!!!
+ps[nrow(ps)+1, 1] <- sample
+ps[nrow(ps), 2] <- length(piall[[sample]])
+ps[nrow(ps), 3] <- sum(piall[[sample]])
+ps[nrow(ps), 4] <- sum(piall[[sample]]) *100 / length(piall[[sample]])
+}
+
+write.table(ps,"/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Ppan40_S.tsv",sep="\t",row.names=FALSE)
+
+## get "real" total number of polymorphic sites in the respective dataset
+piall[ncol(piall)] <- NULL
+rs <- rowSums(piall)
+rs <- rs[rs!=0]
+length(rs)
+
+######################################## allele freqs (!!!plots almost identical to Pi plots!!!) ########################################
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/Ppan_EnzM",
+                            recursive = TRUE,
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+## plot allelediv in loop
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],100,nchar(filelist[i]))
+    assign(sample, read.csv(filelist[i], header=T, check.names=T, sep="\t"))
+
+pdf(file=paste("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/010_allele_freqs_accross_genome/", sample, "_allelediv.pdf", sep=""), width=17, height=3.5)
+# empty plot with x-axis length according to genome size
+plot(c(0,1830921), c(-1,2), type= "n", xlab = "", ylab = "", xaxs="i", yaxs="i")
+# plot coverage at the bottom
+segments(df_w1000_b100$pos, -1, df_w1000_b100$pos, df_w1000_b100$V2, lwd=0.1)
+lines(w1000_b100, col="white", lwd=0.1)
+# sliding window for allele freqs
+noalleles <- data.frame(pos=setdiff(1:1830921, get(sample)$position))
+noalleles[2] <- 0
+alleles <- data.frame(pos=get(sample)$position, V2=get(sample)$X15.max.ATCG.)
+all <- rbind(alleles,noalleles)
+all <- all[order(all$pos), ]
+all_w1000_b100 <- rollapply(all, width=1000, by=100, FUN=mean, align="left")
+df_all_w1000_b100 <- as.data.frame(all_w1000_b100)
+df_all_w1000_b100[3] <- df_all_w1000_b100$V2*10 / df_cov_w1000_b100$V2
+# plot sliding window allele freqs
+segments(df_all_w1000_b100$pos, 0, df_all_w1000_b100$pos, df_all_w1000_b100$V3, lwd=0.1, col="red")
+# close plot
+dev.off()
+}
+

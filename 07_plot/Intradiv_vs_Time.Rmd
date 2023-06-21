@@ -1,0 +1,67 @@
+library(scales)
+library(dplyr)
+library(ggplot2)
+
+#Fsp Erken
+Fsp_Erk <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Fsp_Erken_merged.csv", header=TRUE, sep="\t", check.names=T)
+#Ppan EnzM
+Ppan_Enz <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Ppan_EnzMain_merged.csv", header=TRUE, sep="\t", check.names=T)
+OF <- filter(Ppan_Enz, depth=="0.2")
+OF8 <- head(OF,-2)
+TI <- filter(Ppan_Enz, depth=="1.2")
+#Pfin Mekk
+Pfin_Mek <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Pfin_Mekk_merged.csv", header=TRUE, sep="\t", check.names=T)
+d2p5 <- filter(Pfin_Mek, depth=="2.5")
+others <- filter(Pfin_Mek, is.na(depth))
+#Pfin Trout
+Pfin_Tro <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Pfin_TroutBog_merged.csv", header=TRUE, sep="\t", check.names=T)
+epi <- filter(Pfin_Tro, depth=="Epilimnion")
+hyp <- filter(Pfin_Tro, depth=="Hypolimnion")
+#Muni Rimov
+Muni_Rim <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/007_dates/Muni_Rimov_merged.csv", header=TRUE, sep="\t", check.names=T)
+d0p5 <- filter(Muni_Rim, depth=="0.5")
+d30 <- filter(Muni_Rim, depth=="30")
+
+# parameters to plot (exchange below accordingly)
+entropy_noncorr, bquote(Entropy[noncorr])
+pi*100, "Pi (%)"
+S...., "S (%)"
+X.tri...., bquote(S[tri])                 #bquote didn't work with (%)
+X.tetra...., bquote(S[tetra])                 #bquote didn't work with (%)
+X.tri..di...., bquote(S[tri] / S[di])       #bquote didn't work with (%)
+meddpth.Gbp, "depth / Gbp"
+
+## Plot
+p <- ggplot(Fsp_Erk, aes(x=as.Date(date), y=X.tetra....)) +
+      theme_bw() +
+#      scale_x_date(breaks=seq(as.Date("2011-07-01"), as.Date("2022-07-01"), by="6 months"), date_labels="%b\n%Y", date_minor_breaks="1 month", limits=as.Date(c("2007-06-13","2020-10-23"))) +
+#      scale_x_date(date_breaks="1 month", date_labels="%b\n%Y", date_minor_breaks="1 day") +
+      scale_x_date(date_breaks="1 year", date_labels="%Y", date_minor_breaks="1 month") +
+#      scale_y_continuous(limits=c(6,18)) +
+      geom_line(data=OF, size=0.1, color="gold2") +
+      geom_point(data=OF, size=3.5, shape=21, fill="gold2") +
+      geom_line(data=TI, size=0.1, color="gold4") +
+      geom_point(data=TI, size=3.5, shape=21, fill="gold4") +
+      geom_line(data=epi, size=0.1, color="green1") +
+      geom_point(data=epi, size=3.5, shape=21, fill="green1") +
+      geom_line(data=hyp, size=0.1, color="green4") +
+      geom_point(data=hyp, size=3.5, shape=21, fill="green4") +      
+      geom_line(data=d2p5, size=0.1, color="red4") +
+      geom_point(data=d2p5, size=3.5, shape=21, fill="red4") +
+      geom_line(data=others, size=0.1, color="red1") +
+      geom_point(data=others, size=3.5, shape=21, fill="red1") +      
+      geom_line(data=d0p5, size=0.1, color="skyblue1") +
+      geom_point(data=d0p5, size=3.5, shape=21, fill="skyblue1") +
+      geom_line(data=d30, size=0.1, color="blue3") +
+      geom_point(data=d30, size=3.5, shape=21, fill="blue3") +      
+      geom_line(data=Fsp_Erk, size=0.1, color="grey55") +
+      geom_point(data=Fsp_Erk, size=3.5, shape=21, fill="grey55") +
+#Set axis labels
+      theme(axis.text=element_text(size=15), axis.title=element_text(size=17)) +
+      labs(x="Year", y=bquote(S[tetra]))
+p
+
+### Print to pdf
+pdf("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/timeseries_Stetra.pdf", width=8.5, height=5.5)
+print(p)
+dev.off()

@@ -1,0 +1,47 @@
+library(car)
+library(ggplot2)
+library(dplyr)
+
+### Read in table from tsv
+#multiple <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/000_merged/7species_incl_entr_noSistermetas_noCombined.tsv", header=TRUE, sep="\t")
+multiple <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_time_different_depth/stdd_pairwise_Pi_and_FST_Ppan_run2_noSistermetas.tsv", header=TRUE, sep="\t")
+
+# Split pops
+Fsp <- filter(multiple, species == "Fsp")
+#FspIIIbA2 <- filter(multiple, species == "FspIIIbA2")
+Fubi <- filter(multiple, species == "Fubi")
+Muni <- filter(multiple, species == "Muni")
+Nabu <- filter(multiple, species == "Nabu")
+Pver <- filter(multiple, species == "Pver")
+Ppan <- filter(multiple, species == "Ppan")
+Pfin <- filter(multiple, species == "Pfin")
+
+### Set order of factors
+multiple$species <- factor(multiple$species,levels = c("Ppan", "Pfin", "Muni", "Fubi", "Fsp", "Nabu", "Pver"))
+
+library(ggbeeswarm)
+
+#### Plot Fst ####
+#p <- ggplot(multiple, aes(x=species, y=pi*100)) +
+#p <- ggplot(multiple, aes(x=species, y=pi_1.2*100)) +
+p <- ggplot(multiple, aes(x=species, y=fst)) +
+      theme_bw() +
+#Set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=16), legend.position="none") +
+#      labs(x="", y=Pi (%)")
+#      labs(x="", y="inter-Pi (%)")
+      labs(x="", y=bquote(F[ST]))
+# Set line colors
+#      scale_y_continuous(limits=c(0.009,0.2))
+# Add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")
+# Add median
+p <- p + stat_summary(fun=median, geom="point", alpha=1, shape=21, size=3, stroke=0.8, fill="red", color="black")
+p
+
+### Print to pdf
+#pdf("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pi_within_pops_jitter_noSistermetas.pdf", width=5, height=5)
+#pdf("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/interPi_between_depths_jitter_noSistermetas.pdf", width=5, height=5)
+pdf("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Fst_between_depths_jitter_noSistermetas.pdf", width=5, height=5)
+print(p)
+dev.off()

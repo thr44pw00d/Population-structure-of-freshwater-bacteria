@@ -1,0 +1,755 @@
+##### get matrix with time differences #####
+#all
+time1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Fsp_Erken_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_Mekkojarvi_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+#specific depth
+time6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_hypo_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_epi_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_Mekk_2.5m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time9 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_0.5m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time10 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_Rimov_30m_original_order.csv", header=FALSE, sep="\t", check.names=FALSE)
+time11 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_0.2m_original_order_run1.csv", header=FALSE, sep="\t", check.names=FALSE)
+time12 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_EnzMain_1.2m_original_order_run1.csv", header=FALSE, sep="\t", check.names=FALSE)
+
+#Calculate time differences for all pairs and format matrix as dataframe
+#1
+tdiff1<-0
+temp<-c(0,0)
+for(i in 1:nrow(time1)) {
+  for(k in 1:nrow(time1)) {
+    temp[k]<-abs(difftime(time1[i,2], time1[k,2], tz="GMT", units="days"))
+  }
+  tdiff1<-rbind(tdiff1,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff1<-tdiff1[-1,] #Remove the first row
+row.names(tdiff1)<-time1[,1] #Add row names from original file
+colnames(tdiff1)<-time1[,1] #Add column names from original file
+tdiff1<-data.frame(tdiff1, check.names=FALSE)
+#2
+tdiff2<-0
+temp<-c(0,0)
+for(i in 1:nrow(time2)) {
+  for(k in 1:nrow(time2)) {
+    temp[k]<-abs(difftime(time2[i,2], time2[k,2], tz="GMT", units="days"))
+  }
+  tdiff2<-rbind(tdiff2,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff2<-tdiff2[-1,] #Remove the first row
+row.names(tdiff2)<-time2[,1] #Add row names from original file
+colnames(tdiff2)<-time2[,1] #Add column names from original file
+tdiff2<-data.frame(tdiff2, check.names=FALSE)
+#3
+tdiff3<-0
+temp<-c(0,0)
+for(i in 1:nrow(time3)) {
+  for(k in 1:nrow(time3)) {
+    temp[k]<-abs(difftime(time3[i,2], time3[k,2], tz="GMT", units="days"))
+  }
+  tdiff3<-rbind(tdiff3,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff3<-tdiff3[-1,] #Remove the first row
+row.names(tdiff3)<-time3[,1] #Add row names from original file
+colnames(tdiff3)<-time3[,1] #Add column names from original file
+tdiff3<-data.frame(tdiff3, check.names=FALSE)
+#4
+tdiff4<-0
+temp<-c(0,0)
+for(i in 1:nrow(time4)) {
+  for(k in 1:nrow(time4)) {
+    temp[k]<-abs(difftime(time4[i,2], time4[k,2], tz="GMT", units="days"))
+  }
+  tdiff4<-rbind(tdiff4,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff4<-tdiff4[-1,] #Remove the first row
+row.names(tdiff4)<-time4[,1] #Add row names from original file
+colnames(tdiff4)<-time4[,1] #Add column names from original file
+tdiff4<-data.frame(tdiff4, check.names=FALSE)
+#5
+tdiff5<-0
+temp<-c(0,0)
+for(i in 1:nrow(time5)) {
+  for(k in 1:nrow(time5)) {
+    temp[k]<-abs(difftime(time5[i,2], time5[k,2], tz="GMT", units="days"))
+  }
+  tdiff5<-rbind(tdiff5,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff5<-tdiff5[-1,] #Remove the first row
+row.names(tdiff5)<-time5[,1] #Add row names from original file
+colnames(tdiff5)<-time5[,1] #Add column names from original file
+tdiff5<-data.frame(tdiff5, check.names=FALSE)
+#6
+tdiff6<-0
+temp<-c(0,0)
+for(i in 1:nrow(time6)) {
+  for(k in 1:nrow(time6)) {
+    temp[k]<-abs(difftime(time6[i,2], time6[k,2], tz="GMT", units="days"))
+  }
+  tdiff6<-rbind(tdiff6,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff6<-tdiff6[-1,] #Remove the first row
+row.names(tdiff6)<-time6[,1] #Add row names from original file
+colnames(tdiff6)<-time6[,1] #Add column names from original file
+tdiff6<-data.frame(tdiff6, check.names=FALSE)
+#7
+tdiff7<-0
+temp<-c(0,0)
+for(i in 1:nrow(time7)) {
+  for(k in 1:nrow(time7)) {
+    temp[k]<-abs(difftime(time7[i,2], time7[k,2], tz="GMT", units="days"))
+  }
+  tdiff7<-rbind(tdiff7,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff7<-tdiff7[-1,] #Remove the first row
+row.names(tdiff7)<-time7[,1] #Add row names from original file
+colnames(tdiff7)<-time7[,1] #Add column names from original file
+tdiff7<-data.frame(tdiff7, check.names=FALSE)
+
+#8
+tdiff8<-0
+temp<-c(0,0)
+for(i in 1:nrow(time8)) {
+  for(k in 1:nrow(time8)) {
+    temp[k]<-abs(difftime(time8[i,2], time8[k,2], tz="GMT", units="days"))
+  }
+  tdiff8<-rbind(tdiff8,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff8<-tdiff8[-1,] #Remove the first row
+row.names(tdiff8)<-time8[,1] #Add row names from original file
+colnames(tdiff8)<-time8[,1] #Add column names from original file
+tdiff8<-data.frame(tdiff8, check.names=FALSE)
+#9
+tdiff9<-0
+temp<-c(0,0)
+for(i in 1:nrow(time9)) {
+  for(k in 1:nrow(time9)) {
+    temp[k]<-abs(difftime(time9[i,2], time9[k,2], tz="GMT", units="days"))
+  }
+  tdiff9<-rbind(tdiff9,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff9<-tdiff9[-1,] #Remove the first row
+row.names(tdiff9)<-time9[,1] #Add row names from original file
+colnames(tdiff9)<-time9[,1] #Add column names from original file
+tdiff9<-data.frame(tdiff9, check.names=FALSE)
+#10
+tdiff10<-0
+temp<-c(0,0)
+for(i in 1:nrow(time10)) {
+  for(k in 1:nrow(time10)) {
+    temp[k]<-abs(difftime(time10[i,2], time10[k,2], tz="GMT", units="days"))
+  }
+  tdiff10<-rbind(tdiff10,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff10<-tdiff10[-1,] #Remove the first row
+row.names(tdiff10)<-time10[,1] #Add row names from original file
+colnames(tdiff10)<-time10[,1] #Add column names from original file
+tdiff10<-data.frame(tdiff10, check.names=FALSE)
+#11
+tdiff11<-0
+temp<-c(0,0)
+for(i in 1:nrow(time11)) {
+  for(k in 1:nrow(time11)) {
+    temp[k]<-abs(difftime(time11[i,2], time11[k,2], tz="GMT", units="days"))
+  }
+  tdiff11<-rbind(tdiff11,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff11<-tdiff11[-1,] #Remove the first row
+row.names(tdiff11)<-time11[,1] #Add row names from original file
+colnames(tdiff11)<-time11[,1] #Add column names from original file
+tdiff11<-data.frame(tdiff11, check.names=FALSE)
+#12
+tdiff12<-0
+temp<-c(0,0)
+for(i in 1:nrow(time12)) {
+  for(k in 1:nrow(time12)) {
+    temp[k]<-abs(difftime(time12[i,2], time12[k,2], tz="GMT", units="days"))
+  }
+  tdiff12<-rbind(tdiff12,temp) #Add the current row of time difference into the matrix containing all time differences
+}
+tdiff12<-tdiff12[-1,] #Remove the first row
+row.names(tdiff12)<-time12[,1] #Add row names from original file
+colnames(tdiff12)<-time12[,1] #Add column names from original file
+tdiff12<-data.frame(tdiff12, check.names=FALSE)
+
+##### get matrix with inter-Pi and Fst #####
+library(igraph)
+#Load file with Pi and Fst values (long format)
+#all
+pi_fst1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Fsp1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin2_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni1_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan1_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#specific depth
+pi_fst6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_hypo_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_epi_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin25_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst9 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni05_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst10 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni30_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst11 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan02_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst12 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan12_pairwise_Pi_and_FST_run2.tsv", header=TRUE, sep="\t", check.names=FALSE)
+############################################# in bash #############################################
+#grep -vf Pfin_TroutBog_same.tsv Pfin2_pairwise_Pi_and_FST.tsv > Pfin_TroutBog_diff.tsv
+#grep -vf Pfin_Mekk_same.tsv Pfin1_pairwise_Pi_and_FST.tsv > Pfin_Mekk_diff.tsv
+#grep -vf Muni_same.tsv Muni1_pairwise_Pi_and_FST.tsv > Muni_diff.tsv
+#grep -vf Ppan_same.tsv Ppan1_pairwise_Pi_and_FST_run2.tsv > Ppan_diff.tsv
+###################################################################################################
+pi_fst13 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_TroutBog_diff.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst14 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Pfin_Mekk_diff.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst15 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Muni_diff.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst16 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/same_lake_different_time/Ppan_diff.tsv", header=TRUE, sep="\t", check.names=FALSE)
+
+#Make undirected so that matrix will be symmetric
+undir1 <- graph.data.frame(pi_fst1, directed=FALSE)
+undir2 <- graph.data.frame(pi_fst2, directed=FALSE)
+undir3 <- graph.data.frame(pi_fst3, directed=FALSE)
+undir4 <- graph.data.frame(pi_fst4, directed=FALSE)
+undir5 <- graph.data.frame(pi_fst5, directed=FALSE)
+undir6 <- graph.data.frame(pi_fst6, directed=FALSE)
+undir7 <- graph.data.frame(pi_fst7, directed=FALSE)
+undir8 <- graph.data.frame(pi_fst8, directed=FALSE)
+undir9 <- graph.data.frame(pi_fst9, directed=FALSE)
+undir10 <- graph.data.frame(pi_fst10, directed=FALSE)
+undir11 <- graph.data.frame(pi_fst11, directed=FALSE)
+undir12 <- graph.data.frame(pi_fst12, directed=FALSE)
+undir13 <- graph.data.frame(pi_fst13, directed=FALSE)
+undir14 <- graph.data.frame(pi_fst14, directed=FALSE)
+undir15 <- graph.data.frame(pi_fst15, directed=FALSE)
+undir16 <- graph.data.frame(pi_fst16, directed=FALSE)
+
+#Turn into matrix and into dataframe finally
+#pi1
+pi1 <- get.adjacency(undir1, attr="pi_1-2", sparse=FALSE)
+pi1 <- as.data.frame(pi1)
+for(k in 1:nrow(pi1)){
+pi1[,k]<-as.numeric(pi1[,k])
+}
+pi1 <- pi1[,1:ncol(pi1)]*100
+diag(pi1) <- ""
+#fst1
+fst1 <- get.adjacency(undir1, attr="fst", sparse=FALSE)
+fst1 <- as.data.frame(fst1)
+for(k in 1:nrow(fst1)){
+fst1[,k]<-as.numeric(fst1[,k])
+}
+diag(fst1) <- ""
+#pi2
+pi2 <- get.adjacency(undir2, attr="pi_1-2", sparse=FALSE)
+pi2 <- as.data.frame(pi2)
+for(k in 1:nrow(pi2)){
+pi2[,k]<-as.numeric(pi2[,k])
+}
+pi2 <- pi2[,1:ncol(pi2)]*100
+diag(pi2) <- ""
+#fst2
+fst2 <- get.adjacency(undir2, attr="fst", sparse=FALSE)
+fst2 <- as.data.frame(fst2)
+for(k in 1:nrow(fst2)){
+fst2[,k]<-as.numeric(fst2[,k])
+}
+diag(fst2) <- ""
+#pi3
+pi3 <- get.adjacency(undir3, attr="pi_1-2", sparse=FALSE)
+pi3 <- as.data.frame(pi3)
+for(k in 1:nrow(pi3)){
+pi3[,k]<-as.numeric(pi3[,k])
+}
+pi3 <- pi3[,1:ncol(pi3)]*100
+diag(pi3) <- ""
+#fst3
+fst3 <- get.adjacency(undir3, attr="fst", sparse=FALSE)
+fst3 <- as.data.frame(fst3)
+for(k in 1:nrow(fst3)){
+fst3[,k]<-as.numeric(fst3[,k])
+}
+diag(fst3) <- ""
+#pi4
+pi4 <- get.adjacency(undir4, attr="pi_1-2", sparse=FALSE)
+pi4 <- as.data.frame(pi4)
+for(k in 1:nrow(pi4)){
+pi4[,k]<-as.numeric(pi4[,k])
+}
+pi4 <- pi4[,1:ncol(pi4)]*100
+diag(pi4) <- ""
+#fst4
+fst4 <- get.adjacency(undir4, attr="fst", sparse=FALSE)
+fst4 <- as.data.frame(fst4)
+for(k in 1:nrow(fst4)){
+fst4[,k]<-as.numeric(fst4[,k])
+}
+diag(fst4) <- ""
+#pi5
+pi5 <- get.adjacency(undir5, attr="pi_1-2", sparse=FALSE)
+pi5 <- as.data.frame(pi5)
+for(k in 1:nrow(pi5)){
+pi5[,k]<-as.numeric(pi5[,k])
+}
+pi5 <- pi5[,1:ncol(pi5)]*100
+diag(pi5) <- ""
+#fst5
+fst5 <- get.adjacency(undir5, attr="fst", sparse=FALSE)
+fst5 <- as.data.frame(fst5)
+for(k in 1:nrow(fst5)){
+fst5[,k]<-as.numeric(fst5[,k])
+}
+diag(fst5) <- ""
+#pi6
+pi6 <- get.adjacency(undir6, attr="pi_1-2", sparse=FALSE)
+pi6 <- as.data.frame(pi6)
+for(k in 1:nrow(pi6)){
+pi6[,k]<-as.numeric(pi6[,k])
+}
+pi6 <- pi6[,1:ncol(pi6)]*100
+diag(pi6) <- ""
+#fst6
+fst6 <- get.adjacency(undir6, attr="fst", sparse=FALSE)
+fst6 <- as.data.frame(fst6)
+for(k in 1:nrow(fst6)){
+fst6[,k]<-as.numeric(fst6[,k])
+}
+diag(fst6) <- ""
+#pi7
+pi7 <- get.adjacency(undir7, attr="pi_1-2", sparse=FALSE)
+pi7 <- as.data.frame(pi7)
+for(k in 1:nrow(pi7)){
+pi7[,k]<-as.numeric(pi7[,k])
+}
+pi7 <- pi7[,1:ncol(pi7)]*100
+diag(pi7) <- ""
+#fst7
+fst7 <- get.adjacency(undir7, attr="fst", sparse=FALSE)
+fst7 <- as.data.frame(fst7)
+for(k in 1:nrow(fst7)){
+fst7[,k]<-as.numeric(fst7[,k])
+}
+diag(fst7) <- ""
+
+#pi8
+pi8 <- get.adjacency(undir8, attr="pi_1-2", sparse=FALSE)
+pi8 <- as.data.frame(pi8)
+for(k in 1:nrow(pi8)){
+pi8[,k]<-as.numeric(pi8[,k])
+}
+pi8 <- pi8[,1:ncol(pi8)]*100
+diag(pi8) <- ""
+#fst8
+fst8 <- get.adjacency(undir8, attr="fst", sparse=FALSE)
+fst8 <- as.data.frame(fst8)
+for(k in 1:nrow(fst8)){
+fst8[,k]<-as.numeric(fst8[,k])
+}
+diag(fst8) <- ""
+#pi9
+pi9 <- get.adjacency(undir9, attr="pi_1-2", sparse=FALSE)
+pi9 <- as.data.frame(pi9)
+for(k in 1:nrow(pi9)){
+pi9[,k]<-as.numeric(pi9[,k])
+}
+pi9 <- pi9[,1:ncol(pi9)]*100
+diag(pi9) <- ""
+#fst9
+fst9 <- get.adjacency(undir9, attr="fst", sparse=FALSE)
+fst9 <- as.data.frame(fst9)
+for(k in 1:nrow(fst9)){
+fst9[,k]<-as.numeric(fst9[,k])
+}
+diag(fst9) <- ""
+#pi10
+pi10 <- get.adjacency(undir10, attr="pi_1-2", sparse=FALSE)
+pi10 <- as.data.frame(pi10)
+for(k in 1:nrow(pi10)){
+pi10[,k]<-as.numeric(pi10[,k])
+}
+pi10 <- pi10[,1:ncol(pi10)]*100
+diag(pi10) <- ""
+#fst10
+fst10 <- get.adjacency(undir10, attr="fst", sparse=FALSE)
+fst10 <- as.data.frame(fst10)
+for(k in 1:nrow(fst10)){
+fst10[,k]<-as.numeric(fst10[,k])
+}
+diag(fst10) <- ""
+#pi11
+pi11 <- get.adjacency(undir11, attr="pi_1-2", sparse=FALSE)
+pi11 <- as.data.frame(pi11)
+for(k in 1:nrow(pi11)){
+pi11[,k]<-as.numeric(pi11[,k])
+}
+pi11 <- pi11[,1:ncol(pi11)]*100
+diag(pi11) <- ""
+#fst11
+fst11 <- get.adjacency(undir11, attr="fst", sparse=FALSE)
+fst11 <- as.data.frame(fst11)
+for(k in 1:nrow(fst11)){
+fst11[,k]<-as.numeric(fst11[,k])
+}
+diag(fst11) <- ""
+#pi12
+pi12 <- get.adjacency(undir12, attr="pi_1-2", sparse=FALSE)
+pi12 <- as.data.frame(pi12)
+for(k in 1:nrow(pi12)){
+pi12[,k]<-as.numeric(pi12[,k])
+}
+pi12 <- pi12[,1:ncol(pi12)]*100
+diag(pi12) <- ""
+#fst12
+fst12 <- get.adjacency(undir12, attr="fst", sparse=FALSE)
+fst12 <- as.data.frame(fst12)
+for(k in 1:nrow(fst12)){
+fst12[,k]<-as.numeric(fst12[,k])
+}
+diag(fst12) <- ""
+#pi13
+pi13 <- get.adjacency(undir13, attr="pi_1-2", sparse=FALSE)
+pi13 <- as.data.frame(pi13)
+for(k in 1:nrow(pi13)){
+pi13[,k]<-as.numeric(pi13[,k])
+}
+pi13 <- pi13[,1:ncol(pi13)]*100
+diag(pi13) <- ""
+pi13[pi13 == 0] <- NA
+#fst13
+fst13 <- get.adjacency(undir13, attr="fst", sparse=FALSE)
+fst13 <- as.data.frame(fst13)
+for(k in 1:nrow(fst13)){
+fst13[,k]<-as.numeric(fst13[,k])
+}
+diag(fst13) <- ""
+fst13[fst13 == 0] <- NA
+#pi14
+pi14 <- get.adjacency(undir14, attr="pi_1-2", sparse=FALSE)
+pi14 <- as.data.frame(pi14)
+for(k in 1:nrow(pi14)){
+pi14[,k]<-as.numeric(pi14[,k])
+}
+pi14 <- pi14[,1:ncol(pi14)]*100
+diag(pi14) <- ""
+pi14[pi14 == 0] <- NA
+#fst14
+fst14 <- get.adjacency(undir14, attr="fst", sparse=FALSE)
+fst14 <- as.data.frame(fst14)
+for(k in 1:nrow(fst14)){
+fst14[,k]<-as.numeric(fst14[,k])
+}
+diag(fst14) <- ""
+fst14[fst14 == 0] <- NA
+#pi15
+pi15 <- get.adjacency(undir15, attr="pi_1-2", sparse=FALSE)
+pi15 <- as.data.frame(pi15)
+for(k in 1:nrow(pi15)){
+pi15[,k]<-as.numeric(pi15[,k])
+}
+pi15 <- pi15[,1:ncol(pi15)]*100
+diag(pi15) <- ""
+pi15[pi15 == 0] <- NA
+#fst15
+fst15 <- get.adjacency(undir15, attr="fst", sparse=FALSE)
+fst15 <- as.data.frame(fst15)
+for(k in 1:nrow(fst15)){
+fst15[,k]<-as.numeric(fst15[,k])
+}
+diag(fst15) <- ""
+fst15[fst15 == 0] <- NA
+#pi16
+pi16 <- get.adjacency(undir16, attr="pi_1-2", sparse=FALSE)
+pi16 <- as.data.frame(pi16)
+for(k in 1:nrow(pi16)){
+pi16[,k]<-as.numeric(pi16[,k])
+}
+pi16 <- pi16[,1:ncol(pi16)]*100
+diag(pi16) <- ""
+pi16[pi16 == 0] <- NA
+#fst16
+fst16 <- get.adjacency(undir16, attr="fst", sparse=FALSE)
+fst16 <- as.data.frame(fst16)
+for(k in 1:nrow(fst16)){
+fst16[,k]<-as.numeric(fst16[,k])
+}
+diag(fst16) <- ""
+fst16[fst16 == 0] <- NA
+
+##### Check if rows and columns of matrices match #####
+#1
+identical(colnames(tdiff1), rownames(tdiff1))
+identical(colnames(tdiff1), colnames(pi1))
+identical(colnames(tdiff1), rownames(pi1))
+identical(colnames(tdiff1), colnames(fst1))
+identical(colnames(tdiff1), rownames(fst1))
+#2
+identical(colnames(tdiff2), rownames(tdiff2))
+identical(colnames(tdiff2), colnames(pi2))
+identical(colnames(tdiff2), rownames(pi2))
+identical(colnames(tdiff2), colnames(fst2))
+identical(colnames(tdiff2), rownames(fst2))
+#3
+identical(colnames(tdiff3), rownames(tdiff3))
+identical(colnames(tdiff3), colnames(pi3))
+identical(colnames(tdiff3), rownames(pi3))
+identical(colnames(tdiff3), colnames(fst3))
+identical(colnames(tdiff3), rownames(fst3))
+#4
+identical(colnames(tdiff4), rownames(tdiff4))
+identical(colnames(tdiff4), colnames(pi4))
+identical(colnames(tdiff4), rownames(pi4))
+identical(colnames(tdiff4), colnames(fst4))
+identical(colnames(tdiff4), rownames(fst4))
+#5
+identical(colnames(tdiff5), rownames(tdiff5))
+identical(colnames(tdiff5), colnames(pi5))
+identical(colnames(tdiff5), rownames(pi5))
+identical(colnames(tdiff5), colnames(fst5))
+identical(colnames(tdiff5), rownames(fst5))
+#6
+identical(colnames(tdiff6), rownames(tdiff6))
+identical(colnames(tdiff6), colnames(pi6))
+identical(colnames(tdiff6), rownames(pi6))
+identical(colnames(tdiff6), colnames(fst6))
+identical(colnames(tdiff6), rownames(fst6))
+#7
+identical(colnames(tdiff7), rownames(tdiff7))
+identical(colnames(tdiff7), colnames(pi7))
+identical(colnames(tdiff7), rownames(pi7))
+identical(colnames(tdiff7), colnames(fst7))
+identical(colnames(tdiff7), rownames(fst7))
+#8
+identical(colnames(tdiff8), rownames(tdiff8))
+identical(colnames(tdiff8), colnames(pi8))
+identical(colnames(tdiff8), rownames(pi8))
+identical(colnames(tdiff8), colnames(fst8))
+identical(colnames(tdiff8), rownames(fst8))
+#9
+identical(colnames(tdiff9), rownames(tdiff9))
+identical(colnames(tdiff9), colnames(pi9))
+identical(colnames(tdiff9), rownames(pi9))
+identical(colnames(tdiff9), colnames(fst9))
+identical(colnames(tdiff9), rownames(fst9))
+#10
+identical(colnames(tdiff10), rownames(tdiff10))
+identical(colnames(tdiff10), colnames(pi10))
+identical(colnames(tdiff10), rownames(pi10))
+identical(colnames(tdiff10), colnames(fst10))
+identical(colnames(tdiff10), rownames(fst10))
+#11
+identical(colnames(tdiff11), rownames(tdiff11))
+identical(colnames(tdiff11), colnames(pi11))
+identical(colnames(tdiff11), rownames(pi11))
+identical(colnames(tdiff11), colnames(fst11))
+identical(colnames(tdiff11), rownames(fst11))
+#12
+identical(colnames(tdiff12), rownames(tdiff12))
+identical(colnames(tdiff12), colnames(pi12))
+identical(colnames(tdiff12), rownames(pi12))
+identical(colnames(tdiff12), colnames(fst12))
+identical(colnames(tdiff12), rownames(fst12))
+#13
+identical(colnames(tdiff3), rownames(tdiff3))
+identical(colnames(tdiff3), colnames(pi13))
+identical(colnames(tdiff3), rownames(pi13))
+identical(colnames(tdiff3), colnames(fst13))
+identical(colnames(tdiff3), rownames(fst13))
+#14
+identical(colnames(tdiff2), rownames(tdiff2))
+identical(colnames(tdiff2), colnames(pi14))
+identical(colnames(tdiff2), rownames(pi14))
+identical(colnames(tdiff2), colnames(fst14))
+identical(colnames(tdiff2), rownames(fst14))
+#15
+identical(colnames(tdiff4), rownames(tdiff4))
+identical(colnames(tdiff4), colnames(pi15))
+identical(colnames(tdiff4), rownames(pi15))
+identical(colnames(tdiff4), colnames(fst15))
+identical(colnames(tdiff4), rownames(fst15))
+#16
+identical(colnames(tdiff5), rownames(tdiff5))
+identical(colnames(tdiff5), colnames(pi16))
+identical(colnames(tdiff5), rownames(pi16))
+identical(colnames(tdiff5), colnames(fst16))
+identical(colnames(tdiff5), rownames(fst16))
+
+############################## regression #####################################
+library(ggplot2)
+ggplotRegression <- function(fit){
+    ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) +
+    theme_bw() +
+    xlab("Time difference (days)") +
+    ylab(bquote(F[ST])) +
+    stat_smooth(method="lm", col="black", lwd=0.3, lty=1) +
+    labs(subtitle = mantel,
+          title = paste("slope = ", signif(fit$coef[[2]], 2)*1000)) +
+    theme(plot.title = element_text(size=12, vjust=-6, hjust=1),
+          plot.subtitle = element_text(size=12, hjust=0.015),
+          axis.title = element_text(size=13, hjust=0.5),
+          axis.text = element_text(size=11))
+#    geom_point(shape=21, size=2.5, stroke=0.5)
+}
+###############################################################################
+
+library(grid)
+library(gridExtra)
+
+##### Mantel test and plot (if above checks gave TRUE) #####
+library(vegan)
+
+##Fst1
+# get lower diagonals of matrices into vectors
+tdiff1_ld <- as.numeric(tdiff1[lower.tri(tdiff1, diag=F)])
+fst1_ld <- as.numeric(fst1[lower.tri(fst1, diag=F)])
+# depth
+ddiff <- data.frame(tdiff1_ld, fst1_ld)
+colnames(ddiff) <- c("tdiff","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp.  -  Lake Erken"))), vjust=1.8, hjust=0.672, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst1, tdiff1, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.930  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst1_ld ~ tdiff1_ld))) +
+            geom_point(data=ddiff, shape=21, size=2.5, stroke=0.5, color="black", aes(x=tdiff, y=Fst))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Fsp_Erken_Fst_tdiff.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst2
+# get lower diagonals of matrices into vectors
+tdiff2_ld <- as.numeric(tdiff2[lower.tri(tdiff2, diag=F)])
+fst2_ld <- as.numeric(fst2[lower.tri(fst2, diag=F)])
+# depth
+tdiff8_ld <- as.numeric(tdiff8[lower.tri(tdiff8, diag=F)])
+fst8_ld <- as.numeric(fst8[lower.tri(fst8, diag=F)])
+mekk2p5 <- data.frame(tdiff8_ld, fst8_ld)
+colnames(mekk2p5) <- c("tdiff","Fst")
+fst14_ld <- as.numeric(fst14[lower.tri(fst14, diag=F)])
+ddiff <- data.frame(tdiff2_ld, fst14_ld)
+colnames(ddiff) <- c("tdiff","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Polynucleobacter finlandensis"), bold("  -  Lake Mekkojärvi"))), vjust=1.8, hjust=0.457, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst2, tdiff2, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.592  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst2_ld ~ tdiff2_ld))) +
+            geom_point(data=ddiff, shape=21, size=2.5, stroke=0.5, color="black", aes(x=tdiff, y=Fst)) + 
+            geom_point(data=mekk2p5, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=tdiff, y=Fst))
+#            stat_smooth(data=mekk2p5, aes(x=tdiff, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pfin_Mekk_Fst_tdiff.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst3
+# get lower diagonals of matrices into vectors
+tdiff3_ld <- as.numeric(tdiff3[lower.tri(tdiff3, diag=F)])
+fst3_ld <- as.numeric(fst3[lower.tri(fst3, diag=F)])
+# depth
+tdiff6_ld <- as.numeric(tdiff6[lower.tri(tdiff6, diag=F)])
+fst6_ld <- as.numeric(fst6[lower.tri(fst6, diag=F)])
+hypo <- data.frame(tdiff6_ld, fst6_ld)
+colnames(hypo) <- c("tdiff","Fst")
+tdiff7_ld <- as.numeric(tdiff7[lower.tri(tdiff7, diag=F)])
+fst7_ld <- as.numeric(fst7[lower.tri(fst7, diag=F)])
+epi <- data.frame(tdiff7_ld, fst7_ld)
+colnames(epi) <- c("tdiff","Fst")
+fst13_ld <- as.numeric(fst13[lower.tri(fst13, diag=F)])
+ddiff <- data.frame(tdiff3_ld, fst13_ld)
+colnames(ddiff) <- c("tdiff","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Polynucleobacter finlandensis"), bold("  -  Trout Bog Lake"))), vjust=1.8, hjust=0.484, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst3, tdiff3, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.667  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst3_ld ~ tdiff3_ld))) +
+            geom_point(data=ddiff, shape=21, size=2.5, stroke=0.5, color="black", aes(x=tdiff, y=Fst)) + 
+            geom_point(data=hypo, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=tdiff, y=Fst)) +
+            geom_point(data=epi, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=tdiff, y=Fst))
+#            stat_smooth(data=hypo, aes(x=tdiff, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=epi, aes(x=tdiff, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pfin_TroutBog_Fst_tdiff.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst4
+# get lower diagonals of matrices into vectors
+tdiff4_ld <- as.numeric(tdiff4[lower.tri(tdiff4, diag=F)])
+fst4_ld <- as.numeric(fst4[lower.tri(fst4, diag=F)])
+# depth
+tdiff10_ld <- as.numeric(tdiff10[lower.tri(tdiff10, diag=F)])
+fst10_ld <- as.numeric(fst10[lower.tri(fst10, diag=F)])
+hypo <- data.frame(tdiff10_ld, fst10_ld)
+colnames(hypo) <- c("tdiff","Fst")
+tdiff9_ld <- as.numeric(tdiff9[lower.tri(tdiff9, diag=F)])
+fst9_ld <- as.numeric(fst9[lower.tri(fst9, diag=F)])
+epi <- data.frame(tdiff9_ld, fst9_ld)
+colnames(epi) <- c("tdiff","Fst")
+fst15_ld <- as.numeric(fst15[lower.tri(fst15, diag=F)])
+ddiff <- data.frame(tdiff4_ld, fst15_ld)
+colnames(ddiff) <- c("tdiff","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Methylopumilus universalis  -  Rimov reservoir"))), vjust=1.8, hjust=0.451, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst4, tdiff4, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.686  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst4_ld ~ tdiff4_ld))) +
+            geom_point(data=ddiff, shape=21, size=2.5, stroke=0.5, color="black", aes(x=tdiff, y=Fst)) + 
+            geom_point(data=hypo, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=tdiff, y=Fst)) +
+            geom_point(data=epi, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=tdiff, y=Fst))
+#            stat_smooth(data=hypo, aes(x=tdiff, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=epi, aes(x=tdiff, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Muni_Rimov_Fst_tdiff.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst5
+# get lower diagonals of matrices into vectors
+tdiff5_ld <- as.numeric(tdiff5[lower.tri(tdiff5, diag=F)])
+fst5_ld <- as.numeric(fst5[lower.tri(fst5, diag=F)])
+#depth
+tdiff12_ld <- as.numeric(tdiff12[lower.tri(tdiff12, diag=F)])
+fst12_ld <- as.numeric(fst12[lower.tri(fst12, diag=F)])
+hypo <- data.frame(tdiff12_ld, fst12_ld)
+colnames(hypo) <- c("tdiff","Fst")
+tdiff11_ld <- as.numeric(tdiff11[lower.tri(tdiff11, diag=F)])
+fst11_ld <- as.numeric(fst11[lower.tri(fst11, diag=F)])
+epi <- data.frame(tdiff11_ld, fst11_ld)
+colnames(epi) <- c("tdiff","Fst")
+fst16_ld <- as.numeric(fst16[lower.tri(fst16, diag=F)])
+ddiff <- data.frame(tdiff5_ld, fst16_ld)
+colnames(ddiff) <- c("tdiff","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Polynucleobacter paneuropaeus"), bold("  -  Pond EnzMain"))), vjust=1.8, hjust=0.493, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst5, tdiff5, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.759  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst5_ld ~ tdiff5_ld))) +
+            geom_point(data=ddiff, shape=21, size=2.5, stroke=0.5, color="black", aes(x=tdiff, y=Fst)) + 
+            geom_point(data=hypo, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=tdiff, y=Fst)) +
+            geom_point(data=epi, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=tdiff, y=Fst))
+#            stat_smooth(data=hypo, aes(x=tdiff, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=epi, aes(x=tdiff, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Ppan_EnzMain_Fst_tdiff.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+

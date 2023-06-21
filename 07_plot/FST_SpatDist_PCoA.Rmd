@@ -1,0 +1,428 @@
+##### get matrix with spatial distances #####
+library(geosphere)
+#Load coord file
+geo1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fsp_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep=",", check.names=FALSE)
+geo2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pfin_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+geo3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fubi_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep=",", check.names=FALSE)
+geo4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Muni_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep=",", check.names=FALSE)
+geo5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Nabu_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+geo6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Ppan_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+#geo6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/PpanEnzM_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+#geo7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/PpanWOEnzM2020_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+geo8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pver_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep=",", check.names=FALSE)
+#Convert latitude and longitude into numeric
+geo1[,2]<-as.numeric(geo1[,2])
+geo1[,3]<-as.numeric(geo1[,3])
+geo2[,2]<-as.numeric(geo2[,2])
+geo2[,3]<-as.numeric(geo2[,3])
+geo3[,2]<-as.numeric(geo3[,2])
+geo3[,3]<-as.numeric(geo3[,3])
+geo4[,2]<-as.numeric(geo4[,2])
+geo4[,3]<-as.numeric(geo4[,3])
+geo5[,2]<-as.numeric(geo5[,2])
+geo5[,3]<-as.numeric(geo5[,3])
+geo6[,2]<-as.numeric(geo6[,2])
+geo6[,3]<-as.numeric(geo6[,3])
+#geo7[,2]<-as.numeric(geo7[,2])
+#geo7[,3]<-as.numeric(geo7[,3])
+geo8[,2]<-as.numeric(geo8[,2])
+geo8[,3]<-as.numeric(geo8[,3])
+#Calculate distances for all pairs of coordinates and format matrix as dataframe
+#1
+coord1<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo1)) {
+  for(k in 1:nrow(geo1)) {
+    temp[k]<-distm(c(geo1[i,2], geo1[i,3]), c(geo1[k,2], geo1[k,3]), fun = distGeo)
+  }
+  coord1<-rbind(coord1,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord1<-coord1[-1,] #Remove the first row
+row.names(coord1)<-geo1[,1] #Add row names from original file
+colnames(coord1)<-geo1[,1] #Add column names from original file
+coord1<-data.frame(coord1, check.names=FALSE)
+coord1<-coord1[,1:ncol(coord1)]/1000
+#2
+coord2<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo2)) {
+  for(k in 1:nrow(geo2)) {
+    temp[k]<-distm(c(geo2[i,2], geo2[i,3]), c(geo2[k,2], geo2[k,3]), fun = distGeo)
+  }
+  coord2<-rbind(coord2,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord2<-coord2[-1,] #Remove the first row
+row.names(coord2)<-geo2[,1] #Add row names from original file
+colnames(coord2)<-geo2[,1] #Add column names from original file
+coord2<-data.frame(coord2, check.names=FALSE)
+coord2<-coord2[,1:ncol(coord2)]/1000
+#3
+coord3<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo3)) {
+  for(k in 1:nrow(geo3)) {
+    temp[k]<-distm(c(geo3[i,2], geo3[i,3]), c(geo3[k,2], geo3[k,3]), fun = distGeo)
+  }
+  coord3<-rbind(coord3,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord3<-coord3[-1,] #Remove the first row
+row.names(coord3)<-geo3[,1] #Add row names from original file
+colnames(coord3)<-geo3[,1] #Add column names from original file
+coord3<-data.frame(coord3, check.names=FALSE)
+coord3<-coord3[,1:ncol(coord3)]/1000
+#4
+coord4<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo4)) {
+  for(k in 1:nrow(geo4)) {
+    temp[k]<-distm(c(geo4[i,2], geo4[i,3]), c(geo4[k,2], geo4[k,3]), fun = distGeo)
+  }
+  coord4<-rbind(coord4,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord4<-coord4[-1,] #Remove the first row
+row.names(coord4)<-geo4[,1] #Add row names from original file
+colnames(coord4)<-geo4[,1] #Add column names from original file
+coord4<-data.frame(coord4, check.names=FALSE)
+coord4<-coord4[,1:ncol(coord4)]/1000
+#5
+coord5<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo5)) {
+  for(k in 1:nrow(geo5)) {
+    temp[k]<-distm(c(geo5[i,2], geo5[i,3]), c(geo5[k,2], geo5[k,3]), fun = distGeo)
+  }
+  coord5<-rbind(coord5,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord5<-coord5[-1,] #Remove the first row
+row.names(coord5)<-geo5[,1] #Add row names from original file
+colnames(coord5)<-geo5[,1] #Add column names from original file
+coord5<-data.frame(coord5, check.names=FALSE)
+coord5<-coord5[,1:ncol(coord5)]/1000
+#6
+coord6<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo6)) {
+  for(k in 1:nrow(geo6)) {
+    temp[k]<-distm(c(geo6[i,2], geo6[i,3]), c(geo6[k,2], geo6[k,3]), fun = distGeo)
+  }
+  coord6<-rbind(coord6,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord6<-coord6[-1,] #Remove the first row
+row.names(coord6)<-geo6[,1] #Add row names from original file
+colnames(coord6)<-geo6[,1] #Add column names from original file
+coord6<-data.frame(coord6, check.names=FALSE)
+coord6<-coord6[,1:ncol(coord6)]/1000
+#7
+coord7<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo7)) {
+  for(k in 1:nrow(geo7)) {
+    temp[k]<-distm(c(geo7[i,2], geo7[i,3]), c(geo7[k,2], geo7[k,3]), fun = distGeo)
+  }
+  coord7<-rbind(coord7,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord7<-coord7[-1,] #Remove the first row
+row.names(coord7)<-geo7[,1] #Add row names from original file
+colnames(coord7)<-geo7[,1] #Add column names from original file
+coord7<-data.frame(coord7, check.names=FALSE)
+coord7<-coord7[,1:ncol(coord7)]/1000
+#8
+coord8<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo8)) {
+  for(k in 1:nrow(geo8)) {
+    temp[k]<-distm(c(geo8[i,2], geo8[i,3]), c(geo8[k,2], geo8[k,3]), fun = distGeo)
+  }
+  coord8<-rbind(coord8,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord8<-coord8[-1,] #Remove the first row
+row.names(coord8)<-geo8[,1] #Add row names from original file
+colnames(coord8)<-geo8[,1] #Add column names from original file
+coord8<-data.frame(coord8, check.names=FALSE)
+coord8<-coord8[,1:ncol(coord8)]/1000
+
+##### convert spatdist matrices to long format and save as csv
+library(reshape2)
+c1 <- melt(coord1)
+c2 <- melt(coord2)
+c3 <- melt(coord3)
+c4 <- melt(coord4)
+c5 <- melt(coord5)
+c6 <- melt(coord6)
+c8 <- melt(coord8)
+
+write.csv(c1, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/fsp_spatdist_noSis.csv", row.names=F)
+write.csv(c2, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/pfin_spatdist_noSis.csv", row.names=F)
+write.csv(c3, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/fubi_spatdist_noSis.csv", row.names=F)
+write.csv(c4, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/muni_spatdist_noSis.csv", row.names=F)
+write.csv(c5, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/nabu_spatdist_noSis.csv", row.names=F)
+write.csv(c6, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/ppan_spatdist_noSis.csv", row.names=F)
+write.csv(c8, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_spatdist/pver_spatdist_noSis.csv", row.names=F)
+
+##### get matrix with inter-Pi and Fst #####
+library(igraph)
+#Load file with Pi and Fst values (long format)
+pi_fst1 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst2 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pfin_mc15_mf111_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst3 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fubi_mc15_mf23_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst4 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Muni_mc15_mf43_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst5 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Nabu_mc15_mf10_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst6 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Ppan_mc15_mf40_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#pi_fst6 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/PpanEnzM_mc15_mf19_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#pi_fst7 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/PpanWOEnzM2020_mc15_mf21_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst8 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pver_mc15_mf17_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+
+#Make undirected so that matrix will be symmetric
+undir1 <- graph.data.frame(pi_fst1, directed=FALSE)
+undir2 <- graph.data.frame(pi_fst2, directed=FALSE)
+undir3 <- graph.data.frame(pi_fst3, directed=FALSE)
+undir4 <- graph.data.frame(pi_fst4, directed=FALSE)
+undir5 <- graph.data.frame(pi_fst5, directed=FALSE)
+undir6 <- graph.data.frame(pi_fst6, directed=FALSE)
+#undir7 <- graph.data.frame(pi_fst7, directed=FALSE)
+undir8 <- graph.data.frame(pi_fst8, directed=FALSE)
+
+#Turn into matrix and finally into dataframe
+#pi1
+pi1 <- get.adjacency(undir1, attr="pi_1-2", sparse=FALSE)
+pi1 <- as.data.frame(pi1)
+for(k in 1:nrow(pi1)){
+pi1[,k]<-as.numeric(pi1[,k])
+}
+pi1 <- pi1[,1:ncol(pi1)]*100
+diag(pi1) <- ""
+#fst1
+fst1 <- get.adjacency(undir1, attr="fst", sparse=FALSE)
+fst1 <- as.data.frame(fst1)
+for(k in 1:nrow(fst1)){
+fst1[,k]<-as.numeric(fst1[,k])
+}
+diag(fst1) <- ""
+#pi2
+pi2 <- get.adjacency(undir2, attr="pi_1-2", sparse=FALSE)
+pi2 <- as.data.frame(pi2)
+for(k in 1:nrow(pi2)){
+pi2[,k]<-as.numeric(pi2[,k])
+}
+pi2 <- pi2[,1:ncol(pi2)]*100
+diag(pi2) <- ""
+#fst2
+fst2 <- get.adjacency(undir2, attr="fst", sparse=FALSE)
+fst2 <- as.data.frame(fst2)
+for(k in 1:nrow(fst2)){
+fst2[,k]<-as.numeric(fst2[,k])
+}
+diag(fst2) <- ""
+#pi3
+pi3 <- get.adjacency(undir3, attr="pi_1-2", sparse=FALSE)
+pi3 <- as.data.frame(pi3)
+for(k in 1:nrow(pi3)){
+pi3[,k]<-as.numeric(pi3[,k])
+}
+pi3 <- pi3[,1:ncol(pi3)]*100
+diag(pi3) <- ""
+#fst3
+fst3 <- get.adjacency(undir3, attr="fst", sparse=FALSE)
+fst3 <- as.data.frame(fst3)
+for(k in 1:nrow(fst3)){
+fst3[,k]<-as.numeric(fst3[,k])
+}
+diag(fst3) <- ""
+#pi4
+pi4 <- get.adjacency(undir4, attr="pi_1-2", sparse=FALSE)
+pi4 <- as.data.frame(pi4)
+for(k in 1:nrow(pi4)){
+pi4[,k]<-as.numeric(pi4[,k])
+}
+pi4 <- pi4[,1:ncol(pi4)]*100
+diag(pi4) <- ""
+#fst4
+fst4 <- get.adjacency(undir4, attr="fst", sparse=FALSE)
+fst4 <- as.data.frame(fst4)
+for(k in 1:nrow(fst4)){
+fst4[,k]<-as.numeric(fst4[,k])
+}
+diag(fst4) <- ""
+#pi5
+pi5 <- get.adjacency(undir5, attr="pi_1-2", sparse=FALSE)
+pi5 <- as.data.frame(pi5)
+for(k in 1:nrow(pi5)){
+pi5[,k]<-as.numeric(pi5[,k])
+}
+pi5 <- pi5[,1:ncol(pi5)]*100
+diag(pi5) <- ""
+#fst5
+fst5 <- get.adjacency(undir5, attr="fst", sparse=FALSE)
+fst5 <- as.data.frame(fst5)
+for(k in 1:nrow(fst5)){
+fst5[,k]<-as.numeric(fst5[,k])
+}
+diag(fst5) <- ""
+#pi6
+pi6 <- get.adjacency(undir6, attr="pi_1-2", sparse=FALSE)
+pi6 <- as.data.frame(pi6)
+for(k in 1:nrow(pi6)){
+pi6[,k]<-as.numeric(pi6[,k])
+}
+pi6 <- pi6[,1:ncol(pi6)]*100
+diag(pi6) <- ""
+#fst6
+fst6 <- get.adjacency(undir6, attr="fst", sparse=FALSE)
+fst6 <- as.data.frame(fst6)
+for(k in 1:nrow(fst6)){
+fst6[,k]<-as.numeric(fst6[,k])
+}
+diag(fst6) <- ""
+#pi7
+pi7 <- get.adjacency(undir7, attr="pi_1-2", sparse=FALSE)
+pi7 <- as.data.frame(pi7)
+for(k in 1:nrow(pi7)){
+pi7[,k]<-as.numeric(pi7[,k])
+}
+pi7 <- pi7[,1:ncol(pi7)]*100
+diag(pi7) <- ""
+#fst7
+fst7 <- get.adjacency(undir7, attr="fst", sparse=FALSE)
+fst7 <- as.data.frame(fst7)
+for(k in 1:nrow(fst7)){
+fst7[,k]<-as.numeric(fst7[,k])
+}
+diag(fst7) <- ""
+#pi8
+pi8 <- get.adjacency(undir8, attr="pi_1-2", sparse=FALSE)
+pi8 <- as.data.frame(pi8)
+for(k in 1:nrow(pi8)){
+pi8[,k]<-as.numeric(pi8[,k])
+}
+pi8 <- pi8[,1:ncol(pi8)]*100
+diag(pi8) <- ""
+#fst8
+fst8 <- get.adjacency(undir8, attr="fst", sparse=FALSE)
+fst8 <- as.data.frame(fst8)
+for(k in 1:nrow(fst8)){
+fst8[,k]<-as.numeric(fst8[,k])
+}
+diag(fst8) <- ""
+
+##### Check if rows and columns of matrices match #####
+#1
+identical(colnames(coord1), rownames(coord1))
+identical(colnames(coord1), colnames(pi1))
+identical(colnames(coord1), rownames(pi1))
+identical(colnames(coord1), colnames(fst1))
+identical(colnames(coord1), rownames(fst1))
+#2
+identical(colnames(coord2), rownames(coord2))
+identical(colnames(coord2), colnames(pi2))
+identical(colnames(coord2), rownames(pi2))
+identical(colnames(coord2), colnames(fst2))
+identical(colnames(coord2), rownames(fst2))
+#3
+identical(colnames(coord3), rownames(coord3))
+identical(colnames(coord3), colnames(pi3))
+identical(colnames(coord3), rownames(pi3))
+identical(colnames(coord3), colnames(fst3))
+identical(colnames(coord3), rownames(fst3))
+#4
+identical(colnames(coord4), rownames(coord4))
+identical(colnames(coord4), colnames(pi4))
+identical(colnames(coord4), rownames(pi4))
+identical(colnames(coord4), colnames(fst4))
+identical(colnames(coord4), rownames(fst4))
+#5
+identical(colnames(coord5), rownames(coord5))
+identical(colnames(coord5), colnames(pi5))
+identical(colnames(coord5), rownames(pi5))
+identical(colnames(coord5), colnames(fst5))
+identical(colnames(coord5), rownames(fst5))
+#6
+identical(colnames(coord6), rownames(coord6))
+identical(colnames(coord6), colnames(pi6))
+identical(colnames(coord6), rownames(pi6))
+identical(colnames(coord6), colnames(fst6))
+identical(colnames(coord6), rownames(fst6))
+#7
+#identical(colnames(coord7), rownames(coord7))
+#identical(colnames(coord7), colnames(pi7))
+#identical(colnames(coord7), rownames(pi7))
+#identical(colnames(coord7), colnames(fst7))
+#identical(colnames(coord7), rownames(fst7))
+#8
+identical(colnames(coord8), rownames(coord8))
+identical(colnames(coord8), colnames(pi8))
+identical(colnames(coord8), rownames(pi8))
+identical(colnames(coord8), colnames(fst8))
+identical(colnames(coord8), rownames(fst8))
+
+#### PCoA ####
+library(vegan)
+library(plotrix)
+library(viridis)
+library(colourvalues)
+
+### select species
+#species = substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp.")))
+#species = substitute(bolditalic("Polynucleobacter finlandensis"))
+#species = substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis")))
+#species = substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis")))
+#species = substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans")))
+#species = substitute(bolditalic("Polynucleobacter paneuropaeus"))
+species = substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis")))
+################################################ change accordingly ################################################
+FST = fst8
+GEO = geo8
+COORD = coord8
+lakes <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/006_lakes/Pver_accessions_lakes_countries.csv", sep="\t", check.names=F)
+plotout = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pver_Fst_PCoA_labelled.pdf"
+legeout = "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pver_Fst_PCoA_legend.tiff"
+legeticks = c(0,1000,2000,3000)     #max(dists2minlong$unlist.dists)
+####################################################################################################################
+
+### run things
+modFstCore = wcmdscale(as.dist(FST), k=2, eig = TRUE)
+mod = modFstCore; main=species; legpos = 'topright'
+idx <- match(min(GEO$Longitude), GEO$Longitude)
+min_long <- GEO$accession[idx]
+dists <- COORD[,min_long]
+acces <- rownames(COORD)
+dists2minlong = data.frame(unlist(acces),unlist(dists))
+dists2minlong$col <- colour_values(dists2minlong$unlist.dists, palette = "viridis")
+cols = dists2minlong[order(match(dists2minlong[,1],rownames(mod$points))),]
+lakes_ordered = lakes[order(match(lakes[,1],rownames(mod$points))),]
+#check if accessions match
+identical(rownames(mod$points), lakes_ordered$accession)
+identical(rownames(FST), lakes_ordered$accession)
+
+### Permanova???
+adonis2(as.dist(FST)~continent, data=lakes_ordered, permutations=999, method="bray")
+adonis2(as.dist(FST)~lake, data=lakes_ordered, permutations=999, method="bray")
+
+### plot
+pdf(file=plotout, width=5, height=4.5)
+par(mgp=c(1.4, 0.3, 0))
+plot(mod, type="n", bty="n", axes=F, cex.lab=0.8,
+         xlab=sprintf('PCoA1 (%s%%)', round(100*mod$eig[1]/sum(mod$eig))),
+         ylab=sprintf('PCoA2 (%s%%)', round(100*mod$eig[2]/sum(mod$eig))))
+box(lwd=0.5)
+title(main, line=1.4, cex.main=1.1)
+axis(1, cex.axis=0.7, lwd=0.5, tck=-0.02)
+axis(2, cex.axis=0.7, lwd=0.5, tck=-0.02)
+points(mod$points, bg=cols$col, pch=21, cex=1.7, lwd=0.7)
+#text(mod$points, labels=lakes_ordered$lake, cex=0.6)
+ordiellipse(mod, lakes_ordered$continent, scaling="symmetric", kind="ehull", lty=2, lwd=0.7, label=T, cex=0.95, pos=1)
+ordiellipse(mod, lakes_ordered$lake, scaling="symmetric", kind="ehull", lwd=0.5, col="red", label=T, cex=0.6, pos=2)
+#ordihull(mod, lakes_ordered$continent, scaling="symmetric", label=T)
+dev.off()
+
+### legend
+bar_plot <- function(df) {
+  barplot( height = df[["a"]], col = df[["col"]], border = NA, space = 0, yaxt = 'n')
+}
+df <- data.frame(a = 1, x = min(dists2minlong$unlist.dists):max(dists2minlong$unlist.dists))
+df$col <- colour_values(df$x, palette = "viridis")
+
+tiff(file=legeout, width=2000, height=200)
+bar_plot(df)
+axis(side=1, at=legeticks, lwd=4, labels=F, tck=-0.3)
+dev.off()
+

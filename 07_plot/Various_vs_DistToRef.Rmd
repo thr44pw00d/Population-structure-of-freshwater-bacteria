@@ -1,0 +1,641 @@
+various <- read.csv("/media/matthias/meuk/intercontinental/various_inclDistToRef.csv", header=T, sep="\t")
+
+# Split pops
+Fsp <- filter(various, species == "Fsp")
+Fubi <- filter(various, species == "Fubi")
+Muni <- filter(various, species == "Muni")
+Nabu <- filter(various, species == "Nabu")
+Pver <- filter(various, species == "Pver")
+Ppan <- filter(various, species == "Ppan")
+Pfin <- filter(various, species == "Pfin")
+
+Fsp$dist.to.ref..m.
+Fsp$coverage.breadth....
+
+############################## regression #####################################
+library(ggplot2)
+ggplotRegression <- function(fit){
+    ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab("Mapped bases (%)") +
+#    ylab("Coverage breadth (%)") +
+#    ylab("ANIr90 (%)") +
+#    ylab("ANIr95 (%)") +
+#    ylab("Entrnoncorr") +
+#    ylab("Pi (%)") +
+#    ylab("S (%)") +
+    stat_smooth(method="lm", col="black", lwd=0.5, lty=3) +
+    labs(title = paste("adj. r^2 = ",signif(summary(fit)$adj.r.squared, 2), ",\t",
+                     "slope = ", signif(fit$coef[[2]], 2), ",\t",
+                     "p = ", signif(summary(fit)$coef[2,4], 2))) +
+    theme(plot.title = element_text(size=11, vjust=-8, hjust=0.95),
+          axis.title = element_text(size=13, hjust=0.5),
+          axis.text = element_text(size=11)) +
+    geom_point(shape=21, size=2.5, stroke=0.5)
+}
+###############################################################################
+library(grid)
+library(gridExtra)
+
+# BREADTH
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$coverage.breadth.... ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$coverage.breadth.... ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$coverage.breadth.... ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$coverage.breadth.... ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$coverage.breadth.... ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$coverage.breadth.... ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$coverage.breadth.... ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_breadth_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# MAPPED BASES (%)
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$X..mapped.bases.1 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$X..mapped.bases.1 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$X..mapped.bases.1 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$X..mapped.bases.1 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$X..mapped.bases.1 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$X..mapped.bases.1 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$X..mapped.bases.1 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_mapped_bases_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# ANIr90
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$ANIr90 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$ANIr90 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$ANIr90 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$ANIr90 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$ANIr90 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$ANIr90 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$ANIr90 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr90_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# ANIr95
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$ANIr95 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$ANIr95 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$ANIr95 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$ANIr95 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$ANIr95 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$ANIr95 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$ANIr95 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_ANIr95_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# Entrnoncorr
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$Entrnoncorr.1 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$Entrnoncorr.1 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$Entrnoncorr.1 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$Entrnoncorr.1 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$Entrnoncorr.1 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$Entrnoncorr.1 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$Entrnoncorr.1 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Entrnoncorr_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# Pi (%)
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$Pi.1 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$Pi.1 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$Pi.1 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$Pi.1 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$Pi.1 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$Pi.1 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$Pi.1 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_Pi_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+# S (%)
+
+######### Fsp #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fsp$X..Polymorphic.loci.1 ~ Fsp$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Fsp.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Fubi #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Fubi$X..Polymorphic.loci.1 ~ Fubi$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Fubi.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Muni #########
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Muni$X..Polymorphic.loci.1 ~ Muni$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Muni.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Nabu #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Nabu$X..Polymorphic.loci.1 ~ Nabu$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Nabu.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pver #########
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pver$X..Polymorphic.loci.1 ~ Pver$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Pver.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Pfin #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Pfin$X..Polymorphic.loci.1 ~ Pfin$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Pfin.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+######### Ppan #########
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- plot(ggplotRegression(lm(Ppan$X..Polymorphic.loci.1 ~ Ppan$dist.to.ref..km.)))
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/DistToRef_vs_S_Ppan.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()

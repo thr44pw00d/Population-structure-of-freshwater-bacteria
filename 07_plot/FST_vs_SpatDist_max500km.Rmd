@@ -1,0 +1,638 @@
+##### get matrix with spatial distances #####
+library(geosphere)
+#all
+geo1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fsp_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pfin_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fubi_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Muni_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Nabu_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Ppan_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pver_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+
+#Convert latitude and longitude into numeric
+geo1[,2]<-as.numeric(geo1[,2])
+geo1[,3]<-as.numeric(geo1[,3])
+geo2[,2]<-as.numeric(geo2[,2])
+geo2[,3]<-as.numeric(geo2[,3])
+geo3[,2]<-as.numeric(geo3[,2])
+geo3[,3]<-as.numeric(geo3[,3])
+geo4[,2]<-as.numeric(geo4[,2])
+geo4[,3]<-as.numeric(geo4[,3])
+geo5[,2]<-as.numeric(geo5[,2])
+geo5[,3]<-as.numeric(geo5[,3])
+geo6[,2]<-as.numeric(geo6[,2])
+geo6[,3]<-as.numeric(geo6[,3])
+geo8[,2]<-as.numeric(geo8[,2])
+geo8[,3]<-as.numeric(geo8[,3])
+#############################################
+
+#Calculate distances for all pairs of coordinates and format matrix as dataframe
+#1
+coord1<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo1)) {
+  for(k in 1:nrow(geo1)) {
+    temp[k]<-distm(c(geo1[i,2], geo1[i,3]), c(geo1[k,2], geo1[k,3]), fun = distGeo)
+  }
+  coord1<-rbind(coord1,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord1<-coord1[-1,] #Remove the first row
+row.names(coord1)<-geo1[,1] #Add row names from original file
+colnames(coord1)<-geo1[,1] #Add column names from original file
+coord1<-data.frame(coord1, check.names=FALSE)
+coord1<-coord1[,1:ncol(coord1)]/1000
+#2
+coord2<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo2)) {
+  for(k in 1:nrow(geo2)) {
+    temp[k]<-distm(c(geo2[i,2], geo2[i,3]), c(geo2[k,2], geo2[k,3]), fun = distGeo)
+  }
+  coord2<-rbind(coord2,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord2<-coord2[-1,] #Remove the first row
+row.names(coord2)<-geo2[,1] #Add row names from original file
+colnames(coord2)<-geo2[,1] #Add column names from original file
+coord2<-data.frame(coord2, check.names=FALSE)
+coord2<-coord2[,1:ncol(coord2)]/1000
+#3
+coord3<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo3)) {
+  for(k in 1:nrow(geo3)) {
+    temp[k]<-distm(c(geo3[i,2], geo3[i,3]), c(geo3[k,2], geo3[k,3]), fun = distGeo)
+  }
+  coord3<-rbind(coord3,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord3<-coord3[-1,] #Remove the first row
+row.names(coord3)<-geo3[,1] #Add row names from original file
+colnames(coord3)<-geo3[,1] #Add column names from original file
+coord3<-data.frame(coord3, check.names=FALSE)
+coord3<-coord3[,1:ncol(coord3)]/1000
+#4
+coord4<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo4)) {
+  for(k in 1:nrow(geo4)) {
+    temp[k]<-distm(c(geo4[i,2], geo4[i,3]), c(geo4[k,2], geo4[k,3]), fun = distGeo)
+  }
+  coord4<-rbind(coord4,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord4<-coord4[-1,] #Remove the first row
+row.names(coord4)<-geo4[,1] #Add row names from original file
+colnames(coord4)<-geo4[,1] #Add column names from original file
+coord4<-data.frame(coord4, check.names=FALSE)
+coord4<-coord4[,1:ncol(coord4)]/1000
+#5
+coord5<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo5)) {
+  for(k in 1:nrow(geo5)) {
+    temp[k]<-distm(c(geo5[i,2], geo5[i,3]), c(geo5[k,2], geo5[k,3]), fun = distGeo)
+  }
+  coord5<-rbind(coord5,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord5<-coord5[-1,] #Remove the first row
+row.names(coord5)<-geo5[,1] #Add row names from original file
+colnames(coord5)<-geo5[,1] #Add column names from original file
+coord5<-data.frame(coord5, check.names=FALSE)
+coord5<-coord5[,1:ncol(coord5)]/1000
+#6
+coord6<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo6)) {
+  for(k in 1:nrow(geo6)) {
+    temp[k]<-distm(c(geo6[i,2], geo6[i,3]), c(geo6[k,2], geo6[k,3]), fun = distGeo)
+  }
+  coord6<-rbind(coord6,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord6<-coord6[-1,] #Remove the first row
+row.names(coord6)<-geo6[,1] #Add row names from original file
+colnames(coord6)<-geo6[,1] #Add column names from original file
+coord6<-data.frame(coord6, check.names=FALSE)
+coord6<-coord6[,1:ncol(coord6)]/1000
+#8
+coord8<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo8)) {
+  for(k in 1:nrow(geo8)) {
+    temp[k]<-distm(c(geo8[i,2], geo8[i,3]), c(geo8[k,2], geo8[k,3]), fun = distGeo)
+  }
+  coord8<-rbind(coord8,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord8<-coord8[-1,] #Remove the first row
+row.names(coord8)<-geo8[,1] #Add row names from original file
+colnames(coord8)<-geo8[,1] #Add column names from original file
+coord8<-data.frame(coord8, check.names=FALSE)
+coord8<-coord8[,1:ncol(coord8)]/1000
+##############################################################################################################
+
+##### get matrix with inter-Pi and Fst #####
+library(igraph)
+#Load file with Pi and Fst values (long format)
+pi_fst1 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst2 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pfin_mc15_mf111_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst3 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fubi_mc15_mf23_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst4 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Muni_mc15_mf43_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst5 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Nabu_mc15_mf10_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst6 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Ppan_mc15_mf40_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst8 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pver_mc15_mf17_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+###################################################################################################
+
+#Make undirected so that matrix will be symmetric
+undir1 <- graph.data.frame(pi_fst1, directed=FALSE)
+undir2 <- graph.data.frame(pi_fst2, directed=FALSE)
+undir3 <- graph.data.frame(pi_fst3, directed=FALSE)
+undir4 <- graph.data.frame(pi_fst4, directed=FALSE)
+undir5 <- graph.data.frame(pi_fst5, directed=FALSE)
+undir6 <- graph.data.frame(pi_fst6, directed=FALSE)
+undir8 <- graph.data.frame(pi_fst8, directed=FALSE)
+#####################################################
+
+#Turn into matrix and finally into dataframe
+#pi1
+pi1 <- get.adjacency(undir1, attr="pi_1-2", sparse=FALSE)
+pi1 <- as.data.frame(pi1)
+for(k in 1:nrow(pi1)){
+pi1[,k]<-as.numeric(pi1[,k])
+}
+pi1 <- pi1[,1:ncol(pi1)]*100
+diag(pi1) <- ""
+#fst1
+fst1 <- get.adjacency(undir1, attr="fst", sparse=FALSE)
+fst1 <- as.data.frame(fst1)
+for(k in 1:nrow(fst1)){
+fst1[,k]<-as.numeric(fst1[,k])
+}
+diag(fst1) <- ""
+#pi2
+pi2 <- get.adjacency(undir2, attr="pi_1-2", sparse=FALSE)
+pi2 <- as.data.frame(pi2)
+for(k in 1:nrow(pi2)){
+pi2[,k]<-as.numeric(pi2[,k])
+}
+pi2 <- pi2[,1:ncol(pi2)]*100
+diag(pi2) <- ""
+#fst2
+fst2 <- get.adjacency(undir2, attr="fst", sparse=FALSE)
+fst2 <- as.data.frame(fst2)
+for(k in 1:nrow(fst2)){
+fst2[,k]<-as.numeric(fst2[,k])
+}
+diag(fst2) <- ""
+#pi3
+pi3 <- get.adjacency(undir3, attr="pi_1-2", sparse=FALSE)
+pi3 <- as.data.frame(pi3)
+for(k in 1:nrow(pi3)){
+pi3[,k]<-as.numeric(pi3[,k])
+}
+pi3 <- pi3[,1:ncol(pi3)]*100
+diag(pi3) <- ""
+#fst3
+fst3 <- get.adjacency(undir3, attr="fst", sparse=FALSE)
+fst3 <- as.data.frame(fst3)
+for(k in 1:nrow(fst3)){
+fst3[,k]<-as.numeric(fst3[,k])
+}
+diag(fst3) <- ""
+#pi4
+pi4 <- get.adjacency(undir4, attr="pi_1-2", sparse=FALSE)
+pi4 <- as.data.frame(pi4)
+for(k in 1:nrow(pi4)){
+pi4[,k]<-as.numeric(pi4[,k])
+}
+pi4 <- pi4[,1:ncol(pi4)]*100
+diag(pi4) <- ""
+#fst4
+fst4 <- get.adjacency(undir4, attr="fst", sparse=FALSE)
+fst4 <- as.data.frame(fst4)
+for(k in 1:nrow(fst4)){
+fst4[,k]<-as.numeric(fst4[,k])
+}
+diag(fst4) <- ""
+#pi5
+pi5 <- get.adjacency(undir5, attr="pi_1-2", sparse=FALSE)
+pi5 <- as.data.frame(pi5)
+for(k in 1:nrow(pi5)){
+pi5[,k]<-as.numeric(pi5[,k])
+}
+pi5 <- pi5[,1:ncol(pi5)]*100
+diag(pi5) <- ""
+#fst5
+fst5 <- get.adjacency(undir5, attr="fst", sparse=FALSE)
+fst5 <- as.data.frame(fst5)
+for(k in 1:nrow(fst5)){
+fst5[,k]<-as.numeric(fst5[,k])
+}
+diag(fst5) <- ""
+#pi6
+pi6 <- get.adjacency(undir6, attr="pi_1-2", sparse=FALSE)
+pi6 <- as.data.frame(pi6)
+for(k in 1:nrow(pi6)){
+pi6[,k]<-as.numeric(pi6[,k])
+}
+pi6 <- pi6[,1:ncol(pi6)]*100
+diag(pi6) <- ""
+#fst6
+fst6 <- get.adjacency(undir6, attr="fst", sparse=FALSE)
+fst6 <- as.data.frame(fst6)
+for(k in 1:nrow(fst6)){
+fst6[,k]<-as.numeric(fst6[,k])
+}
+diag(fst6) <- ""
+#pi8
+pi8 <- get.adjacency(undir8, attr="pi_1-2", sparse=FALSE)
+pi8 <- as.data.frame(pi8)
+for(k in 1:nrow(pi8)){
+pi8[,k]<-as.numeric(pi8[,k])
+}
+pi8 <- pi8[,1:ncol(pi8)]*100
+diag(pi8) <- ""
+#fst8
+fst8 <- get.adjacency(undir8, attr="fst", sparse=FALSE)
+fst8 <- as.data.frame(fst8)
+for(k in 1:nrow(fst8)){
+fst8[,k]<-as.numeric(fst8[,k])
+}
+diag(fst8) <- ""
+
+######################################################################################################################################################
+coord1_close <- coord1
+fst1_close <- fst1
+coord2_close <- coord2
+fst2_close <- fst2
+coord3_close <- coord3
+fst3_close <- fst3
+coord4_close <- coord4
+fst4_close <- fst4
+coord5_close <- coord5
+fst5_close <- fst5
+coord6_close <- coord6
+fst6_close <- fst6
+coord8_close <- coord8
+fst8_close <- fst8
+fst1_close[coord1_close>500] <- NA
+coord1_close[coord1_close>500] <- NA
+fst2_close[coord2_close>500] <- NA
+coord2_close[coord2_close>500] <- NA
+fst3_close[coord3_close>500] <- NA
+coord3_close[coord3_close>500] <- NA
+fst4_close[coord4_close>500] <- NA
+coord4_close[coord4_close>500] <- NA
+fst5_close[coord5_close>500] <- NA
+coord5_close[coord5_close>500] <- NA
+fst6_close[coord6_close>500] <- NA
+coord6_close[coord6_close>500] <- NA
+fst8_close[coord8_close>500] <- NA
+coord8_close[coord8_close>500] <- NA
+
+fst1[coord1<=500] <- NA
+coord1[coord1<=500] <- NA
+fst2[coord2<=500] <- NA
+coord2[coord2<=500] <- NA
+fst3[coord3<=500] <- NA
+coord3[coord3<=500] <- NA
+fst4[coord4<=500] <- NA
+coord4[coord4<=500] <- NA
+fst5[coord5<=500] <- NA
+coord5[coord5<=500] <- NA
+fst6[coord6<=500] <- NA
+coord6[coord6<=500] <- NA
+fst8[coord8<=500] <- NA
+coord8[coord8<=500] <- NA
+######################################################################################################################################################
+##### Check if rows and columns of matrices match #####
+#1
+identical(colnames(coord1), rownames(coord1))
+identical(colnames(coord1), colnames(pi1))
+identical(colnames(coord1), rownames(pi1))
+identical(colnames(coord1), colnames(fst1))
+identical(colnames(coord1), rownames(fst1))
+#2
+identical(colnames(coord2), rownames(coord2))
+identical(colnames(coord2), colnames(pi2))
+identical(colnames(coord2), rownames(pi2))
+identical(colnames(coord2), colnames(fst2))
+identical(colnames(coord2), rownames(fst2))
+#3
+identical(colnames(coord3), rownames(coord3))
+identical(colnames(coord3), colnames(pi3))
+identical(colnames(coord3), rownames(pi3))
+identical(colnames(coord3), colnames(fst3))
+identical(colnames(coord3), rownames(fst3))
+#4
+identical(colnames(coord4), rownames(coord4))
+identical(colnames(coord4), colnames(pi4))
+identical(colnames(coord4), rownames(pi4))
+identical(colnames(coord4), colnames(fst4))
+identical(colnames(coord4), rownames(fst4))
+#5
+identical(colnames(coord5), rownames(coord5))
+identical(colnames(coord5), colnames(pi5))
+identical(colnames(coord5), rownames(pi5))
+identical(colnames(coord5), colnames(fst5))
+identical(colnames(coord5), rownames(fst5))
+#6
+identical(colnames(coord6), rownames(coord6))
+identical(colnames(coord6), colnames(pi6))
+identical(colnames(coord6), rownames(pi6))
+identical(colnames(coord6), colnames(fst6))
+identical(colnames(coord6), rownames(fst6))
+#8
+identical(colnames(coord8), rownames(coord8))
+identical(colnames(coord8), colnames(pi8))
+identical(colnames(coord8), rownames(pi8))
+identical(colnames(coord8), colnames(fst8))
+identical(colnames(coord8), rownames(fst8))
+#1
+identical(colnames(coord1_close), rownames(coord1_close))
+identical(colnames(coord1_close), colnames(fst1_close))
+identical(colnames(coord1_close), rownames(fst1_close))
+#2
+identical(colnames(coord2_close), rownames(coord2_close))
+identical(colnames(coord2_close), colnames(fst2_close))
+identical(colnames(coord2_close), rownames(fst2_close))
+#3
+identical(colnames(coord3_close), rownames(coord3_close))
+identical(colnames(coord3_close), colnames(fst3_close))
+identical(colnames(coord3_close), rownames(fst3_close))
+#4
+identical(colnames(coord4_close), rownames(coord4_close))
+identical(colnames(coord4_close), colnames(fst4_close))
+identical(colnames(coord4_close), rownames(fst4_close))
+#5
+identical(colnames(coord5_close), rownames(coord5_close))
+identical(colnames(coord5_close), colnames(fst5_close))
+identical(colnames(coord5_close), rownames(fst5_close))
+#6
+identical(colnames(coord6_close), rownames(coord6_close))
+identical(colnames(coord6_close), colnames(fst6_close))
+identical(colnames(coord6_close), rownames(fst6_close))
+#8
+identical(colnames(coord8_close), rownames(coord8_close))
+identical(colnames(coord8_close), colnames(fst8_close))
+identical(colnames(coord8_close), rownames(fst8_close))
+
+###############################################################################
+library(grid)
+library(gridExtra)
+library(tidyr)
+
+###Fst1
+## get lower diagonals of matrices into vectors
+# <500km
+coord1_close_ld <- as.numeric(coord1_close[lower.tri(coord1_close, diag=F)])
+fst1_close_ld <- as.numeric(fst1_close[lower.tri(fst1_close, diag=F)])
+close <- data.frame(coord1_close_ld, fst1_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord1_ld <- as.numeric(coord1[lower.tri(coord1, diag=F)])
+fst1_ld <- as.numeric(fst1[lower.tri(fst1, diag=F)])
+far <- data.frame(coord1_ld, fst1_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1, hjust=1.279, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Fsp_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst2
+## get lower diagonals of matrices into vectors
+# <500km
+coord2_close_ld <- as.numeric(coord2_close[lower.tri(coord2_close, diag=F)])
+fst2_close_ld <- as.numeric(fst2_close[lower.tri(fst2_close, diag=F)])
+close <- data.frame(coord2_close_ld, fst2_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord2_ld <- as.numeric(coord2[lower.tri(coord2, diag=F)])
+fst2_ld <- as.numeric(fst2[lower.tri(fst2, diag=F)])
+far <- data.frame(coord2_ld, fst2_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1, hjust=0.822, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Pfin_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst3
+## get lower diagonals of matrices into vectors
+# <500km
+coord3_close_ld <- as.numeric(coord3_close[lower.tri(coord3_close, diag=F)])
+fst3_close_ld <- as.numeric(fst3_close[lower.tri(fst3_close, diag=F)])
+close <- data.frame(coord3_close_ld, fst3_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord3_ld <- as.numeric(coord3[lower.tri(coord3, diag=F)])
+fst3_ld <- as.numeric(fst3[lower.tri(fst3, diag=F)])
+far <- data.frame(coord3_ld, fst3_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1, hjust=1.003, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Fubi_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst4
+## get lower diagonals of matrices into vectors
+# <500km
+coord4_close_ld <- as.numeric(coord4_close[lower.tri(coord4_close, diag=F)])
+fst4_close_ld <- as.numeric(fst4_close[lower.tri(fst4_close, diag=F)])
+close <- data.frame(coord4_close_ld, fst4_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord4_ld <- as.numeric(coord4[lower.tri(coord4, diag=F)])
+fst4_ld <- as.numeric(fst4[lower.tri(fst4, diag=F)])
+far <- data.frame(coord4_ld, fst4_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1, hjust=0.793, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Muni_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst5
+## get lower diagonals of matrices into vectors
+# <500km
+coord5_close_ld <- as.numeric(coord5_close[lower.tri(coord5_close, diag=F)])
+fst5_close_ld <- as.numeric(fst5_close[lower.tri(fst5_close, diag=F)])
+close <- data.frame(coord5_close_ld, fst5_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord5_ld <- as.numeric(coord5[lower.tri(coord5, diag=F)])
+fst5_ld <- as.numeric(fst5[lower.tri(fst5, diag=F)])
+far <- data.frame(coord5_ld, fst5_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1, hjust=0.85, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Nabu_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst6
+## get lower diagonals of matrices into vectors
+# <500km
+coord6_close_ld <- as.numeric(coord6_close[lower.tri(coord6_close, diag=F)])
+fst6_close_ld <- as.numeric(fst6_close[lower.tri(fst6_close, diag=F)])
+close <- data.frame(coord6_close_ld, fst6_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord6_ld <- as.numeric(coord6[lower.tri(coord6, diag=F)])
+fst6_ld <- as.numeric(fst6[lower.tri(fst6, diag=F)])
+far <- data.frame(coord6_ld, fst6_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1, hjust=0.765, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Ppan_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+###fst8
+## get lower diagonals of matrices into vectors
+# <500km
+coord8_close_ld <- as.numeric(coord8_close[lower.tri(coord8_close, diag=F)])
+fst8_close_ld <- as.numeric(fst8_close[lower.tri(fst8_close, diag=F)])
+close <- data.frame(coord8_close_ld, fst8_close_ld)
+colnames(close) <- c("spatdist","Fst")
+close <- drop_na(close)
+close$dist <- "close"
+# >=500km
+coord8_ld <- as.numeric(coord8[lower.tri(coord8, diag=F)])
+fst8_ld <- as.numeric(fst8[lower.tri(fst8, diag=F)])
+far <- data.frame(coord8_ld, fst8_ld)
+colnames(far) <- c("spatdist","Fst")
+far <- drop_na(far)
+far$dist <- "far"
+# concatenata
+both <- rbind(close,far)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1, hjust=1, gp=gpar(fontsize=13))
+# create plot
+p1 <- ggplot(both, aes(x=spatdist, y=Fst)) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    geom_point(data=close, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+    geom_point(data=far, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+    stat_smooth(data=close, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.4, lty=1, se=F) +
+    stat_smooth(data=far, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.4, lty=1, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Pver_Fst_spatdist_500km.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()

@@ -1,0 +1,92 @@
+spe7 <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/7species_various.csv", header=TRUE, sep="\t", check.names=T)
+fsp <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Fsp_various.csv", header=TRUE, sep="\t", check.names=T)
+fubi <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Fubi_various.csv", header=TRUE, sep="\t", check.names=T)
+muni <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Muni_various.csv", header=TRUE, sep="\t", check.names=T)
+nabu <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Nabu_various.csv", header=TRUE, sep="\t", check.names=T)
+pfin <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Pfin_various.csv", header=TRUE, sep="\t", check.names=T)
+ppan <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Ppan_various.csv", header=TRUE, sep="\t", check.names=T)
+pver <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/Pver_various.csv", header=TRUE, sep="\t", check.names=T)
+dumm <- read.csv("/media/matthias/meuk/intercontinental/strain_diversity/new_foos.csv", header=TRUE, sep="\t", check.names=T)
+
+library(ggplot2)
+
+colorBlind <- c("#56B4E9","#0072B2","#CC79A7","#E69F00","#009E73","#F0E442","#D55E00")
+
+# regression
+ggplotRegression <- function(fit){
+    ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) +
+    theme_bw() +
+    stat_smooth(method = "lm", col = "blue", linetype=3, lwd=0.7) +
+    labs(title = paste("adj. r^2 = ",signif(summary(fit)$adj.r.squared, 2), ",  ",
+                     "slope = ", signif(fit$coef[[2]], 2), ",  ",
+                     "p = ", signif(summary(fit)$coef[2,4], 2))) +
+    theme(axis.title = element_text(size=14, face="bold", hjust=0.5),
+          axis.text = element_text(size=12)) +
+    geom_point(shape=21, size=3.5, stroke=0.8)    
+}
+
+# num alleles
+p3 <- ggplotRegression(lm(Total_num_alleles ~ pi, pver))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/pver_pi_vs_numalleles.pdf", width=5.5, height=5.5)
+plot(p3)
+dev.off()
+
+
+### dummy
+
+## entropy noncorr
+# num strains
+p1 <- ggplotRegression(lm(num_strains ~ entropy_noncorr, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_numstrains_vs_entrnoncorr.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+# shannon
+p1 <- ggplotRegression(lm(shannon_diversity ~ entropy_noncorr, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_shannon_vs_entrnoncorr.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+# pi
+p1 <- ggplotRegression(lm(pi ~ entropy_noncorr, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_pi_vs_entrnoncorr.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+
+## pi
+# num strains
+p1 <- ggplotRegression(lm(num_strains ~ pi, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_numstrains_vs_pi.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+## shannon
+p1 <- ggplotRegression(lm(shannon_diversity ~ pi, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_shannon_vs_pi.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+## entropy all
+p1 <- ggplotRegression(lm(entropy_all ~ pi, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_entropy_all_vs_pi.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+
+## entropy all
+# num strains
+p1 <- ggplotRegression(lm(num_strains ~ entropy_all, dumm))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/dummy_numstrains_vs_entropy_all.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+
+###########################################################################
+### num alleles
+# entropy noncorr
+p1 <- ggplotRegression(lm(entropy_noncorr ~ Total_num_alleles, all))
+pdf(file="/media/matthias/meuk/Iintercontinental/strain_diversity/numalleles_vs_entrnoncorr.pdf", width=5.5, height=5.5)
+plot(p1)
+dev.off()
+# entropy all
+p2 <- ggplotRegression(lm(entropy_all ~ Total_num_alleles, all))
+pdf(file="/media/matthias/meuk/intercontinental/strain_diversity/numallels_vs_entrall.pdf", width=5.5, height=5.5)
+plot(p2)
+dev.off()
+
+
+

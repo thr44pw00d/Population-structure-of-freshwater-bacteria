@@ -1,0 +1,1192 @@
+##### get matrix with spatial distances #####
+library(geosphere)
+#all
+geo1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fsp_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo2 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pfin_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo3 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Fubi_cov30_bdth50_accessions_coordinates_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo4 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Muni_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo5 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Nabu_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+geo6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Ppan_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep="\t", check.names=FALSE)
+#geo6 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/PpanEnzM_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+#geo7 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/PpanWOEnzM2020_cov30_bdth50_accessions_coordinates.csv", header=TRUE, sep=",", check.names=FALSE)
+geo8 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/001_coord/Pver_cov30_bdth50_accessions_coordinates_nodupl_noSis.csv", header=TRUE, sep="\t", check.names=FALSE)
+############################################# in bash #############################################
+grep -f 004_accessions/Fsp_NorthAmerica.csv 001_coord/Fsp_cov30_bdth50_accessions_coordinates_noSis.csv > 005_euas_noam/Fsp_coord_NOAM.csv
+grep -f 004_accessions/Fsp_Eurasia.csv 001_coord/Fsp_cov30_bdth50_accessions_coordinates_noSis.csv > 005_euas_noam/Fsp_coord_EUAS.csv
+###################################################################################################
+EuAs1_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_coord_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs1_c) <- colnames(geo8)
+NoAm1_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_coord_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm1_c) <- colnames(geo8)
+EuAs2_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Pfin_coord_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs2_c) <- colnames(geo8)
+NoAm2_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Pfin_coord_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm2_c) <- colnames(geo8)
+EuAs3_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fubi_coord_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs3_c) <- colnames(geo8)
+NoAm3_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fubi_coord_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm3_c) <- colnames(geo8)
+EuAs4_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Muni_coord_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs4_c) <- colnames(geo8)
+NoAm4_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Muni_coord_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm4_c) <- colnames(geo8)
+#Only 1 Nabu sample in Eurasia
+NoAm5_c <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Nabu_coord_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm5_c) <- colnames(geo8)
+
+#Convert latitude and longitude into numeric
+geo1[,2]<-as.numeric(geo1[,2])
+geo1[,3]<-as.numeric(geo1[,3])
+geo2[,2]<-as.numeric(geo2[,2])
+geo2[,3]<-as.numeric(geo2[,3])
+geo3[,2]<-as.numeric(geo3[,2])
+geo3[,3]<-as.numeric(geo3[,3])
+geo4[,2]<-as.numeric(geo4[,2])
+geo4[,3]<-as.numeric(geo4[,3])
+geo5[,2]<-as.numeric(geo5[,2])
+geo5[,3]<-as.numeric(geo5[,3])
+geo6[,2]<-as.numeric(geo6[,2])
+geo6[,3]<-as.numeric(geo6[,3])
+#geo7[,2]<-as.numeric(geo7[,2])
+#geo7[,3]<-as.numeric(geo7[,3])
+geo8[,2]<-as.numeric(geo8[,2])
+geo8[,3]<-as.numeric(geo8[,3])
+#############################################
+EuAs1_c[,2]<-as.numeric(EuAs1_c[,2])
+EuAs1_c[,3]<-as.numeric(EuAs1_c[,3])
+NoAm1_c[,2]<-as.numeric(NoAm1_c[,2])
+NoAm1_c[,3]<-as.numeric(NoAm1_c[,3])
+EuAs2_c[,2]<-as.numeric(EuAs2_c[,2])
+EuAs2_c[,3]<-as.numeric(EuAs2_c[,3])
+NoAm2_c[,2]<-as.numeric(NoAm2_c[,2])
+NoAm2_c[,3]<-as.numeric(NoAm2_c[,3])
+EuAs3_c[,2]<-as.numeric(EuAs3_c[,2])
+EuAs3_c[,3]<-as.numeric(EuAs3_c[,3])
+NoAm3_c[,2]<-as.numeric(NoAm3_c[,2])
+NoAm3_c[,3]<-as.numeric(NoAm3_c[,3])
+EuAs4_c[,2]<-as.numeric(EuAs4_c[,2])
+EuAs4_c[,3]<-as.numeric(EuAs4_c[,3])
+NoAm4_c[,2]<-as.numeric(NoAm4_c[,2])
+NoAm4_c[,3]<-as.numeric(NoAm4_c[,3])
+#Only 1 Nabu sample in Eurasia
+NoAm5_c[,2]<-as.numeric(NoAm5_c[,2])
+NoAm5_c[,3]<-as.numeric(NoAm5_c[,3])
+
+#Calculate distances for all pairs of coordinates and format matrix as dataframe
+#1
+coord1<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo1)) {
+  for(k in 1:nrow(geo1)) {
+    temp[k]<-distm(c(geo1[i,2], geo1[i,3]), c(geo1[k,2], geo1[k,3]), fun = distGeo)
+  }
+  coord1<-rbind(coord1,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord1<-coord1[-1,] #Remove the first row
+row.names(coord1)<-geo1[,1] #Add row names from original file
+colnames(coord1)<-geo1[,1] #Add column names from original file
+coord1<-data.frame(coord1, check.names=FALSE)
+coord1<-coord1[,1:ncol(coord1)]/1000
+#2
+coord2<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo2)) {
+  for(k in 1:nrow(geo2)) {
+    temp[k]<-distm(c(geo2[i,2], geo2[i,3]), c(geo2[k,2], geo2[k,3]), fun = distGeo)
+  }
+  coord2<-rbind(coord2,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord2<-coord2[-1,] #Remove the first row
+row.names(coord2)<-geo2[,1] #Add row names from original file
+colnames(coord2)<-geo2[,1] #Add column names from original file
+coord2<-data.frame(coord2, check.names=FALSE)
+coord2<-coord2[,1:ncol(coord2)]/1000
+#3
+coord3<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo3)) {
+  for(k in 1:nrow(geo3)) {
+    temp[k]<-distm(c(geo3[i,2], geo3[i,3]), c(geo3[k,2], geo3[k,3]), fun = distGeo)
+  }
+  coord3<-rbind(coord3,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord3<-coord3[-1,] #Remove the first row
+row.names(coord3)<-geo3[,1] #Add row names from original file
+colnames(coord3)<-geo3[,1] #Add column names from original file
+coord3<-data.frame(coord3, check.names=FALSE)
+coord3<-coord3[,1:ncol(coord3)]/1000
+#4
+coord4<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo4)) {
+  for(k in 1:nrow(geo4)) {
+    temp[k]<-distm(c(geo4[i,2], geo4[i,3]), c(geo4[k,2], geo4[k,3]), fun = distGeo)
+  }
+  coord4<-rbind(coord4,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord4<-coord4[-1,] #Remove the first row
+row.names(coord4)<-geo4[,1] #Add row names from original file
+colnames(coord4)<-geo4[,1] #Add column names from original file
+coord4<-data.frame(coord4, check.names=FALSE)
+coord4<-coord4[,1:ncol(coord4)]/1000
+#5
+coord5<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo5)) {
+  for(k in 1:nrow(geo5)) {
+    temp[k]<-distm(c(geo5[i,2], geo5[i,3]), c(geo5[k,2], geo5[k,3]), fun = distGeo)
+  }
+  coord5<-rbind(coord5,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord5<-coord5[-1,] #Remove the first row
+row.names(coord5)<-geo5[,1] #Add row names from original file
+colnames(coord5)<-geo5[,1] #Add column names from original file
+coord5<-data.frame(coord5, check.names=FALSE)
+coord5<-coord5[,1:ncol(coord5)]/1000
+#6
+coord6<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo6)) {
+  for(k in 1:nrow(geo6)) {
+    temp[k]<-distm(c(geo6[i,2], geo6[i,3]), c(geo6[k,2], geo6[k,3]), fun = distGeo)
+  }
+  coord6<-rbind(coord6,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord6<-coord6[-1,] #Remove the first row
+row.names(coord6)<-geo6[,1] #Add row names from original file
+colnames(coord6)<-geo6[,1] #Add column names from original file
+coord6<-data.frame(coord6, check.names=FALSE)
+coord6<-coord6[,1:ncol(coord6)]/1000
+#7
+coord7<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo7)) {
+  for(k in 1:nrow(geo7)) {
+    temp[k]<-distm(c(geo7[i,2], geo7[i,3]), c(geo7[k,2], geo7[k,3]), fun = distGeo)
+  }
+  coord7<-rbind(coord7,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord7<-coord7[-1,] #Remove the first row
+row.names(coord7)<-geo7[,1] #Add row names from original file
+colnames(coord7)<-geo7[,1] #Add column names from original file
+coord7<-data.frame(coord7, check.names=FALSE)
+coord7<-coord7[,1:ncol(coord7)]/1000
+#8
+coord8<-0
+temp<-c(0,0)
+for(i in 1:nrow(geo8)) {
+  for(k in 1:nrow(geo8)) {
+    temp[k]<-distm(c(geo8[i,2], geo8[i,3]), c(geo8[k,2], geo8[k,3]), fun = distGeo)
+  }
+  coord8<-rbind(coord8,temp) #Add the current row of distances into the matrix containing all distances
+}
+coord8<-coord8[-1,] #Remove the first row
+row.names(coord8)<-geo8[,1] #Add row names from original file
+colnames(coord8)<-geo8[,1] #Add column names from original file
+coord8<-data.frame(coord8, check.names=FALSE)
+coord8<-coord8[,1:ncol(coord8)]/1000
+##############################################################################################################
+#NoAm1
+NoAm1_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(NoAm1_c)) {
+  for(k in 1:nrow(NoAm1_c)) {
+    temp[k]<-distm(c(NoAm1_c[i,2], NoAm1_c[i,3]), c(NoAm1_c[k,2], NoAm1_c[k,3]), fun = distGeo)
+  }
+  NoAm1_d<-rbind(NoAm1_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+NoAm1_d<-NoAm1_d[-1,] #Remove the first row
+row.names(NoAm1_d)<-NoAm1_c[,1] #Add row names from original file
+colnames(NoAm1_d)<-NoAm1_c[,1] #Add column names from original file
+NoAm1_d<-data.frame(NoAm1_d, check.names=FALSE)
+NoAm1_d<-NoAm1_d[,1:ncol(NoAm1_d)]/1000
+#EuAs1
+EuAs1_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(EuAs1_c)) {
+  for(k in 1:nrow(EuAs1_c)) {
+    temp[k]<-distm(c(EuAs1_c[i,2], EuAs1_c[i,3]), c(EuAs1_c[k,2], EuAs1_c[k,3]), fun = distGeo)
+  }
+  EuAs1_d<-rbind(EuAs1_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+EuAs1_d<-EuAs1_d[-1,] #Remove the first row
+row.names(EuAs1_d)<-EuAs1_c[,1] #Add row names from original file
+colnames(EuAs1_d)<-EuAs1_c[,1] #Add column names from original file
+EuAs1_d<-data.frame(EuAs1_d, check.names=FALSE)
+EuAs1_d<-EuAs1_d[,1:ncol(EuAs1_d)]/1000
+#NoAm2
+NoAm2_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(NoAm2_c)) {
+  for(k in 1:nrow(NoAm2_c)) {
+    temp[k]<-distm(c(NoAm2_c[i,2], NoAm2_c[i,3]), c(NoAm2_c[k,2], NoAm2_c[k,3]), fun = distGeo)
+  }
+  NoAm2_d<-rbind(NoAm2_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+NoAm2_d<-NoAm2_d[-1,] #Remove the first row
+row.names(NoAm2_d)<-NoAm2_c[,1] #Add row names from original file
+colnames(NoAm2_d)<-NoAm2_c[,1] #Add column names from original file
+NoAm2_d<-data.frame(NoAm2_d, check.names=FALSE)
+NoAm2_d<-NoAm2_d[,1:ncol(NoAm2_d)]/1000
+#EuAs2
+EuAs2_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(EuAs2_c)) {
+  for(k in 1:nrow(EuAs2_c)) {
+    temp[k]<-distm(c(EuAs2_c[i,2], EuAs2_c[i,3]), c(EuAs2_c[k,2], EuAs2_c[k,3]), fun = distGeo)
+  }
+  EuAs2_d<-rbind(EuAs2_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+EuAs2_d<-EuAs2_d[-1,] #Remove the first row
+row.names(EuAs2_d)<-EuAs2_c[,1] #Add row names from original file
+colnames(EuAs2_d)<-EuAs2_c[,1] #Add column names from original file
+EuAs2_d<-data.frame(EuAs2_d, check.names=FALSE)
+EuAs2_d<-EuAs2_d[,1:ncol(EuAs2_d)]/1000
+#NoAm3
+NoAm3_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(NoAm3_c)) {
+  for(k in 1:nrow(NoAm3_c)) {
+    temp[k]<-distm(c(NoAm3_c[i,2], NoAm3_c[i,3]), c(NoAm3_c[k,2], NoAm3_c[k,3]), fun = distGeo)
+  }
+  NoAm3_d<-rbind(NoAm3_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+NoAm3_d<-NoAm3_d[-1,] #Remove the first row
+row.names(NoAm3_d)<-NoAm3_c[,1] #Add row names from original file
+colnames(NoAm3_d)<-NoAm3_c[,1] #Add column names from original file
+NoAm3_d<-data.frame(NoAm3_d, check.names=FALSE)
+NoAm3_d<-NoAm3_d[,1:ncol(NoAm3_d)]/1000
+#EuAs3
+EuAs3_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(EuAs3_c)) {
+  for(k in 1:nrow(EuAs3_c)) {
+    temp[k]<-distm(c(EuAs3_c[i,2], EuAs3_c[i,3]), c(EuAs3_c[k,2], EuAs3_c[k,3]), fun = distGeo)
+  }
+  EuAs3_d<-rbind(EuAs3_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+EuAs3_d<-EuAs3_d[-1,] #Remove the first row
+row.names(EuAs3_d)<-EuAs3_c[,1] #Add row names from original file
+colnames(EuAs3_d)<-EuAs3_c[,1] #Add column names from original file
+EuAs3_d<-data.frame(EuAs3_d, check.names=FALSE)
+EuAs3_d<-EuAs3_d[,1:ncol(EuAs3_d)]/1000
+#NoAm4
+NoAm4_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(NoAm4_c)) {
+  for(k in 1:nrow(NoAm4_c)) {
+    temp[k]<-distm(c(NoAm4_c[i,2], NoAm4_c[i,3]), c(NoAm4_c[k,2], NoAm4_c[k,3]), fun = distGeo)
+  }
+  NoAm4_d<-rbind(NoAm4_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+NoAm4_d<-NoAm4_d[-1,] #Remove the first row
+row.names(NoAm4_d)<-NoAm4_c[,1] #Add row names from original file
+colnames(NoAm4_d)<-NoAm4_c[,1] #Add column names from original file
+NoAm4_d<-data.frame(NoAm4_d, check.names=FALSE)
+NoAm4_d<-NoAm4_d[,1:ncol(NoAm4_d)]/1000
+#EuAs4
+EuAs4_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(EuAs4_c)) {
+  for(k in 1:nrow(EuAs4_c)) {
+    temp[k]<-distm(c(EuAs4_c[i,2], EuAs4_c[i,3]), c(EuAs4_c[k,2], EuAs4_c[k,3]), fun = distGeo)
+  }
+  EuAs4_d<-rbind(EuAs4_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+EuAs4_d<-EuAs4_d[-1,] #Remove the first row
+row.names(EuAs4_d)<-EuAs4_c[,1] #Add row names from original file
+colnames(EuAs4_d)<-EuAs4_c[,1] #Add column names from original file
+EuAs4_d<-data.frame(EuAs4_d, check.names=FALSE)
+EuAs4_d<-EuAs4_d[,1:ncol(EuAs4_d)]/1000
+#NoAm5
+NoAm5_d<-0
+temp<-c(0,0)
+for(i in 1:nrow(NoAm5_c)) {
+  for(k in 1:nrow(NoAm5_c)) {
+    temp[k]<-distm(c(NoAm5_c[i,2], NoAm5_c[i,3]), c(NoAm5_c[k,2], NoAm5_c[k,3]), fun = distGeo)
+  }
+  NoAm5_d<-rbind(NoAm5_d,temp) #Add the current row of distances into the matrix containing all distances
+}
+NoAm5_d<-NoAm5_d[-1,] #Remove the first row
+row.names(NoAm5_d)<-NoAm5_c[,1] #Add row names from original file
+colnames(NoAm5_d)<-NoAm5_c[,1] #Add column names from original file
+NoAm5_d<-data.frame(NoAm5_d, check.names=FALSE)
+NoAm5_d<-NoAm5_d[,1:ncol(NoAm5_d)]/1000
+#Only 1 Nabu sample in Eurasia
+
+
+##### get matrix with inter-Pi and Fst #####
+library(igraph)
+#Load file with Pi and Fst values (long format)
+pi_fst1 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst2 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pfin_mc15_mf111_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst3 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Fubi_mc15_mf23_pairwise_Pi_and_FST_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst4 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Muni_mc15_mf43_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst5 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Nabu_mc15_mf10_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst6 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Ppan_mc15_mf40_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#pi_fst6 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/PpanEnzM_mc15_mf19_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+#pi_fst7 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/PpanWOEnzM2020_mc15_mf21_pairwise_Pi_and_FST.tsv", header=TRUE, sep="\t", check.names=FALSE)
+pi_fst8 <- read.csv2("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/002_Pi_Fst/Pver_mc15_mf17_pairwise_Pi_and_FST_nodupl_noSis.tsv", header=TRUE, sep="\t", check.names=FALSE)
+############################################# in bash #############################################
+#grep -f 004_accessions/Fsp_NorthAmerica.csv 002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.csv | grep -f 004_accessions/Fsp_Eurasia.csv > 005_euas_noam/Fsp_Pi_and_FST_EUASvsNOAM.csv
+#grep -f 004_accessions/Fsp_NorthAmerica.csv 002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.csv | grep -vf 004_accessions/Fsp_Eurasia.csv > 005_euas_noam/Fsp_Pi_and_FST_NOAM.csv
+#grep -f 004_accessions/Fsp_Eurasia.csv 002_Pi_Fst/Fsp_mc15_mf24_pairwise_Pi_and_FST_noSis.csv | grep -vf 004_accessions/Fsp_NorthAmerica.csv > 005_euas_noam/Fsp_Pi_and_FST_EUAS.csv
+###################################################################################################
+EvsN1_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_Pi_and_FST_EUASvsNOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EvsN1_s) <- colnames(pi_fst8)
+EuAs1_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_Pi_and_FST_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs1_s) <- colnames(pi_fst8)
+NoAm1_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_Pi_and_FST_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm1_s) <- colnames(pi_fst8)
+EvsN2_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Pfin_Pi_and_FST_EUASvsNOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EvsN2_s) <- colnames(pi_fst8)
+EuAs2_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Pfin_Pi_and_FST_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs2_s) <- colnames(pi_fst8)
+NoAm2_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Pfin_Pi_and_FST_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm2_s) <- colnames(pi_fst8)
+EvsN3_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fubi_Pi_and_FST_EUASvsNOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EvsN3_s) <- colnames(pi_fst8)
+EuAs3_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fubi_Pi_and_FST_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs3_s) <- colnames(pi_fst8)
+NoAm3_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fubi_Pi_and_FST_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm3_s) <- colnames(pi_fst8)
+EvsN4_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Muni_Pi_and_FST_EUASvsNOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EvsN4_s) <- colnames(pi_fst8)
+EuAs4_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Muni_Pi_and_FST_EUAS.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EuAs4_s) <- colnames(pi_fst8)
+NoAm4_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Muni_Pi_and_FST_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm4_s) <- colnames(pi_fst8)
+EvsN5_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Nabu_Pi_and_FST_EUASvsNOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(EvsN5_s) <- colnames(pi_fst8)
+#Only 1 Nabu sample in Eurasia
+NoAm5_s <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Nabu_Pi_and_FST_NOAM.csv", header=F, sep="\t", check.names=FALSE)
+colnames(NoAm5_s) <- colnames(pi_fst8)
+
+#Make undirected so that matrix will be symmetric
+undir1 <- graph.data.frame(pi_fst1, directed=FALSE)
+undir2 <- graph.data.frame(pi_fst2, directed=FALSE)
+undir3 <- graph.data.frame(pi_fst3, directed=FALSE)
+undir4 <- graph.data.frame(pi_fst4, directed=FALSE)
+undir5 <- graph.data.frame(pi_fst5, directed=FALSE)
+undir6 <- graph.data.frame(pi_fst6, directed=FALSE)
+#undir7 <- graph.data.frame(pi_fst7, directed=FALSE)
+undir8 <- graph.data.frame(pi_fst8, directed=FALSE)
+#####################################################
+undir_EvsN1 <- graph.data.frame(EvsN1_s, directed=FALSE)
+undir_EuAs1 <- graph.data.frame(EuAs1_s, directed=FALSE)
+undir_NoAm1 <- graph.data.frame(NoAm1_s, directed=FALSE)
+undir_EvsN2 <- graph.data.frame(EvsN2_s, directed=FALSE)
+undir_EuAs2 <- graph.data.frame(EuAs2_s, directed=FALSE)
+undir_NoAm2 <- graph.data.frame(NoAm2_s, directed=FALSE)
+undir_EvsN3 <- graph.data.frame(EvsN3_s, directed=FALSE)
+undir_EuAs3 <- graph.data.frame(EuAs3_s, directed=FALSE)
+undir_NoAm3 <- graph.data.frame(NoAm3_s, directed=FALSE)
+undir_EvsN4 <- graph.data.frame(EvsN4_s, directed=FALSE)
+undir_EuAs4 <- graph.data.frame(EuAs4_s, directed=FALSE)
+undir_NoAm4 <- graph.data.frame(NoAm4_s, directed=FALSE)
+undir_EvsN5 <- graph.data.frame(EvsN5_s, directed=FALSE)
+#Only 1 Nabu sample in Eurasia
+undir_NoAm5 <- graph.data.frame(NoAm5_s, directed=FALSE)
+
+#Turn into matrix and finally into dataframe
+#pi1
+pi1 <- get.adjacency(undir1, attr="pi_1-2", sparse=FALSE)
+pi1 <- as.data.frame(pi1)
+for(k in 1:nrow(pi1)){
+pi1[,k]<-as.numeric(pi1[,k])
+}
+pi1 <- pi1[,1:ncol(pi1)]*100
+diag(pi1) <- ""
+#fst1
+fst1 <- get.adjacency(undir1, attr="fst", sparse=FALSE)
+fst1 <- as.data.frame(fst1)
+for(k in 1:nrow(fst1)){
+fst1[,k]<-as.numeric(fst1[,k])
+}
+diag(fst1) <- ""
+#pi2
+pi2 <- get.adjacency(undir2, attr="pi_1-2", sparse=FALSE)
+pi2 <- as.data.frame(pi2)
+for(k in 1:nrow(pi2)){
+pi2[,k]<-as.numeric(pi2[,k])
+}
+pi2 <- pi2[,1:ncol(pi2)]*100
+diag(pi2) <- ""
+#fst2
+fst2 <- get.adjacency(undir2, attr="fst", sparse=FALSE)
+fst2 <- as.data.frame(fst2)
+for(k in 1:nrow(fst2)){
+fst2[,k]<-as.numeric(fst2[,k])
+}
+diag(fst2) <- ""
+#pi3
+pi3 <- get.adjacency(undir3, attr="pi_1-2", sparse=FALSE)
+pi3 <- as.data.frame(pi3)
+for(k in 1:nrow(pi3)){
+pi3[,k]<-as.numeric(pi3[,k])
+}
+pi3 <- pi3[,1:ncol(pi3)]*100
+diag(pi3) <- ""
+#fst3
+fst3 <- get.adjacency(undir3, attr="fst", sparse=FALSE)
+fst3 <- as.data.frame(fst3)
+for(k in 1:nrow(fst3)){
+fst3[,k]<-as.numeric(fst3[,k])
+}
+diag(fst3) <- ""
+#pi4
+pi4 <- get.adjacency(undir4, attr="pi_1-2", sparse=FALSE)
+pi4 <- as.data.frame(pi4)
+for(k in 1:nrow(pi4)){
+pi4[,k]<-as.numeric(pi4[,k])
+}
+pi4 <- pi4[,1:ncol(pi4)]*100
+diag(pi4) <- ""
+#fst4
+fst4 <- get.adjacency(undir4, attr="fst", sparse=FALSE)
+fst4 <- as.data.frame(fst4)
+for(k in 1:nrow(fst4)){
+fst4[,k]<-as.numeric(fst4[,k])
+}
+diag(fst4) <- ""
+#pi5
+pi5 <- get.adjacency(undir5, attr="pi_1-2", sparse=FALSE)
+pi5 <- as.data.frame(pi5)
+for(k in 1:nrow(pi5)){
+pi5[,k]<-as.numeric(pi5[,k])
+}
+pi5 <- pi5[,1:ncol(pi5)]*100
+diag(pi5) <- ""
+#fst5
+fst5 <- get.adjacency(undir5, attr="fst", sparse=FALSE)
+fst5 <- as.data.frame(fst5)
+for(k in 1:nrow(fst5)){
+fst5[,k]<-as.numeric(fst5[,k])
+}
+diag(fst5) <- ""
+#pi6
+pi6 <- get.adjacency(undir6, attr="pi_1-2", sparse=FALSE)
+pi6 <- as.data.frame(pi6)
+for(k in 1:nrow(pi6)){
+pi6[,k]<-as.numeric(pi6[,k])
+}
+pi6 <- pi6[,1:ncol(pi6)]*100
+diag(pi6) <- ""
+#fst6
+fst6 <- get.adjacency(undir6, attr="fst", sparse=FALSE)
+fst6 <- as.data.frame(fst6)
+for(k in 1:nrow(fst6)){
+fst6[,k]<-as.numeric(fst6[,k])
+}
+diag(fst6) <- ""
+#pi7
+pi7 <- get.adjacency(undir7, attr="pi_1-2", sparse=FALSE)
+pi7 <- as.data.frame(pi7)
+for(k in 1:nrow(pi7)){
+pi7[,k]<-as.numeric(pi7[,k])
+}
+pi7 <- pi7[,1:ncol(pi7)]*100
+diag(pi7) <- ""
+#fst7
+fst7 <- get.adjacency(undir7, attr="fst", sparse=FALSE)
+fst7 <- as.data.frame(fst7)
+for(k in 1:nrow(fst7)){
+fst7[,k]<-as.numeric(fst7[,k])
+}
+diag(fst7) <- ""
+#pi8
+pi8 <- get.adjacency(undir8, attr="pi_1-2", sparse=FALSE)
+pi8 <- as.data.frame(pi8)
+for(k in 1:nrow(pi8)){
+pi8[,k]<-as.numeric(pi8[,k])
+}
+pi8 <- pi8[,1:ncol(pi8)]*100
+diag(pi8) <- ""
+#fst8
+fst8 <- get.adjacency(undir8, attr="fst", sparse=FALSE)
+fst8 <- as.data.frame(fst8)
+for(k in 1:nrow(fst8)){
+fst8[,k]<-as.numeric(fst8[,k])
+}
+diag(fst8) <- ""
+#########################################################
+#pi_EvsN1
+pi_EvsN1 <- get.adjacency(undir_EvsN1, attr="pi_1-2", sparse=FALSE)
+pi_EvsN1 <- as.data.frame(pi_EvsN1)
+for(k in 1:nrow(pi_EvsN1)){
+pi_EvsN1[,k]<-as.numeric(pi_EvsN1[,k])
+}
+pi_EvsN1 <- pi_EvsN1[,1:ncol(pi_EvsN1)]*100
+diag(pi_EvsN1) <- ""
+pi_EvsN1[pi_EvsN1 == 0] <- NA
+#fst_EvsN1
+fst_EvsN1 <- get.adjacency(undir_EvsN1, attr="fst", sparse=FALSE)
+fst_EvsN1 <- as.data.frame(fst_EvsN1)
+for(k in 1:nrow(fst_EvsN1)){
+fst_EvsN1[,k]<-as.numeric(fst_EvsN1[,k])
+}
+diag(fst_EvsN1) <- ""
+fst_EvsN1[fst_EvsN1 == 0] <- NA
+#pi_EuAs1
+pi_EuAs1 <- get.adjacency(undir_EuAs1, attr="pi_1-2", sparse=FALSE)
+pi_EuAs1 <- as.data.frame(pi_EuAs1)
+for(k in 1:nrow(pi_EuAs1)){
+pi_EuAs1[,k]<-as.numeric(pi_EuAs1[,k])
+}
+pi_EuAs1 <- pi_EuAs1[,1:ncol(pi_EuAs1)]*100
+diag(pi_EuAs1) <- ""
+pi_EuAs1[pi_EuAs1 == 0] <- NA
+#fst_EuAs1
+fst_EuAs1 <- get.adjacency(undir_EuAs1, attr="fst", sparse=FALSE)
+fst_EuAs1 <- as.data.frame(fst_EuAs1)
+for(k in 1:nrow(fst_EuAs1)){
+fst_EuAs1[,k]<-as.numeric(fst_EuAs1[,k])
+}
+diag(fst_EuAs1) <- ""
+fst_EuAs1[fst_EuAs1 == 0] <- NA
+#pi_NoAm1
+pi_NoAm1 <- get.adjacency(undir_NoAm1, attr="pi_1-2", sparse=FALSE)
+pi_NoAm1 <- as.data.frame(pi_NoAm1)
+for(k in 1:nrow(pi_NoAm1)){
+pi_NoAm1[,k]<-as.numeric(pi_NoAm1[,k])
+}
+pi_NoAm1 <- pi_NoAm1[,1:ncol(pi_NoAm1)]*100
+diag(pi_NoAm1) <- ""
+pi_NoAm1[pi_NoAm1 == 0] <- NA
+#fst_NoAm1
+fst_NoAm1 <- get.adjacency(undir_NoAm1, attr="fst", sparse=FALSE)
+fst_NoAm1 <- as.data.frame(fst_NoAm1)
+for(k in 1:nrow(fst_NoAm1)){
+fst_NoAm1[,k]<-as.numeric(fst_NoAm1[,k])
+}
+diag(fst_NoAm1) <- ""
+fst_NoAm1[fst_NoAm1 == 0] <- NA
+#pi_EvsN2
+pi_EvsN2 <- get.adjacency(undir_EvsN2, attr="pi_1-2", sparse=FALSE)
+pi_EvsN2 <- as.data.frame(pi_EvsN2)
+for(k in 1:nrow(pi_EvsN2)){
+pi_EvsN2[,k]<-as.numeric(pi_EvsN2[,k])
+}
+pi_EvsN2 <- pi_EvsN2[,1:ncol(pi_EvsN2)]*100
+diag(pi_EvsN2) <- ""
+pi_EvsN2[pi_EvsN2 == 0] <- NA
+#fst_EvsN2
+fst_EvsN2 <- get.adjacency(undir_EvsN2, attr="fst", sparse=FALSE)
+fst_EvsN2 <- as.data.frame(fst_EvsN2)
+for(k in 1:nrow(fst_EvsN2)){
+fst_EvsN2[,k]<-as.numeric(fst_EvsN2[,k])
+}
+diag(fst_EvsN2) <- ""
+fst_EvsN2[fst_EvsN2 == 0] <- NA
+#pi_EuAs2
+pi_EuAs2 <- get.adjacency(undir_EuAs2, attr="pi_1-2", sparse=FALSE)
+pi_EuAs2 <- as.data.frame(pi_EuAs2)
+for(k in 1:nrow(pi_EuAs2)){
+pi_EuAs2[,k]<-as.numeric(pi_EuAs2[,k])
+}
+pi_EuAs2 <- pi_EuAs2[,1:ncol(pi_EuAs2)]*100
+diag(pi_EuAs2) <- ""
+pi_EuAs2[pi_EuAs2 == 0] <- NA
+#fst_EuAs2
+fst_EuAs2 <- get.adjacency(undir_EuAs2, attr="fst", sparse=FALSE)
+fst_EuAs2 <- as.data.frame(fst_EuAs2)
+for(k in 1:nrow(fst_EuAs2)){
+fst_EuAs2[,k]<-as.numeric(fst_EuAs2[,k])
+}
+diag(fst_EuAs2) <- ""
+fst_EuAs2[fst_EuAs2 == 0] <- NA
+#pi_NoAm2
+pi_NoAm2 <- get.adjacency(undir_NoAm2, attr="pi_1-2", sparse=FALSE)
+pi_NoAm2 <- as.data.frame(pi_NoAm2)
+for(k in 1:nrow(pi_NoAm2)){
+pi_NoAm2[,k]<-as.numeric(pi_NoAm2[,k])
+}
+pi_NoAm2 <- pi_NoAm2[,1:ncol(pi_NoAm2)]*100
+diag(pi_NoAm2) <- ""
+pi_NoAm2[pi_NoAm2 == 0] <- NA
+#fst_NoAm2
+fst_NoAm2 <- get.adjacency(undir_NoAm2, attr="fst", sparse=FALSE)
+fst_NoAm2 <- as.data.frame(fst_NoAm2)
+for(k in 1:nrow(fst_NoAm2)){
+fst_NoAm2[,k]<-as.numeric(fst_NoAm2[,k])
+}
+diag(fst_NoAm2) <- ""
+fst_NoAm2[fst_NoAm2 == 0] <- NA
+#pi_EvsN3
+pi_EvsN3 <- get.adjacency(undir_EvsN3, attr="pi_1-2", sparse=FALSE)
+pi_EvsN3 <- as.data.frame(pi_EvsN3)
+for(k in 1:nrow(pi_EvsN3)){
+pi_EvsN3[,k]<-as.numeric(pi_EvsN3[,k])
+}
+pi_EvsN3 <- pi_EvsN3[,1:ncol(pi_EvsN3)]*100
+diag(pi_EvsN3) <- ""
+pi_EvsN3[pi_EvsN3 == 0] <- NA
+#fst_EvsN3
+fst_EvsN3 <- get.adjacency(undir_EvsN3, attr="fst", sparse=FALSE)
+fst_EvsN3 <- as.data.frame(fst_EvsN3)
+for(k in 1:nrow(fst_EvsN3)){
+fst_EvsN3[,k]<-as.numeric(fst_EvsN3[,k])
+}
+diag(fst_EvsN3) <- ""
+fst_EvsN3[fst_EvsN3 == 0] <- NA
+#pi_EuAs3
+pi_EuAs3 <- get.adjacency(undir_EuAs3, attr="pi_1-2", sparse=FALSE)
+pi_EuAs3 <- as.data.frame(pi_EuAs3)
+for(k in 1:nrow(pi_EuAs3)){
+pi_EuAs3[,k]<-as.numeric(pi_EuAs3[,k])
+}
+pi_EuAs3 <- pi_EuAs3[,1:ncol(pi_EuAs3)]*100
+diag(pi_EuAs3) <- ""
+pi_EuAs3[pi_EuAs3 == 0] <- NA
+#fst_EuAs3
+fst_EuAs3 <- get.adjacency(undir_EuAs3, attr="fst", sparse=FALSE)
+fst_EuAs3 <- as.data.frame(fst_EuAs3)
+for(k in 1:nrow(fst_EuAs3)){
+fst_EuAs3[,k]<-as.numeric(fst_EuAs3[,k])
+}
+diag(fst_EuAs3) <- ""
+fst_EuAs3[fst_EuAs3 == 0] <- NA
+#pi_NoAm3
+pi_NoAm3 <- get.adjacency(undir_NoAm3, attr="pi_1-2", sparse=FALSE)
+pi_NoAm3 <- as.data.frame(pi_NoAm3)
+for(k in 1:nrow(pi_NoAm3)){
+pi_NoAm3[,k]<-as.numeric(pi_NoAm3[,k])
+}
+pi_NoAm3 <- pi_NoAm3[,1:ncol(pi_NoAm3)]*100
+diag(pi_NoAm3) <- ""
+pi_NoAm3[pi_NoAm3 == 0] <- NA
+#fst_NoAm3
+fst_NoAm3 <- get.adjacency(undir_NoAm3, attr="fst", sparse=FALSE)
+fst_NoAm3 <- as.data.frame(fst_NoAm3)
+for(k in 1:nrow(fst_NoAm3)){
+fst_NoAm3[,k]<-as.numeric(fst_NoAm3[,k])
+}
+diag(fst_NoAm3) <- ""
+fst_NoAm3[fst_NoAm3 == 0] <- NA
+#pi_EvsN4
+pi_EvsN4 <- get.adjacency(undir_EvsN4, attr="pi_1-2", sparse=FALSE)
+pi_EvsN4 <- as.data.frame(pi_EvsN4)
+for(k in 1:nrow(pi_EvsN4)){
+pi_EvsN4[,k]<-as.numeric(pi_EvsN4[,k])
+}
+pi_EvsN4 <- pi_EvsN4[,1:ncol(pi_EvsN4)]*100
+diag(pi_EvsN4) <- ""
+pi_EvsN4[pi_EvsN4 == 0] <- NA
+#fst_EvsN4
+fst_EvsN4 <- get.adjacency(undir_EvsN4, attr="fst", sparse=FALSE)
+fst_EvsN4 <- as.data.frame(fst_EvsN4)
+for(k in 1:nrow(fst_EvsN4)){
+fst_EvsN4[,k]<-as.numeric(fst_EvsN4[,k])
+}
+diag(fst_EvsN4) <- ""
+fst_EvsN4[fst_EvsN4 == 0] <- NA
+#pi_EuAs4
+pi_EuAs4 <- get.adjacency(undir_EuAs4, attr="pi_1-2", sparse=FALSE)
+pi_EuAs4 <- as.data.frame(pi_EuAs4)
+for(k in 1:nrow(pi_EuAs4)){
+pi_EuAs4[,k]<-as.numeric(pi_EuAs4[,k])
+}
+pi_EuAs4 <- pi_EuAs4[,1:ncol(pi_EuAs4)]*100
+diag(pi_EuAs4) <- ""
+pi_EuAs4[pi_EuAs4 == 0] <- NA
+#fst_EuAs4
+fst_EuAs4 <- get.adjacency(undir_EuAs4, attr="fst", sparse=FALSE)
+fst_EuAs4 <- as.data.frame(fst_EuAs4)
+for(k in 1:nrow(fst_EuAs4)){
+fst_EuAs4[,k]<-as.numeric(fst_EuAs4[,k])
+}
+diag(fst_EuAs4) <- ""
+fst_EuAs4[fst_EuAs4 == 0] <- NA
+#pi_NoAm4
+pi_NoAm4 <- get.adjacency(undir_NoAm4, attr="pi_1-2", sparse=FALSE)
+pi_NoAm4 <- as.data.frame(pi_NoAm4)
+for(k in 1:nrow(pi_NoAm4)){
+pi_NoAm4[,k]<-as.numeric(pi_NoAm4[,k])
+}
+pi_NoAm4 <- pi_NoAm4[,1:ncol(pi_NoAm4)]*100
+diag(pi_NoAm4) <- ""
+pi_NoAm4[pi_NoAm4 == 0] <- NA
+#fst_NoAm4
+fst_NoAm4 <- get.adjacency(undir_NoAm4, attr="fst", sparse=FALSE)
+fst_NoAm4 <- as.data.frame(fst_NoAm4)
+for(k in 1:nrow(fst_NoAm4)){
+fst_NoAm4[,k]<-as.numeric(fst_NoAm4[,k])
+}
+diag(fst_NoAm4) <- ""
+fst_NoAm4[fst_NoAm4 == 0] <- NA
+#pi_EvsN5
+pi_EvsN5 <- get.adjacency(undir_EvsN5, attr="pi_1-2", sparse=FALSE)
+pi_EvsN5 <- as.data.frame(pi_EvsN5)
+for(k in 1:nrow(pi_EvsN5)){
+pi_EvsN5[,k]<-as.numeric(pi_EvsN5[,k])
+}
+pi_EvsN5 <- pi_EvsN5[,1:ncol(pi_EvsN5)]*100
+diag(pi_EvsN5) <- ""
+pi_EvsN5[pi_EvsN5 == 0] <- NA
+#fst_EvsN5
+fst_EvsN5 <- get.adjacency(undir_EvsN5, attr="fst", sparse=FALSE)
+fst_EvsN5 <- as.data.frame(fst_EvsN5)
+for(k in 1:nrow(fst_EvsN5)){
+fst_EvsN5[,k]<-as.numeric(fst_EvsN5[,k])
+}
+diag(fst_EvsN5) <- ""
+fst_EvsN5[fst_EvsN5 == 0] <- NA
+################
+#Only 1 Nabu sample in Eurasia
+################
+#pi_NoAm5
+pi_NoAm5 <- get.adjacency(undir_NoAm5, attr="pi_1-2", sparse=FALSE)
+pi_NoAm5 <- as.data.frame(pi_NoAm5)
+for(k in 1:nrow(pi_NoAm5)){
+pi_NoAm5[,k]<-as.numeric(pi_NoAm5[,k])
+}
+pi_NoAm5 <- pi_NoAm5[,1:ncol(pi_NoAm5)]*100
+diag(pi_NoAm5) <- ""
+pi_NoAm5[pi_NoAm5 == 0] <- NA
+#fst_NoAm5
+fst_NoAm5 <- get.adjacency(undir_NoAm5, attr="fst", sparse=FALSE)
+fst_NoAm5 <- as.data.frame(fst_NoAm5)
+for(k in 1:nrow(fst_NoAm5)){
+fst_NoAm5[,k]<-as.numeric(fst_NoAm5[,k])
+}
+diag(fst_NoAm5) <- ""
+fst_NoAm5[fst_NoAm5 == 0] <- NA
+
+##### Check if rows and columns of matrices match #####
+#1
+identical(colnames(coord1), rownames(coord1))
+identical(colnames(coord1), colnames(pi1))
+identical(colnames(coord1), rownames(pi1))
+identical(colnames(coord1), colnames(fst1))
+identical(colnames(coord1), rownames(fst1))
+#2
+identical(colnames(coord2), rownames(coord2))
+identical(colnames(coord2), colnames(pi2))
+identical(colnames(coord2), rownames(pi2))
+identical(colnames(coord2), colnames(fst2))
+identical(colnames(coord2), rownames(fst2))
+#3
+identical(colnames(coord3), rownames(coord3))
+identical(colnames(coord3), colnames(pi3))
+identical(colnames(coord3), rownames(pi3))
+identical(colnames(coord3), colnames(fst3))
+identical(colnames(coord3), rownames(fst3))
+#4
+identical(colnames(coord4), rownames(coord4))
+identical(colnames(coord4), colnames(pi4))
+identical(colnames(coord4), rownames(pi4))
+identical(colnames(coord4), colnames(fst4))
+identical(colnames(coord4), rownames(fst4))
+#5
+identical(colnames(coord5), rownames(coord5))
+identical(colnames(coord5), colnames(pi5))
+identical(colnames(coord5), rownames(pi5))
+identical(colnames(coord5), colnames(fst5))
+identical(colnames(coord5), rownames(fst5))
+#6
+identical(colnames(coord6), rownames(coord6))
+identical(colnames(coord6), colnames(pi6))
+identical(colnames(coord6), rownames(pi6))
+identical(colnames(coord6), colnames(fst6))
+identical(colnames(coord6), rownames(fst6))
+#8
+identical(colnames(coord8), rownames(coord8))
+identical(colnames(coord8), colnames(pi8))
+identical(colnames(coord8), rownames(pi8))
+identical(colnames(coord8), colnames(fst8))
+identical(colnames(coord8), rownames(fst8))
+######################################################################################################################################
+#EvsN1
+identical(colnames(coord1), rownames(coord1))
+identical(colnames(coord1), colnames(pi_EvsN1))
+identical(colnames(coord1), rownames(pi_EvsN1))
+identical(colnames(coord1), colnames(fst_EvsN1))
+identical(colnames(coord1), rownames(fst_EvsN1))
+#EuAs1
+identical(colnames(EuAs1_d), rownames(EuAs1_d))
+identical(colnames(EuAs1_d), colnames(pi_EuAs1))
+identical(colnames(EuAs1_d), rownames(pi_EuAs1))
+identical(colnames(EuAs1_d), colnames(fst_EuAs1))
+identical(colnames(EuAs1_d), rownames(fst_EuAs1))
+#NoAm1
+identical(colnames(NoAm1_d), rownames(NoAm1_d))
+identical(colnames(NoAm1_d), colnames(pi_NoAm1))
+identical(colnames(NoAm1_d), rownames(pi_NoAm1))
+identical(colnames(NoAm1_d), colnames(fst_NoAm1))
+identical(colnames(NoAm1_d), rownames(fst_NoAm1))
+#EvsN2
+identical(colnames(coord2), rownames(coord2))
+identical(colnames(coord2), colnames(pi_EvsN2))
+identical(colnames(coord2), rownames(pi_EvsN2))
+identical(colnames(coord2), colnames(fst_EvsN2))
+identical(colnames(coord2), rownames(fst_EvsN2))
+#EuAs2
+identical(colnames(EuAs2_d), rownames(EuAs2_d))
+identical(colnames(EuAs2_d), colnames(pi_EuAs2))
+identical(colnames(EuAs2_d), rownames(pi_EuAs2))
+identical(colnames(EuAs2_d), colnames(fst_EuAs2))
+identical(colnames(EuAs2_d), rownames(fst_EuAs2))
+#NoAm2
+identical(colnames(NoAm2_d), rownames(NoAm2_d))
+identical(colnames(NoAm2_d), colnames(pi_NoAm2))
+identical(colnames(NoAm2_d), rownames(pi_NoAm2))
+identical(colnames(NoAm2_d), colnames(fst_NoAm2))
+identical(colnames(NoAm2_d), rownames(fst_NoAm2))
+#EvsN3
+identical(colnames(coord3), rownames(coord3))
+identical(colnames(coord3), colnames(pi_EvsN3))
+identical(colnames(coord3), rownames(pi_EvsN3))
+identical(colnames(coord3), colnames(fst_EvsN3))
+identical(colnames(coord3), rownames(fst_EvsN3))
+#EuAs3
+identical(colnames(EuAs3_d), rownames(EuAs3_d))
+identical(colnames(EuAs3_d), colnames(pi_EuAs3))
+identical(colnames(EuAs3_d), rownames(pi_EuAs3))
+identical(colnames(EuAs3_d), colnames(fst_EuAs3))
+identical(colnames(EuAs3_d), rownames(fst_EuAs3))
+#NoAm3
+identical(colnames(NoAm3_d), rownames(NoAm3_d))
+identical(colnames(NoAm3_d), colnames(pi_NoAm3))
+identical(colnames(NoAm3_d), rownames(pi_NoAm3))
+identical(colnames(NoAm3_d), colnames(fst_NoAm3))
+identical(colnames(NoAm3_d), rownames(fst_NoAm3))
+#EvsN4
+identical(colnames(coord4), rownames(coord4))
+identical(colnames(coord4), colnames(pi_EvsN4))
+identical(colnames(coord4), rownames(pi_EvsN4))
+identical(colnames(coord4), colnames(fst_EvsN4))
+identical(colnames(coord4), rownames(fst_EvsN4))
+#EuAs4
+identical(colnames(EuAs4_d), rownames(EuAs4_d))
+identical(colnames(EuAs4_d), colnames(pi_EuAs4))
+identical(colnames(EuAs4_d), rownames(pi_EuAs4))
+identical(colnames(EuAs4_d), colnames(fst_EuAs4))
+identical(colnames(EuAs4_d), rownames(fst_EuAs4))
+#NoAm4
+identical(colnames(NoAm4_d), rownames(NoAm4_d))
+identical(colnames(NoAm4_d), colnames(pi_NoAm4))
+identical(colnames(NoAm4_d), rownames(pi_NoAm4))
+identical(colnames(NoAm4_d), colnames(fst_NoAm4))
+identical(colnames(NoAm4_d), rownames(fst_NoAm4))
+#EvsN5
+identical(colnames(coord5), rownames(coord5))
+identical(colnames(coord5), colnames(pi_EvsN5))
+identical(colnames(coord5), rownames(pi_EvsN5))
+identical(colnames(coord5), colnames(fst_EvsN5))
+identical(colnames(coord5), rownames(fst_EvsN5))
+#Only 1 Nabu sample in Eurasia
+#NoAm5
+identical(colnames(NoAm5_d), rownames(NoAm5_d))
+identical(colnames(NoAm5_d), colnames(pi_NoAm5))
+identical(colnames(NoAm5_d), rownames(pi_NoAm5))
+identical(colnames(NoAm5_d), colnames(fst_NoAm5))
+identical(colnames(NoAm5_d), rownames(fst_NoAm5))
+
+############################## regression #####################################
+library(ggplot2)
+ggplotRegression <- function(fit){
+    ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) +
+    theme_bw() +
+    xlab("Spatial distance (km)") +
+    ylab(bquote(F[ST])) +
+    stat_smooth(method="lm", col="black", lwd=0.4, lty=1) +
+    labs(subtitle = mantel,
+          title = paste("slope = ", signif(fit$coef[[2]], 2)*1000)) +
+    theme(plot.title = element_text(size=12, vjust=-6, hjust=1),
+          plot.subtitle = element_text(size=12, hjust=0.015),
+          axis.title = element_text(size=13, hjust=0.5),
+          axis.text = element_text(size=11))
+#    geom_point(shape=21, size=2.5, stroke=0.5)
+}
+###############################################################################
+
+library(grid)
+library(gridExtra)
+
+##### Mantel test and plot (if above checks gave TRUE) #####
+library(vegan)
+
+##Fst1
+# get lower diagonals of matrices into vectors
+coord1_ld <- as.numeric(coord1[lower.tri(coord1, diag=F)])
+fst1_ld <- as.numeric(fst1[lower.tri(fst1, diag=F)])
+#Eurasia and NorthAmerica
+EuAs1_ld <- as.numeric(EuAs1_d[lower.tri(EuAs1_d, diag=F)])
+NoAm1_ld <- as.numeric(NoAm1_d[lower.tri(NoAm1_d, diag=F)])
+fst_EvsN1_ld <- as.numeric(fst_EvsN1[lower.tri(fst_EvsN1, diag=F)])
+fst_EuAs1_ld <- as.numeric(fst_EuAs1[lower.tri(fst_EuAs1, diag=F)])
+fst_NoAm1_ld <- as.numeric(fst_NoAm1[lower.tri(fst_NoAm1, diag=F)])
+EvsN <- data.frame(coord1_ld, fst_EvsN1_ld)
+colnames(EvsN) <- c("spatdist","Fst")
+EuAs <- data.frame(EuAs1_ld, fst_EuAs1_ld)
+colnames(EuAs) <- c("spatdist","Fst")
+NoAm <- data.frame(NoAm1_ld, fst_NoAm1_ld)
+colnames(NoAm) <- c("spatdist","Fst")
+intracont <- rbind(EuAs,NoAm)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Fonsibacter sp."))), vjust=1.8, hjust=1.279, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst1, coord1, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.756  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst1_ld ~ coord1_ld))) + expand_limits(x=0,y=0) +
+#plot(ggplotRegression(lm(fst_EuAs1_ld ~ EuAs1_ld))) + expand_limits(x=0,y=0)
+#plot(ggplotRegression(lm(fst_NoAm1_ld ~ NoAm1_ld))) + expand_limits(x=0,y=0)
+            geom_point(data=EvsN, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=EuAs, shape=21, size=2.5, stroke=0.5, color="green3", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=NoAm, shape=21, size=2.5, stroke=0.5, color="orange2", aes(x=spatdist, y=Fst)) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=EvsN, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=EuAs, aes(x=spatdist, y=Fst), method="lm", col="green3", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=NoAm, aes(x=spatdist, y=Fst), method="lm", col="orange2", lwd=0.5, lty=3, se=F) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Fsp_Fst_spatdist_intercont.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst2
+# get lower diagonals of matrices into vectors
+coord2_ld <- as.numeric(coord2[lower.tri(coord2, diag=F)])
+fst2_ld <- as.numeric(fst2[lower.tri(fst2, diag=F)])
+#Eurasia and NorthAmerica
+EuAs2_ld <- as.numeric(EuAs2_d[lower.tri(EuAs2_d, diag=F)])
+NoAm2_ld <- as.numeric(NoAm2_d[lower.tri(NoAm2_d, diag=F)])
+fst_EvsN2_ld <- as.numeric(fst_EvsN2[lower.tri(fst_EvsN2, diag=F)])
+fst_EuAs2_ld <- as.numeric(fst_EuAs2[lower.tri(fst_EuAs2, diag=F)])
+fst_NoAm2_ld <- as.numeric(fst_NoAm2[lower.tri(fst_NoAm2, diag=F)])
+EvsN <- data.frame(coord2_ld, fst_EvsN2_ld)
+colnames(EvsN) <- c("spatdist","Fst")
+EuAs <- data.frame(EuAs2_ld, fst_EuAs2_ld)
+colnames(EuAs) <- c("spatdist","Fst")
+NoAm <- data.frame(NoAm2_ld, fst_NoAm2_ld)
+colnames(NoAm) <- c("spatdist","Fst")
+intracont <- rbind(EuAs,NoAm)
+
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter finlandensis")), vjust=1.8, hjust=0.822, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst2, coord2, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.910  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst2_ld ~ coord2_ld))) + expand_limits(x=0,y=0) +
+#plot(ggplotRegression(lm(fst_EuAs2_ld ~ EuAs2_ld))) + expand_limits(x=0,y=0)
+#plot(ggplotRegression(lm(fst_NoAm2_ld ~ NoAm2_ld))) + expand_limits(x=0,y=0)
+            geom_point(data=EvsN, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=EuAs, shape=21, size=2.5, stroke=0.5, color="green3", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=NoAm, shape=21, size=2.5, stroke=0.5, color="orange2", aes(x=spatdist, y=Fst)) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=EvsN, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=EuAs, aes(x=spatdist, y=Fst), method="lm", col="green3", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=NoAm, aes(x=spatdist, y=Fst), method="lm", col="orange2", lwd=0.5, lty=3, se=F) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pfin_Fst_spatdist_intercont.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst3
+# get lower diagonals of matrices into vectors
+coord3_ld <- as.numeric(coord3[lower.tri(coord3, diag=F)])
+fst3_ld <- as.numeric(fst3[lower.tri(fst3, diag=F)])
+#Eurasia and NorthAmerica
+EuAs3_ld <- as.numeric(EuAs3_d[lower.tri(EuAs3_d, diag=F)])
+NoAm3_ld <- as.numeric(NoAm3_d[lower.tri(NoAm3_d, diag=F)])
+fst_EvsN3_ld <- as.numeric(fst_EvsN3[lower.tri(fst_EvsN3, diag=F)])
+fst_EuAs3_ld <- as.numeric(fst_EuAs3[lower.tri(fst_EuAs3, diag=F)])
+fst_NoAm3_ld <- as.numeric(fst_NoAm3[lower.tri(fst_NoAm3, diag=F)])
+EvsN <- data.frame(coord3_ld, fst_EvsN3_ld)
+colnames(EvsN) <- c("spatdist","Fst")
+EuAs <- data.frame(EuAs3_ld, fst_EuAs3_ld)
+colnames(EuAs) <- c("spatdist","Fst")
+NoAm <- data.frame(NoAm3_ld, fst_NoAm3_ld)
+colnames(NoAm) <- c("spatdist","Fst")
+intracont <- rbind(EuAs,NoAm)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Fonsibacter ubiquis"))), vjust=1.8, hjust=1.003, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst3, coord3, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.649  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst3_ld ~ coord3_ld))) + expand_limits(x=0,y=0) +
+#plot(ggplotRegression(lm(fst_EuAs3_ld ~ EuAs3_ld))) + expand_limits(x=0,y=0)
+#plot(ggplotRegression(lm(fst_NoAm3_ld ~ NoAm3_ld))) + expand_limits(x=0,y=0)
+            geom_point(data=EvsN, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=EuAs, shape=21, size=2.5, stroke=0.5, color="green3", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=NoAm, shape=21, size=2.5, stroke=0.5, color="orange2", aes(x=spatdist, y=Fst)) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=EvsN, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=EuAs, aes(x=spatdist, y=Fst), method="lm", col="green3", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=NoAm, aes(x=spatdist, y=Fst), method="lm", col="orange2", lwd=0.5, lty=3, se=F) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Fubi_Fst_spatdist_intercont.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst4
+# get lower diagonals of matrices into vectors
+coord4_ld <- as.numeric(coord4[lower.tri(coord4, diag=F)])
+fst4_ld <- as.numeric(fst4[lower.tri(fst4, diag=F)])
+#Eurasia and NorthAmerica
+EuAs4_ld <- as.numeric(EuAs4_d[lower.tri(EuAs4_d, diag=F)])
+NoAm4_ld <- as.numeric(NoAm4_d[lower.tri(NoAm4_d, diag=F)])
+fst_EvsN4_ld <- as.numeric(fst_EvsN4[lower.tri(fst_EvsN4, diag=F)])
+fst_EuAs4_ld <- as.numeric(fst_EuAs4[lower.tri(fst_EuAs4, diag=F)])
+fst_NoAm4_ld <- as.numeric(fst_NoAm4[lower.tri(fst_NoAm4, diag=F)])
+EvsN <- data.frame(coord4_ld, fst_EvsN4_ld)
+colnames(EvsN) <- c("spatdist","Fst")
+EuAs <- data.frame(EuAs4_ld, fst_EuAs4_ld)
+colnames(EuAs) <- c("spatdist","Fst")
+NoAm <- data.frame(NoAm4_ld, fst_NoAm4_ld)
+colnames(NoAm) <- c("spatdist","Fst")
+intracont <- rbind(EuAs,NoAm)
+
+# set title
+species <- textGrob(substitute(paste(bolditalic('Ca.'), bold(" Methylopumilus universalis"))), vjust=1.8, hjust=0.793, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst4, coord4, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.928  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst4_ld ~ coord4_ld))) + expand_limits(x=0,y=0) +
+#plot(ggplotRegression(lm(fst_EuAs4_ld ~ EuAs4_ld))) + expand_limits(x=0,y=0)
+#plot(ggplotRegression(lm(fst_NoAm4_ld ~ NoAm4_ld))) + expand_limits(x=0,y=0)
+            geom_point(data=EvsN, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=EuAs, shape=21, size=2.5, stroke=0.5, color="green3", aes(x=spatdist, y=Fst)) +
+#            geom_point(data=NoAm, shape=21, size=2.5, stroke=0.5, color="orange2", aes(x=spatdist, y=Fst)) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=EvsN, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=EuAs, aes(x=spatdist, y=Fst), method="lm", col="green3", lwd=0.5, lty=3, se=F) +
+#            stat_smooth(data=NoAm, aes(x=spatdist, y=Fst), method="lm", col="orange2", lwd=0.5, lty=3, se=F) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Muni_Fst_spatdist_intercont.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst5
+# get lower diagonals of matrices into vectors
+coord5_ld <- as.numeric(coord5[lower.tri(coord5, diag=F)])
+fst5_ld <- as.numeric(fst5[lower.tri(fst5, diag=F)])
+#Eurasia and NorthAmerica
+#Only 1 Nabu sample in Eurasia
+NoAm5_ld <- as.numeric(NoAm5_d[lower.tri(NoAm5_d, diag=F)])
+fst_EvsN5_ld <- as.numeric(fst_EvsN5[lower.tri(fst_EvsN5, diag=F)])
+#Only 1 Nabu sample in Eurasia
+fst_NoAm5_ld <- as.numeric(fst_NoAm5[lower.tri(fst_NoAm5, diag=F)])
+EvsN <- data.frame(coord5_ld, fst_EvsN5_ld)
+colnames(EvsN) <- c("spatdist","Fst")
+#Only 1 Nabu sample in Eurasia
+NoAm <- data.frame(NoAm5_ld, fst_NoAm5_ld)
+colnames(NoAm) <- c("spatdist","Fst")
+intracont <- NoAm     #Only 1 Nabu sample in Eurasia
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Nanopelagicus abundans"))), vjust=1.8, hjust=0.85, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst5, coord5, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.955  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst5_ld ~ coord5_ld))) + expand_limits(x=0,y=0) +
+#plot(ggplotRegression(lm(fst_EuAs5_ld ~ EuAs5_ld))) + expand_limits(x=0,y=0)
+#plot(ggplotRegression(lm(fst_NoAm5_ld ~ NoAm5_ld))) + expand_limits(x=0,y=0)
+            geom_point(data=EvsN, shape=21, size=2.5, stroke=0.5, color="blue", aes(x=spatdist, y=Fst)) +
+#Only 1 Nabu sample in Eurasia
+#            geom_point(data=NoAm, shape=21, size=2.5, stroke=0.5, color="orange2", aes(x=spatdist, y=Fst)) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=EvsN, aes(x=spatdist, y=Fst), method="lm", col="blue", lwd=0.5, lty=3, se=F) +
+#Only 1 Nabu sample in Eurasia
+#            stat_smooth(data=NoAm, aes(x=spatdist, y=Fst), method="lm", col="orange2", lwd=0.5, lty=3, se=F) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Nabu_Fst_spatdist_intercont.pdf", width=5.5, height=4)
+# add title and mantel results to plot
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst6
+# get lower diagonals of matrices into vectors
+coord6_ld <- as.numeric(coord6[lower.tri(coord6, diag=F)])
+fst6_ld <- as.numeric(fst6[lower.tri(fst6, diag=F)])
+#Ppan samples only from Europe
+intracont <- data.frame(coord6_ld, fst6_ld)
+colnames(intracont) <- c("spatdist","Fst")
+
+# set title
+species <- textGrob(substitute(bolditalic("Polynucleobacter paneuropaeus")), vjust=1.8, hjust=0.765, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst6, coord6, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.365  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst6_ld ~ coord6_ld))) + expand_limits(x=0,y=0) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Ppan_Fst_spatdist_intracont.pdf", width=5.5, height=4)
+# add title
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+##Fst8
+# get lower diagonals of matrices into vectors
+coord8_ld <- as.numeric(coord8[lower.tri(coord8, diag=F)])
+fst8_ld <- as.numeric(fst8[lower.tri(fst8, diag=F)])
+#Pver samples only from Europe
+intracont <- data.frame(coord8_ld, fst8_ld)
+colnames(intracont) <- c("spatdist","Fst")
+
+# set title
+species <- textGrob(substitute(paste(bolditalic("Ca."), bold(" Planktophila vernalis"))), vjust=1.8, hjust=1, gp=gpar(fontsize=13))
+# set mantel results
+#mantel(fst8, coord8, method="spearman", permutations=10000)
+mantel <- "Mantel's r = 0.740  (p < 0.001)"
+# create plot
+p1 <- plot(ggplotRegression(lm(fst8_ld ~ coord8_ld))) + expand_limits(x=0,y=0) +
+            geom_point(data=intracont, shape=21, size=2.5, stroke=0.5, color="red3", aes(x=spatdist, y=Fst)) +
+            stat_smooth(data=intracont, aes(x=spatdist, y=Fst), method="lm", col="red3", lwd=0.5, lty=3, se=F)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/aaa_plots/Pver_Fst_spatdist_intracont.pdf", width=5.5, height=4)
+# add title
+grid.arrange(p1, top=species)
+# save plot
+dev.off()
+
+
+######################################################################################################################################
+##################################################### OUTTAKES #######################################################################
+######################################################################################################################################
+##### convert spatdist matrices to long format and save as csv
+library(reshape2)
+
+##Fsp
+c1 <- melt(as.matrix(coord1))
+write.table(c1, "/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/fsp_spatdist_noSis.csv", row.names=F, col.names=F)
+############################################# in bash #############################################
+#grep -f 004_accessions/Fsp_Eurasia.csv 005_spatdist/fsp_spatdist_noSis.csv | grep -f 004_accessions/Fsp_NorthAmerica.csv > 005_spatdist/Fsp_spatdist_EUASvsNOAM.csv
+#grep -f 004_accessions/Fsp_Eurasia.csv 005_spatdist/fsp_spatdist_noSis.csv | grep -vf 004_accessions/Fsp_NorthAmerica.csv > 005_spatdist/Fsp_spatdist_EUAS.csv
+#grep -f 004_accessions/Fsp_NorthAmerica.csv 005_spatdist/fsp_spatdist_noSis.csv | grep -vf 004_accessions/Fsp_Eurasia.csv > 005_spatdist/Fsp_spatdist_NOAM.csv
+###################################################################################################
+EvsN1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_spatdist_EUASvsNOAM.csv", header=F, sep=" ", check.names=FALSE)
+EvsN1 <- dcast(EvsN1, V1~V2)
+rownames(EvsN1) <- EvsN1[,1]
+EvsN1 <- EvsN1[,-1]
+EuAs1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_spatdist_EUAS.csv", header=F, sep=" ", check.names=FALSE)
+EuAs1 <- dcast(EuAs1, V1~V2)
+rownames(EuAs1) <- EuAs1[,1]
+EuAs1 <- EuAs1[,-1]
+NoAm1 <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/005_euas_noam/Fsp_spatdist_NOAM.csv", header=F, sep=" ", check.names=FALSE)
+NoAm1 <- dcast(NoAm1, V1~V2)
+rownames(NoAm1) <- NoAm1[,1]
+NoAm1 <- NoAm1[,-1]

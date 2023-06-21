@@ -1,0 +1,57 @@
+library(sf)
+library(mapview)
+library(dplyr)
+
+#"Fsp"="#56B4E9", "Fubi"="#0072B2", "Muni"="#CC79A7", "Pver"="#D55E00", "Nabu"="#E69F00", "Ppan"="#F0E442", "Pfin"="#009E73"
+colorBlind <- c("#56B4E9","#0072B2","#CC79A7","#E69F00","#009E73","#F0E442","#D55E00")
+
+#Load file containing data for all species
+samples <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/000_merged/7species_incl_entr_noSistermetas_noCombined.tsv", header=TRUE, sep="\t")
+#samples <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/000_merged/Pver_dummies.csv", header=TRUE, sep="\t")
+
+# Transform into spatial object
+# coords - set the second columns in samples to longitude and latitude
+# crs - set the map projection to WGS84
+samples_sf <- st_as_sf(samples, coords = c("long", "lat"),  crs = 4326)
+
+### Set order of species
+samples_sf$species <- factor(samples_sf$species, levels = c("Fsp","Fubi","Muni","Nabu","Pfin","Ppan","Pver"))
+
+#### Map spatial object on interactive map
+p <- mapview(samples_sf, col.regions=colorBlind, alpha.regions=0.5, zcol=c("species"), cex="meddpth.Gbp", legend=TRUE, layer.name="Species")
+# Print to pdf
+mapshot(p, file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map.pdf")
+mapshot(p, file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map.png")
+mapshot(p, file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map.jpeg")
+mapshot(p, url="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map.html")
+
+#### Plot each species separately
+# separate species
+Fsp <- filter(samples_sf, species=="Fsp")
+Fubi <- filter(samples_sf, species=="Fubi")
+Muni <- filter(samples_sf, species=="Muni")
+Pver <- filter(samples_sf, species=="Pver")
+Nabu <- filter(samples_sf, species=="Nabu")
+Ppan <- filter(samples_sf, species=="Ppan")
+Pfin <- filter(samples_sf, species=="Pfin")
+# color palette for dpth/Gbp
+palette <- c("yellow", "green", "darkblue")
+# order by dpth/Gbp so that highest values will be on top
+Fsp <- Fsp[order(Fsp$meddpth.Gbp),]
+Fubi <- Fubi[order(Fubi$meddpth.Gbp),]
+Muni <- Muni[order(Muni$meddpth.Gbp),]
+Pver <- Pver[order(Pver$meddpth.Gbp),]
+Nabu <- Nabu[order(Nabu$meddpth.Gbp),]
+Ppan <- Ppan[order(Ppan$meddpth.Gbp),]
+Pfin <- Pfin[order(Pfin$meddpth.Gbp),]
+
+mapshot(mapview(Fsp, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Fsp.pdf")
+mapshot(mapview(Fubi, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Fubi.pdf")
+mapshot(mapview(Muni, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Muni.pdf")
+# plot Pver with dummy first as map was cropped otherwise 
+dummy <- mapview(Pver, map.types="CartoDB.Positron", alpha=0, alpha.regions=0, legend="FALSE")
+mapshot(dummy + mapview(Pver, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Pver.pdf")
+mapshot(mapview(Nabu, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Nabu.pdf")
+mapshot(mapview(Ppan, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Ppan.pdf")
+mapshot(mapview(Pfin, map.types="CartoDB.Positron", col.regions=palette, zcol=c("meddpth.Gbp"), alpha.regions=1, legend="TRUE", layer.name="Depth/Gbp"), file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/map_Pfin.pdf")
+

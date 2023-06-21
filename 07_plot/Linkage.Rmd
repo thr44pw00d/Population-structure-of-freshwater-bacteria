@@ -1,0 +1,130 @@
+library(ggplot2)
+library(dplyr)
+
+ppan <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Ppan_merged_linkage.tsv", header=T, sep="\t")
+pfin <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Pfin_merged_linkage.tsv", header=T, sep="\t")
+nabu <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Nabu_merged_linkage.tsv", header=T, sep="\t")
+pver <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Pver_merged_linkage.tsv", header=T, sep="\t")
+fsp <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Fsp_merged_linkage.tsv", header=T, sep="\t")
+fubi <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Fubi_merged_linkage.tsv", header=T, sep="\t")
+muni <- read.csv("/media/matthias/meuk/intercontinental/instrain/linkage_tsv/IS_Muni_merged_linkage.tsv", header=T, sep="\t")
+
+win <- read.csv("/media/matthias/meuk/intercontinental/instrain/windows.tsv", header=T, sep="\t")
+
+ppan <- filter(ppan, r2_normalized!="NA")
+pfin <- filter(pfin, r2_normalized!="NA")
+nabu <- filter(nabu, r2_normalized!="NA")
+pver <- filter(pver, r2_normalized!="NA")
+fsp <- filter(fsp, r2_normalized!="NA")
+fubi <- filter(fubi, r2_normalized!="NA")
+muni <- filter(muni, r2_normalized!="NA")
+
+ppan$window = NA
+pfin$window = NA
+nabu$window = NA
+pver$window = NA
+fsp$window = NA
+fubi$window = NA
+muni$window = NA
+
+ppan <- merge(ppan, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+pfin <- merge(pfin, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+nabu <- merge(nabu, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+pver <- merge(pver, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+fsp <- merge(fsp, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+fubi <- merge(fubi, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+muni <- merge(muni, win, by="distance", all.x=T) %>% 
+            mutate(window = ifelse(!is.na(window.y), window.y, window.x)) %>% 
+            select(distance, window, r2, r2_normalized)
+
+ppan_w <- aggregate(ppan[, 3:4], list(ppan$window), mean)
+pfin_w <- aggregate(pfin[, 3:4], list(pfin$window), mean)
+nabu_w <- aggregate(nabu[, 3:4], list(nabu$window), mean)
+pver_w <- aggregate(pver[, 3:4], list(pver$window), mean)
+fsp_w <- aggregate(fsp[, 3:4], list(fsp$window), mean)
+fubi_w <- aggregate(fubi[, 3:4], list(fubi$window), mean)
+muni_w <- aggregate(muni[, 3:4], list(muni$window), mean)
+
+ppan_w <- cbind(ppan_w, table(ppan$window))
+pfin_w <- cbind(pfin_w, table(pfin$window))
+nabu_w <- cbind(nabu_w, table(nabu$window))
+pver_w <- cbind(pver_w, table(pver$window))
+fsp_w <- cbind(fsp_w, table(fsp$window))
+fubi_w <- cbind(fubi_w, table(fubi$window))
+muni_w <- cbind(muni_w, table(muni$window))
+
+ppan_w <- filter(ppan_w, Freq>19)
+pfin_w <- filter(pfin_w, Freq>19)
+nabu_w <- filter(nabu_w, Freq>19)
+pver_w <- filter(pver_w, Freq>19)
+fsp_w <- filter(fsp_w, Freq>19)
+fubi_w <- filter(fubi_w, Freq>19)
+muni_w <- filter(muni_w, Freq>19)
+
+p1 <- ggplot(ppan_w, aes(x=Group.1, y=r2_normalized)) +
+    theme_bw() +
+    xlab("Distance between loci (bp)") +
+    ylab(bquote(Linkage~disequilibrium~({r^2}[normalized]))) +
+    geom_point(size=1.9, stroke=0, color="#009E73", alpha=0.7) +
+    geom_line(linewidth=0.5, color="#009E73", alpha=0.5) +
+    geom_point(data=pfin_w, size=1.9, stroke=0, color="#000000", alpha=0.7) +
+    geom_line(data=pfin_w, linewidth=0.5, color="#000000", alpha=0.5) +
+    geom_point(data=pver_w, size=1.9, stroke=0, color="#D55E00", alpha=0.7) +
+    geom_line(data=pver_w, linewidth=0.5, color="#D55E00", alpha=0.5) +
+    geom_point(data=nabu_w, size=1.9, stroke=0, color="#E69F00", alpha=0.7) +
+    geom_line(data=nabu_w, linewidth=0.5, color="#E69F00", alpha=0.5) +        
+    geom_point(data=muni_w, size=1.9, stroke=0, color="#CC79A7", alpha=0.7) +
+    geom_line(data=muni_w, linewidth=0.5, color="#CC79A7", alpha=0.5) +    
+    geom_point(data=fubi_w, size=1.9, stroke=0, color="#0072B2", alpha=0.7) +
+    geom_line(data=fubi_w, linewidth=0.5, color="#0072B2", alpha=0.5) +       
+    geom_point(data=fsp_w, size=1.9, stroke=0, color="#56B4E9", alpha=0.7) +
+    geom_line(data=fsp_w, linewidth=0.5, color="#56B4E9", alpha=0.5)
+
+# plot to pdf and svg
+pdf(file="/media/matthias/meuk/intercontinental/instrain/r2_norm__.pdf", width=6, height=5)
+p1
+dev.off()
+
+svg(file="/media/matthias/meuk/intercontinental/instrain/r2_norm__.svg", width=6, height=5)
+p1
+dev.off()
+
+p2 <- ggplot(ppan_w, aes(x=Group.1, y=r2)) +
+    theme_bw() +
+    xlab("Distance between loci (bp)") +
+    ylab(bquote(Linkage~disequilibrium~({r^2}))) +
+    geom_point(size=1.9, stroke=0, color="#009E73", alpha=0.7) +
+    geom_line(linewidth=0.5, color="#009E73", alpha=0.5) +
+    geom_point(data=pfin_w, size=1.9, stroke=0, color="#000000", alpha=0.7) +
+    geom_line(data=pfin_w, linewidth=0.5, color="#000000", alpha=0.5) +
+    geom_point(data=pver_w, size=1.9, stroke=0, color="#D55E00", alpha=0.7) +
+    geom_line(data=pver_w, linewidth=0.5, color="#D55E00", alpha=0.5) +
+    geom_point(data=nabu_w, size=1.9, stroke=0, color="#E69F00", alpha=0.7) +
+    geom_line(data=nabu_w, linewidth=0.5, color="#E69F00", alpha=0.5) +        
+    geom_point(data=muni_w, size=1.9, stroke=0, color="#CC79A7", alpha=0.7) +
+    geom_line(data=muni_w, linewidth=0.5, color="#CC79A7", alpha=0.5) +    
+    geom_point(data=fubi_w, size=1.9, stroke=0, color="#0072B2", alpha=0.7) +
+    geom_line(data=fubi_w, linewidth=0.5, color="#0072B2", alpha=0.5) +       
+    geom_point(data=fsp_w, size=1.9, stroke=0, color="#56B4E9", alpha=0.7) +
+    geom_line(data=fsp_w, linewidth=0.5, color="#56B4E9", alpha=0.5)
+
+# plot to pdf and svg
+pdf(file="/media/matthias/meuk/intercontinental/instrain/r2__.pdf", width=6, height=5)
+p2
+dev.off()
+
+svg(file="/media/matthias/meuk/intercontinental/instrain/r2__.svg", width=6, height=5)
+p2
+dev.off()

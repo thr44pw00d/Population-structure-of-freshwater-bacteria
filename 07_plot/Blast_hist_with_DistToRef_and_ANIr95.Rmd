@@ -1,0 +1,657 @@
+library(geosphere)
+
+#Load coord file
+geo1 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/fsp_coord_used.tsv", header=T, sep="\t")
+geo2 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/pfin_coord_used.tsv", header=T, sep="\t")
+geo3 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/fubi_coord_used.tsv", header=T, sep="\t")
+geo4 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/muni_coord_used.tsv", header=T, sep="\t")
+geo5 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/nabu_coord_used.tsv", header=T, sep="\t")
+geo6 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/ppan_coord_used.tsv", header=T, sep="\t")
+geo7 <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/pver_coord_used.tsv", header=T, sep="\t")
+refs <- read.csv("/media/matthias/meuk/intercontinental/coord_used_metas/refs_coord.tsv", header=T, sep="\t")
+
+#Convert latitude and longitude into numeric
+geo1[,2]<-as.numeric(geo1[,2])
+geo1[,3]<-as.numeric(geo1[,3])
+geo2[,2]<-as.numeric(geo2[,2])
+geo2[,3]<-as.numeric(geo2[,3])
+geo3[,2]<-as.numeric(geo3[,2])
+geo3[,3]<-as.numeric(geo3[,3])
+geo4[,2]<-as.numeric(geo4[,2])
+geo4[,3]<-as.numeric(geo4[,3])
+geo5[,2]<-as.numeric(geo5[,2])
+geo5[,3]<-as.numeric(geo5[,3])
+geo6[,2]<-as.numeric(geo6[,2])
+geo6[,3]<-as.numeric(geo6[,3])
+geo7[,2]<-as.numeric(geo7[,2])
+geo7[,3]<-as.numeric(geo7[,3])
+refs[,2]<-as.numeric(refs[,2])
+refs[,3]<-as.numeric(refs[,3])
+
+#Fsp
+temp<-c(0,0)
+
+for(i in 1:nrow(geo1)) {
+    temp[i]<-distm(c(geo1[i,2], geo1[i,3]), c(refs[1,2], refs[1,3]), fun = distGeo)
+    }
+
+dist1 <- rbind(geo1[,1],temp) #combine row of accessions with row of computed distances
+dist1 <- t(dist1)
+colnames(dist1) <- c('accession','spatdist')
+dist1 <- as.data.frame(dist1)
+dist1$spatdist <- as.numeric(dist1$spatdist)
+dist1 <- dist1[order(dist1$spatdist,dist1$accession),]
+
+#write.table(dist1, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Fsp.csv", row.names=F)
+
+#Pfin
+temp<-c(0,0)
+
+for(i in 1:nrow(geo2)) {
+    temp[i]<-distm(c(geo2[i,2], geo2[i,3]), c(refs[6,2], refs[6,3]), fun = distGeo)
+    }
+
+dist2 <- rbind(geo2[,1],temp) #combine row of accessions with row of computed distances
+dist2 <- t(dist2)
+colnames(dist2) <- c('accession','spatdist')
+dist2 <- as.data.frame(dist2)
+dist2$spatdist <- as.numeric(dist2$spatdist)
+dist2 <- dist2[order(dist2$spatdist,dist2$accession),]
+
+#write.table(dist2, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Pfin.csv", row.names=F)
+
+#Fubi
+temp<-c(0,0)
+
+for(i in 1:nrow(geo3)) {
+    temp[i]<-distm(c(geo3[i,2], geo3[i,3]), c(refs[2,2], refs[2,3]), fun = distGeo)
+    }
+
+dist3 <- rbind(geo3[,1],temp) #combine row of accessions with row of computed distances
+dist3 <- t(dist3)
+colnames(dist3) <- c('accession','spatdist')
+dist3 <- as.data.frame(dist3)
+dist3$spatdist <- as.numeric(dist3$spatdist)
+dist3 <- dist3[order(dist3$spatdist,dist3$accession),]
+
+#write.table(dist3, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Fubi.csv", row.names=F)
+
+#Muni
+temp<-c(0,0)
+
+for(i in 1:nrow(geo4)) {
+    temp[i]<-distm(c(geo4[i,2], geo4[i,3]), c(refs[3,2], refs[3,3]), fun = distGeo)
+    }
+
+dist4 <- rbind(geo4[,1],temp) #combine row of accessions with row of computed distances
+dist4 <- t(dist4)
+colnames(dist4) <- c('accession','spatdist')
+dist4 <- as.data.frame(dist4)
+dist4$spatdist <- as.numeric(dist4$spatdist)
+dist4 <- dist4[order(dist4$spatdist,dist4$accession),]
+
+#write.table(dist4, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Muni.csv", row.names=F)
+
+#Nabu
+temp<-c(0,0)
+
+for(i in 1:nrow(geo5)) {
+    temp[i]<-distm(c(geo5[i,2], geo5[i,3]), c(refs[4,2], refs[4,3]), fun = distGeo)
+    }
+
+dist5 <- rbind(geo5[,1],temp) #combine row of accessions with row of computed distances
+dist5 <- t(dist5)
+colnames(dist5) <- c('accession','spatdist')
+dist5 <- as.data.frame(dist5)
+dist5$spatdist <- as.numeric(dist5$spatdist)
+dist5 <- dist5[order(dist5$spatdist,dist5$accession),]
+
+#write.table(dist5, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Nabu.csv", row.names=F)
+
+#Ppan
+temp<-c(0,0)
+
+for(i in 1:nrow(geo6)) {
+    temp[i]<-distm(c(geo6[i,2], geo6[i,3]), c(refs[7,2], refs[7,3]), fun = distGeo)
+    }
+
+dist6 <- rbind(geo6[,1],temp) #combine row of accessions with row of computed distances
+dist6 <- t(dist6)
+colnames(dist6) <- c('accession','spatdist')
+dist6 <- as.data.frame(dist6)
+dist6$spatdist <- as.numeric(dist6$spatdist)
+dist6 <- dist6[order(dist6$spatdist,dist6$accession),]
+
+#write.table(dist6, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Ppan.csv", row.names=F)
+
+#Pver
+temp<-c(0,0)
+
+for(i in 1:nrow(geo7)) {
+    temp[i]<-distm(c(geo7[i,2], geo7[i,3]), c(refs[5,2], refs[5,3]), fun = distGeo)
+    }
+
+dist7 <- rbind(geo7[,1],temp) #combine row of accessions with row of computed distances
+dist7 <- t(dist7)
+colnames(dist7) <- c('accession','spatdist')
+dist7 <- as.data.frame(dist7)
+dist7$spatdist <- as.numeric(dist7$spatdist)
+dist7 <- dist7[order(dist7$spatdist,dist7$accession),]
+
+#write.table(dist7, "/media/matthias/meuk/intercontinental/dist_metas_to_ref_Pver.csv", row.names=F)
+
+
+#### blast histograms
+library(readr)
+library(stringr)
+
+numreads <- read.csv("/media/matthias/meuk/intercontinental/blastn/sub1M_noNs_numreads.csv", header=F, sep=",")
+
+
+################################## Fsp ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/fsp",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],50,nchar(filelist[i])-26)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_fsp = 0
+med90_fsp = c()
+med95_fsp = c()
+ANIr90_fsp = c()
+ANIr95_fsp = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/fsp_histograms_ANIr95.pdf", width=3, height=69)
+par(mfrow=c(nrow(dist1)-1,1))
+for(i in 1:nrow(dist1)) {
+  if (str_detect(filenames, dist1[i,1])) {
+    h = hist(as.numeric(unlist(get(dist1[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist1[i,1], ][,2]
+    readcount_fsp = readcount_fsp + numreads[numreads$V1 == dist1[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist1[i,1],", ",round(dist1[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist1[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_fsp = append(ANIr95_fsp, as.numeric(sample_params[3]))
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_fsp = scan("/media/matthias/meuk/intercontinental/blastn/fsp/fsp.all")
+ANIr95 = mean(pid_fsp[pid_fsp >= 95])
+med95 = median(pid_fsp[pid_fsp >= 95])
+ANIr90 = mean(pid_fsp[pid_fsp >= 90])
+med90 = median(pid_fsp[pid_fsp >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/fsp_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_fsp, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_fsp
+        plot(h, freq=FALSE, main="Fsp all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+    
+################################## Fubi ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/fubi",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_fubi = 0
+med90_fubi = c()
+med95_fubi = c()
+ANIr90_fubi = c()
+ANIr95_fubi = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/fubi_histograms_ANIr95.pdf", width=3, height=57)
+par(mfrow=c(nrow(dist3)-4,1))
+for(i in 1:nrow(dist3)) {
+  if (str_detect(filenames, dist3[i,1])) {
+    h = hist(as.numeric(unlist(get(dist3[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist3[i,1], ][,2]
+    readcount_fubi = readcount_fubi + numreads[numreads$V1 == dist3[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist3[i,1],", ",round(dist3[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist3[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_fubi = append(ANIr95_fubi, as.numeric(sample_params[3])) 
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_fubi = scan("/media/matthias/meuk/intercontinental/blastn/fubi/fubi.all")
+ANIr95 = mean(pid_fubi[pid_fubi >= 95])
+med95 = median(pid_fubi[pid_fubi >= 95])
+ANIr90 = mean(pid_fubi[pid_fubi >= 90])
+med90 = median(pid_fubi[pid_fubi >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/fubi_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_fubi, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_fubi
+        plot(h, freq=FALSE, main="fubi all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+################################## Muni ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/muni",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_muni = 0
+med90_muni = c()
+med95_muni = c()
+ANIr90_muni = c()
+ANIr95_muni = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/muni_histograms_ANIr95.pdf", width=3, height=111)
+par(mfrow=c(nrow(dist4)-1,1))
+for(i in 1:nrow(dist4)) {
+  if (str_detect(filenames, dist4[i,1])) {
+    h = hist(as.numeric(unlist(get(dist4[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist4[i,1], ][,2]
+    readcount_muni = readcount_muni + numreads[numreads$V1 == dist4[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist4[i,1],", ",round(dist4[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist4[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_muni = append(ANIr95_muni, as.numeric(sample_params[3])) 
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_muni = scan("/media/matthias/meuk/intercontinental/blastn/muni/muni.all")
+ANIr95 = mean(pid_muni[pid_muni >= 95])
+med95 = median(pid_muni[pid_muni >= 95])
+ANIr90 = mean(pid_muni[pid_muni >= 90])
+med90 = median(pid_muni[pid_muni >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/muni_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_muni, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_muni
+        plot(h, freq=FALSE, main="muni all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+################################## Nabu ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/nabu",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_nabu = 0
+med90_nabu = c()
+med95_nabu = c()
+ANIr90_nabu = c()
+ANIr95_nabu = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/nabu_histograms_ANIr95.pdf", width=3, height=30)
+par(mfrow=c(nrow(dist5),1))
+for(i in 1:nrow(dist5)) {
+  if (str_detect(filenames, dist5[i,1])) {
+    h = hist(as.numeric(unlist(get(dist5[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist5[i,1], ][,2]
+    readcount_nabu = readcount_nabu + numreads[numreads$V1 == dist5[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist5[i,1],", ",round(dist5[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist5[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_nabu = append(ANIr95_nabu, as.numeric(sample_params[3]))
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_nabu = scan("/media/matthias/meuk/intercontinental/blastn/nabu/nabu.all")
+ANIr95 = mean(pid_nabu[pid_nabu >= 95])
+med95 = median(pid_nabu[pid_nabu >= 95])
+ANIr90 = mean(pid_nabu[pid_nabu >= 90])
+med90 = median(pid_nabu[pid_nabu >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/nabu_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_nabu, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_nabu
+        plot(h, freq=FALSE, main="nabu all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+
+################################## Pver ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/pver",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_pver = 0
+med90_pver = c()
+med95_pver = c()
+ANIr90_pver = c()
+ANIr95_pver = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/pver_histograms_ANIr95.pdf", width=3, height=39)
+par(mfrow=c(nrow(dist7)-2,1))
+for(i in 1:nrow(dist7)) {
+  if (str_detect(filenames, dist7[i,1])) {
+    h = hist(as.numeric(unlist(get(dist7[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist7[i,1], ][,2]
+    readcount_pver = readcount_pver + numreads[numreads$V1 == dist7[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist7[i,1],", ",round(dist7[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist7[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_pver = append(ANIr95_pver, as.numeric(sample_params[3]))
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_pver = scan("/media/matthias/meuk/intercontinental/blastn/pver/pver.all")
+ANIr95 = mean(pid_pver[pid_pver >= 95])
+med95 = median(pid_pver[pid_pver >= 95])
+ANIr90 = mean(pid_pver[pid_pver >= 90])
+med90 = median(pid_pver[pid_pver >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/pver_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_pver, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_pver
+        plot(h, freq=FALSE, main="pver all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+
+################################## Ppan ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/ppan",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_ppan = 0
+med90_ppan = c()
+med95_ppan = c()
+ANIr90_ppan = c()
+ANIr95_ppan = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/ppan_histograms_ANIr95.pdf", width=3, height=114)
+par(mfrow=c(nrow(dist6),1))
+for(i in 1:nrow(dist6)) {
+  if (str_detect(filenames, dist6[i,1])) {
+    h = hist(as.numeric(unlist(get(dist6[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist6[i,1], ][,2]
+    readcount_ppan = readcount_ppan + numreads[numreads$V1 == dist6[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist6[i,1],", ",round(dist6[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+    sample_params <- params[str_detect(params$sample, paste0("^",dist6[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_ppan = append(ANIr95_ppan, as.numeric(sample_params[3]))
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_ppan = scan("/media/matthias/meuk/intercontinental/blastn/ppan/ppan.all")
+ANIr95 = mean(pid_ppan[pid_ppan >= 95])
+med95 = median(pid_ppan[pid_ppan >= 95])
+ANIr90 = mean(pid_ppan[pid_ppan >= 90])
+med90 = median(pid_ppan[pid_ppan >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/ppan_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_ppan, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_ppan
+        plot(h, freq=FALSE, main="ppan all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+
+################################## Pfin ##################################
+
+##### multiple files #####
+filelist <- list.files(path = "/media/matthias/meuk/intercontinental/blastn/pfin",
+                            recursive = TRUE,
+                            pattern = "\\.percid$",
+                            full.names = TRUE)
+                            
+filenames = paste(filelist, collapse = '')
+
+params <- data.frame()
+
+for(i in 1:length(filelist)) {
+    sample = substr(filelist[i],51,nchar(filelist[i])-27)
+    percid = assign(sample, scan(filelist[i]))
+    med95 = median(percid[percid >= 95])
+    ANIr95 = mean(percid[percid >= 95])
+    med90 = median(percid[percid >= 90])
+    ANIr90 = mean(percid[percid >= 90])
+    params = rbind(params, c(sample, med95, ANIr95, med90, ANIr90))
+}
+
+colnames(params) <- "sample"
+
+readcount_pfin = 0
+med90_pfin = c()
+med95_pfin = c()
+ANIr90_pfin = c()
+ANIr95_pfin = c()
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/pfin_histograms_ANIr95.pdf", width=3, height=333)
+par(mfrow=c(nrow(dist2),1))
+for(i in 1:nrow(dist2)) {
+  if (str_detect(filenames, dist2[i,1])) {
+    h = hist(as.numeric(unlist(get(dist2[i,1]))), breaks=seq(70,100,length.out=61), plot=FALSE)
+    metareads <- numreads[numreads$V1 == dist2[i,1], ][,2]
+    readcount_pfin = readcount_pfin + numreads[numreads$V1 == dist2[i,1], ][,2]
+    h$density = h$counts*100/metareads
+    plot(h, freq=FALSE, main=paste(dist2[i,1],", ",round(dist2[i,2]/1000,digits=0)," km", sep=""), xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+# MJ1 is a metaname but also contained in other metanames -> look only for exact matches
+    sample_params <- params[str_detect(params$sample, paste0("^",dist2[i,1],"$")), ]
+    abline(v=sample_params[5], col="blue", lwd=1.5, lty=2)
+    mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(as.numeric(sample_params[3]),digits=1), nsmall=1))), side=3, line=-5, cex=0.5, col="blue")
+    ANIr95_pfin = append(ANIr95_pfin, as.numeric(sample_params[3]))
+  }
+}
+dev.off()
+
+##### all metas in one file #####
+pid_pfin = scan("/media/matthias/meuk/intercontinental/blastn/pfin/pfin.all")
+ANIr95 = mean(pid_pfin[pid_pfin >= 95])
+med95 = median(pid_pfin[pid_pfin >= 95])
+ANIr90 = mean(pid_pfin[pid_pfin >= 90])
+med90 = median(pid_pfin[pid_pfin >= 90])
+
+pdf(file="/media/matthias/meuk/intercontinental/blastn/pfin_combined_histogram_ANIr95.pdf", width=5, height=5)
+    h = hist(pid_pfin, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_pfin
+        plot(h, freq=FALSE, main="pfin all", xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        abline(v=c(ANIr95), col="blue", lwd=1.5, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(ANIr95,digits=1), nsmall=1))), side=3, line=-5, cex=0.8, col="blue")
+    dev.off()
+
+
+#### plot 7 species with ANIr95 ####
+pdf(file="/media/matthias/meuk/intercontinental/blastn/7species_histogram_05pidintervals_ANIr95.pdf", width=3, height=21)
+par(mfrow=c(7,1))
+# ppan
+    h = hist(pid_ppan, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_ppan
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(bolditalic('Polynucleobacter paneuropaeus')), line = 1, cex.main=0.9)
+        abline(v=mean(pid_ppan[pid_ppan >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_ppan[pid_ppan >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_ppan),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_ppan),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 40", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 14", side=3, line=-3, cex=0.6, adj=0.11)
+# pfin
+    h = hist(pid_pfin, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_pfin
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(bolditalic('Polynucleobacter finlandensis')), line = 1, cex.main=0.9)
+        abline(v=mean(pid_pfin[pid_pfin >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_pfin[pid_pfin >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_pfin),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_pfin),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 111", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 14", side=3, line=-3, cex=0.6, adj=0.11)
+# muni
+    h = hist(pid_muni, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_muni
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(paste(bolditalic('Ca.'), bold(' Methylopumilus universalis'))), line = 1, cex.main=0.9)
+        abline(v=mean(pid_muni[pid_muni >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_muni[pid_muni >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_muni),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_muni),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 37", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 8", side=3, line=-3, cex=0.6, adj=0.11)
+# fubi
+    h = hist(pid_fubi, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_fubi
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(paste(bolditalic('Ca.'), bold(' Fonsibacter ubiquis'))), line = 1, cex.main=0.9)
+        abline(v=mean(pid_fubi[pid_fubi >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_fubi[pid_fubi >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_fubi),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_fubi),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 19", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 8", side=3, line=-3, cex=0.6, adj=0.11)
+# fsp
+    h = hist(pid_fsp, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_fsp
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(paste(bolditalic('Ca.'), bold(' Fonsibacter sp.'))), line = 1, cex.main=0.9)
+        abline(v=mean(pid_fsp[pid_fsp >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_fsp[pid_fsp >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_fsp),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_fsp),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 23", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 7", side=3, line=-3, cex=0.6, adj=0.11)
+# nabu
+    h = hist(pid_nabu, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_nabu
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(paste(bolditalic('Ca.'), bold(' Nanopelagicus abundans'))), line = 1, cex.main=0.9)
+        abline(v=mean(pid_nabu[pid_nabu >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_nabu[pid_nabu >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_nabu),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_nabu),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 10", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 3", side=3, line=-3, cex=0.6, adj=0.11)
+# pver
+    h = hist(pid_pver, breaks=seq(70,100,length.out=61), plot=FALSE)
+        h$density = h$counts*100/readcount_pver
+        plot(h, freq=FALSE, main=NULL, xlab="% identity", ylab="% of reads", cex.axis=0.8, cex.lab=0.8, cex.main=0.8)
+        title(substitute(paste(bolditalic('Ca.'), bold(' Planktophila vernalis'))), line = 1, cex.main=0.9)
+        abline(v=mean(pid_pver[pid_pver >= 95]), col="blue", lwd=1.3, lty=2)
+        mtext(bquote(ANIr[95] ~ "=" ~ .(format(round(mean(pid_pver[pid_pver >= 95]),digits=1),nsmall=1)) ~ " (" * .(format(round(min(ANIr95_pver),digits=1),nsmall=1)) ~ "-" ~ .(format(round(max(ANIr95_pver),digits=1),nsmall=1)) * ")"), side=3, line=-5, cex=0.6, col="blue", adj=0.19)
+        mtext("# metagenomes = 13", side=3, line=-2, cex=0.6, adj=0.15)
+        mtext("# lakes = 5", side=3, line=-3, cex=0.6, adj=0.11)
+dev.off()
+

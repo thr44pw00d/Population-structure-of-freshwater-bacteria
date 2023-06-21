@@ -1,0 +1,367 @@
+### load correlation matrix
+FE_r <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Fsp_Erken_r_unique.tsv", header=TRUE, sep="\t", check.names=F)
+# remove first column (allele names)
+FE_r <- FE_r[,-1]
+# set diagonal elements to 1
+diag(FE_r) <- 1
+# mirror upper to lower diagonal
+FE_r[lower.tri(FE_r)] <- t(FE_r)[lower.tri(FE_r)]
+# turn into matrix
+FE_r_m <- as.matrix(FE_r)
+# check if nrow and ncol is identical
+nrow(FE_r_m)
+ncol(FE_r_m)
+# calculate distance as 1 - correlation_coefficient
+FE_r_dist <- as.dist(1-FE_r_m)
+# remove dataframe and matrix (only keep the distance object)
+rm(FE_r, FE_r_m)
+
+### pheatmap distances
+library(pheatmap)
+pheat_dist <- pheatmap(FE_r_dist)
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Fsp_Erk_pheat_dist.pdf", width=7, height=7)
+pheat_dist
+dev.off()
+
+# hclust with r-distances
+hc <- hclust(FE_r_dist) 
+
+# infer number of "strains"
+library("WeightedCluster")
+hcRange <- as.clustrange(hc, diss=FE_r_dist, ncluster=20)
+summary(hcRange)
+plot(hcRange, stat = c("PBC", "HG", "HGSD", "ASW", "ASWw", "R2", "R2sq", "HC"), lwd = 2)
+plot(hcRange, stat = c("ASW", "HG", "PBC"), lwd = 2)
+### 11 clusters according to PBC (Point biserial correlation)
+
+#cut into "strains"
+strains <- cutree(hc, k=11)
+
+#color "strains" in tree
+library(dendextend)
+avg_dend_obj <- as.dendrogram(hc)
+avg_col_dend <- color_branches(avg_dend_obj, k=11)
+pdf(file="/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Fsp_Erk_hc_11strains.pdf", width=35, height=15)
+plot(avg_col_dend)
+dev.off()
+
+# get allele to strain assignment into dataframe
+strains_df <- as.data.frame(strains)
+# get allele_names into a column
+strains_df$alleles <- rownames(strains_df)
+# check if num strains is ok
+max(strains_df$strains)
+# plot num alleles per strain
+h <- hist(strains_df$strains, breaks=0:11)
+# get num alleles per strain
+alleles_per_strain <- as.data.frame(table(strains_df$strains))
+abus <- alleles_per_strain[alleles_per_strain$Freq > 0,]
+abus_sort <- abus[order(abus$Freq, decreasing=T), ]
+# check again if num strains is ok
+nrow(abus_sort)
+
+#subset strains (from the one with most alleles as strain1 to the one with least alleles to strain11)
+strain1 <- subset(strains_df, strains==7)
+strain2 <- subset(strains_df, strains==6)
+strain3 <- subset(strains_df, strains==3)
+strain4 <- subset(strains_df, strains==5)
+strain5 <- subset(strains_df, strains==4)
+strain6 <- subset(strains_df, strains==1)
+strain7 <- subset(strains_df, strains==11)
+strain8 <- subset(strains_df, strains==8)
+strain9 <- subset(strains_df, strains==9)
+strain10 <- subset(strains_df, strains==2)
+strain11 <- subset(strains_df, strains==10)
+
+# laod allele freqs
+all <- read.csv("/media/matthias/meuk/intercontinental/pogenom_cov30_mc15/008_allele_freqs/Fsp_Erken_all_unique.csv", header=TRUE, sep="\t", check.names=F)
+# create new df without 1st column (allele_names)
+all2 <- all[,-1]
+# put allele_names as rownames
+rownames(all2) <- all[,1]
+
+#get allele frequencies for each "strain"
+strain1_freqs <- all2[rownames(all2) %in% strain1$alleles, ]
+strain2_freqs <- all2[rownames(all2) %in% strain2$alleles, ]
+strain3_freqs <- all2[rownames(all2) %in% strain3$alleles, ]
+strain4_freqs <- all2[rownames(all2) %in% strain4$alleles, ]
+strain5_freqs <- all2[rownames(all2) %in% strain5$alleles, ]
+strain6_freqs <- all2[rownames(all2) %in% strain6$alleles, ]
+strain7_freqs <- all2[rownames(all2) %in% strain7$alleles, ]
+strain8_freqs <- all2[rownames(all2) %in% strain8$alleles, ]
+strain9_freqs <- all2[rownames(all2) %in% strain9$alleles, ]
+strain10_freqs <- all2[rownames(all2) %in% strain10$alleles, ]
+strain11_freqs <- all2[rownames(all2) %in% strain11$alleles, ]
+
+##### Get mean per sample for each "strain" and combine OF and TI
+##### plot allele freq of each "strain" across dates
+##### dotsize/linesize/color_density according to number of allels in "strain"
+library(tibble)
+library(dplyr)
+library(stringr)
+
+### Strain 1
+# calculate mean (median) of each row
+s1_avg <- as.data.frame(apply(strain1_freqs, 2, mean))
+#s1_med <- as.data.frame(apply(strain1_freqs, 2, median))
+# rownames to col1
+s1_avg <- tibble::rownames_to_column(s1_avg)
+# set colnames
+colnames(s1_avg) <- c("date", "freq")
+# make freqs numeric
+s1_avg$freq <- as.numeric(as.character(s1_avg$freq))
+# date as date
+s1_avg$date <- as.Date(s1_avg$date, format='%Y-%m-%d')
+s1_avg$date <- format(s1_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s1_avg$date <- factor(s1_avg$date, levels = s1_avg$date)
+
+### Strain 2
+# calculate mean (median) of each row
+s2_avg <- as.data.frame(apply(strain2_freqs, 2, mean))
+#s2_med <- as.data.frame(apply(strain2_freqs, 2, median))
+# rownames to col1
+s2_avg <- tibble::rownames_to_column(s2_avg)
+# set colnames
+colnames(s2_avg) <- c("date", "freq")
+# make freqs numeric
+s2_avg$freq <- as.numeric(as.character(s2_avg$freq))
+# date as date
+s2_avg$date <- as.Date(s2_avg$date, format='%Y-%m-%d')
+s2_avg$date <- format(s2_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s2_avg$date <- factor(s2_avg$date, levels = s2_avg$date)
+
+### Strain 3
+# calculate mean (median) of each row
+s3_avg <- as.data.frame(apply(strain3_freqs, 2, mean))
+#s3_med <- as.data.frame(apply(strain3_freqs, 2, median))
+# rownames to col1
+s3_avg <- tibble::rownames_to_column(s3_avg)
+# set colnames
+colnames(s3_avg) <- c("date", "freq")
+# make freqs numeric
+s3_avg$freq <- as.numeric(as.character(s3_avg$freq))
+# date as date
+s3_avg$date <- as.Date(s3_avg$date, format='%Y-%m-%d')
+s3_avg$date <- format(s3_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s3_avg$date <- factor(s3_avg$date, levels = s3_avg$date)
+
+### Strain 4
+# calculate mean (median) of each row
+s4_avg <- as.data.frame(apply(strain4_freqs, 2, mean))
+#s4_med <- as.data.frame(apply(strain4_freqs, 2, median))
+# rownames to col1
+s4_avg <- tibble::rownames_to_column(s4_avg)
+# set colnames
+colnames(s4_avg) <- c("date", "freq")
+# make freqs numeric
+s4_avg$freq <- as.numeric(as.character(s4_avg$freq))
+# date as date
+s4_avg$date <- as.Date(s4_avg$date, format='%Y-%m-%d')
+s4_avg$date <- format(s4_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s4_avg$date <- factor(s4_avg$date, levels = s4_avg$date)
+
+### Strain 5
+# calculate mean (median) of each row
+s5_avg <- as.data.frame(apply(strain5_freqs, 2, mean))
+#s5_med <- as.data.frame(apply(strain5_freqs, 2, median))
+# rownames to col1
+s5_avg <- tibble::rownames_to_column(s5_avg)
+# set colnames
+colnames(s5_avg) <- c("date", "freq")
+# make freqs numeric
+s5_avg$freq <- as.numeric(as.character(s5_avg$freq))
+# date as date
+s5_avg$date <- as.Date(s5_avg$date, format='%Y-%m-%d')
+s5_avg$date <- format(s5_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s5_avg$date <- factor(s5_avg$date, levels = s5_avg$date)
+
+### Strain 6
+# calculate mean (median) of each row
+s6_avg <- as.data.frame(apply(strain6_freqs, 2, mean))
+#s6_med <- as.data.frame(apply(strain6_freqs, 2, median))
+# rownames to col1
+s6_avg <- tibble::rownames_to_column(s6_avg)
+# set colnames
+colnames(s6_avg) <- c("date", "freq")
+# make freqs numeric
+s6_avg$freq <- as.numeric(as.character(s6_avg$freq))
+# date as date
+s6_avg$date <- as.Date(s6_avg$date, format='%Y-%m-%d')
+s6_avg$date <- format(s6_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s6_avg$date <- factor(s6_avg$date, levels = s6_avg$date)
+
+### Strain 7
+# calculate mean (median) of each row
+s7_avg <- as.data.frame(apply(strain7_freqs, 2, mean))
+#s7_med <- as.data.frame(apply(strain7_freqs, 2, median))
+# rownames to col1
+s7_avg <- tibble::rownames_to_column(s7_avg)
+# set colnames
+colnames(s7_avg) <- c("date", "freq")
+# make freqs numeric
+s7_avg$freq <- as.numeric(as.character(s7_avg$freq))
+# date as date
+s7_avg$date <- as.Date(s7_avg$date, format='%Y-%m-%d')
+s7_avg$date <- format(s7_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s7_avg$date <- factor(s7_avg$date, levels = s7_avg$date)
+
+### Strain 8
+# calculate mean (median) of each row
+s8_avg <- as.data.frame(apply(strain8_freqs, 2, mean))
+#s8_med <- as.data.frame(apply(strain8_freqs, 2, median))
+# rownames to col1
+s8_avg <- tibble::rownames_to_column(s8_avg)
+# set colnames
+colnames(s8_avg) <- c("date", "freq")
+# make freqs numeric
+s8_avg$freq <- as.numeric(as.character(s8_avg$freq))
+# date as date
+s8_avg$date <- as.Date(s8_avg$date, format='%Y-%m-%d')
+s8_avg$date <- format(s8_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s8_avg$date <- factor(s8_avg$date, levels = s8_avg$date)
+
+### Strain 9
+# calculate mean (median) of each row
+s9_avg <- as.data.frame(apply(strain9_freqs, 2, mean))
+#s9_med <- as.data.frame(apply(strain9_freqs, 2, median))
+# rownames to col1
+s9_avg <- tibble::rownames_to_column(s9_avg)
+# set colnames
+colnames(s9_avg) <- c("date", "freq")
+# make freqs numeric
+s9_avg$freq <- as.numeric(as.character(s9_avg$freq))
+# date as date
+s9_avg$date <- as.Date(s9_avg$date, format='%Y-%m-%d')
+s9_avg$date <- format(s9_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s9_avg$date <- factor(s9_avg$date, levels = s9_avg$date)
+
+### Strain 10
+# calculate mean (median) of each row
+s10_avg <- as.data.frame(apply(strain10_freqs, 2, mean))
+#s10_med <- as.data.frame(apply(strain10_freqs, 2, median))
+# rownames to col1
+s10_avg <- tibble::rownames_to_column(s10_avg)
+# set colnames
+colnames(s10_avg) <- c("date", "freq")
+# make freqs numeric
+s10_avg$freq <- as.numeric(as.character(s10_avg$freq))
+# date as date
+s10_avg$date <- as.Date(s10_avg$date, format='%Y-%m-%d')
+s10_avg$date <- format(s10_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s10_avg$date <- factor(s10_avg$date, levels = s10_avg$date)
+
+### Strain 11
+# calculate mean (median) of each row
+s11_avg <- as.data.frame(apply(strain11_freqs, 2, mean))
+#s11_med <- as.data.frame(apply(strain11_freqs, 2, median))
+# rownames to col1
+s11_avg <- tibble::rownames_to_column(s11_avg)
+# set colnames
+colnames(s11_avg) <- c("date", "freq")
+# make freqs numeric
+s11_avg$freq <- as.numeric(as.character(s11_avg$freq))
+# date as date
+s11_avg$date <- as.Date(s11_avg$date, format='%Y-%m-%d')
+s11_avg$date <- format(s11_avg$date, "%d-%b-%Y")
+# make date an ordered factor
+s11_avg$date <- factor(s11_avg$date, levels = s11_avg$date)
+
+abu_sum = sum(abus_sort$Freq)
+abu11 = nrow(strain11)/abu_sum
+abu10 = nrow(strain10)/abu_sum
+abu9 = nrow(strain9)/abu_sum
+abu8 = nrow(strain8)/abu_sum
+abu7 = nrow(strain7)/abu_sum
+abu6 = nrow(strain6)/abu_sum
+abu5 = nrow(strain5)/abu_sum
+abu4 = nrow(strain4)/abu_sum
+abu3 = nrow(strain3)/abu_sum
+abu2 = nrow(strain2)/abu_sum
+abu1 = nrow(strain1)/abu_sum
+
+# colors
+col1="#661100"
+col2="#332288"
+col3="#117733"
+col4="#999933"
+col5="#888888"
+col6="#AA4499"
+col7="#6699CC"
+col8="#44AA99"
+col9="#DDCC77"
+col10="#CC6677"
+col11="#88CCEE"
+
+# plot
+library(ggplot2)
+# open pdf
+pdf(file="/media/matthias/meuk/intercontinental/Fsp_Erk_dynamics.pdf", width=6, height=4.5)
+# plot
+ggplot() +
+      theme_bw() +
+      scale_y_continuous(limits=c(2,13), breaks=seq(0,15,by=2)) +
+      xlab("") +
+      ylab("Mean allele frequency") +
+#strain11
+      geom_point(data=s11_avg, size=abu11*30, color=col11, alpha=abu11/abu1, aes(x=date, y=freq)) +
+      geom_line(data=s11_avg, color=col11, size=abu11*7, alpha=abu11/abu1, aes(x=date, y=freq, group=1)) +
+#strain10
+      geom_point(data=s10_avg, size=abu10*30, color=col10, alpha=abu10/abu1, aes(x=date, y=freq)) +
+      geom_line(data=s10_avg, color=col10, size=abu10*7, alpha=abu10/abu1, aes(x=date, y=freq, group=1)) +
+#strain9
+      geom_point(data=s9_avg, size=abu9*30, color=col9, alpha=abu9/abu1, aes(x=date, y=freq)) +
+      geom_line(data=s9_avg, color=col9, size=abu9*7, alpha=abu9/abu1, aes(x=date, y=freq, group=1)) +
+#strain8
+      geom_point(data=s8_avg, size=abu8*30, color=col8, alpha=abu8/abu1, aes(x=date, y=freq)) +  
+      geom_line(data=s8_avg, color=col8, size=abu8*7, alpha=abu8/abu1, aes(x=date, y=freq, group=1)) +
+#strain7
+      geom_point(data=s7_avg, size=abu7*30, color=col7, alpha=abu7/abu1, aes(x=date, y=freq)) +   
+      geom_line(data=s7_avg, color=col7, size=abu7*7, alpha=abu7/abu1, aes(x=date, y=freq, group=1)) +
+#strain6
+      geom_point(data=s6_avg, size=abu6*30, color=col6, alpha=abu6/abu1, aes(x=date, y=freq)) + 
+      geom_line(data=s6_avg, color=col6, size=abu6*7, alpha=abu6/abu1, aes(x=date, y=freq, group=1)) +
+#strain5
+      geom_point(data=s5_avg, size=abu5*30, color=col5, alpha=abu5/abu1, aes(x=date, y=freq)) +
+      geom_line(data=s5_avg, color=col5, size=abu5*7, alpha=abu5/abu1, aes(x=date, y=freq, group=1)) +
+#strain4
+      geom_point(data=s4_avg, size=abu4*30, color=col4, alpha=abu4/abu1, aes(x=date, y=freq)) +    
+      geom_line(data=s4_avg, color=col4, size=abu4*7, alpha=abu4/abu1, aes(x=date, y=freq, group=1)) +
+#strain3
+      geom_point(data=s3_avg, size=abu3*30, color=col3, alpha=abu3/abu1, aes(x=date, y=freq)) +
+      geom_line(data=s3_avg, color=col3, size=abu3*7, alpha=abu3/abu1, aes(x=date, y=freq, group=1)) +
+#strain2
+      geom_point(data=s2_avg, size=abu2*30, color=col2, alpha=abu2/abu1, aes(x=date, y=freq)) +   
+      geom_line(data=s2_avg, color=col2, size=abu2*7, alpha=abu2/abu1, aes(x=date, y=freq, group=1)) +
+#strain1
+      geom_point(data=s1_avg, size=abu1*30, color=col1, alpha=1, aes(x=date, y=freq)) +
+      geom_line(data=s1_avg, color=col1, size=abu1*7, alpha=1, aes(x=date, y=freq, group=1)) +
+# rotate x-axis labels
+      theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=1),
+            axis.title = element_text(size=13, face="bold"),
+            axis.text = element_text(size=10))
+# save plot
+dev.off()
+
+############################ OUTTAKES ########################################
+## Jitterplot ##
+library(ggbeeswarm)
+# stack df into 2 columns 
+s1_stacked <- stack(strain1_freqs)
+# ggplot
+p <- ggplot(s1_stacked, aes(x=ind, y=values)) +
+      theme_bw() +
+# set axis labels
+      theme(axis.text = element_text(size=14), axis.title = element_text(size=16), legend.position="none") +
+      labs(x="", y=bquote(F[ST]))
+# add jitter
+p <- p + geom_quasirandom(alpha=0.8, width=0.2, shape=21, size=3, stroke=0.8, color="black")

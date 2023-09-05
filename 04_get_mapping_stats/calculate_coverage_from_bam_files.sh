@@ -4,7 +4,7 @@ for file in *.bam
 # determine coverage
 do genomeCoverageBed -ibam "$file" > "${file/.bam/.cov}"
 # determine coverage per contig (script slightly modified from https://github.com/inodb/metassemble/blob/master/scripts/validate/map/gen_contig_cov_per_bam_table.py)
-python get_contig_cov_per_bam_table.modified.py --isbedfiles Pfin_MWH-Mekk-B1.fa "${file/.bam/.cov}" > "${file/.bam/.covpercont}"
+python gen_contig_cov_per_bam_table.modified.py --isbedfiles Pfin_MWH-Mekk-B1.fa "${file/.bam/.cov}" > "${file/.bam/.covpercont}"
 # determine coverage per metasize
 python add_depth_per_metasize.py "${file/.bam/.covpercont}" Pfin_metasizes.csv "${file/.bam/.covpercont.permsize}"
 done
